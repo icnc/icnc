@@ -1,4 +1,1 @@
-cnc
-===
-
-Source code for Intel(R) Concurrent Collections for C++
+Intel(R) Concurrent Collections for C++
