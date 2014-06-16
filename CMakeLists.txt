@@ -1,6 +1,6 @@
 # cmake lists for building CnC
 
-cmake_minimum_required (VERSION 2.6)
+cmake_minimum_required (VERSION 2.8.7)
 
 project(CnC)
 
@@ -18,7 +18,7 @@ option(CNC_PRODUCT_BUILD   "Build an \"official\" binary release" FALSE)
 ################################################################################
 # Project paths
 
-set(CNC_SRC_ROOT "runtimes/cnc_api")
+set(CNC_SRC_ROOT ${CMAKE_SOURCE_DIR})
 set(EXECUTABLE_OUTPUT_PATH "bin")
 set(LIBRARY_OUTPUT_PATH "lib")
 
@@ -113,8 +113,10 @@ target_link_libraries(cnc_socket general cnc ${CNC_ADD_LIBS})
 if(BUILD_LIBS_FOR_MPI)
   set(CNC_LIBS ${CNC_LIBS} cnc_mpi)
   add_library(cnc_mpi SHARED ${CNC_MPI_SOURCES})
-  set(CNC_MPI_FLAGS "-I\"${MPIROOT}/${MPIARCH}/include\" -DNO_MSG_TRACING -DPRE_SEND_MSGS")
+  set(CNC_MPI_FLAGS "-DNO_MSG_TRACING -DPRE_SEND_MSGS")
   set_target_properties(cnc_mpi PROPERTIES COMPILE_FLAGS "${CNC_MPI_FLAGS}")
+  # doesn't seem to work:  set_target_properties(cnc_mpi PROPERTIES INCLUDE_DIRECTORIES "${MPIROOT}/${MPIARCH}/include")
+  include_directories("${MPIROOT}/${MPIARCH}/include")
   target_link_libraries(cnc_mpi cnc ${CNC_ADD_LIBS} ${MPI_LIB})
 endif(BUILD_LIBS_FOR_MPI)
 
@@ -127,12 +129,15 @@ if(BUILD_LIBS_FOR_ITAC)
   add_library(cnc_socket_itac SHARED ${CNC_SOCKET_SOURCES} )
   set(CNC_ITAC_FLAGS "${CNC_ITAC_FLAGS} -DINTERNAL_ITAC")
   set_target_properties(cnc_socket_itac PROPERTIES COMPILE_FLAGS "${CNC_ITAC_FLAGS}")
+  set_target_properties(cnc_socket_itac PROPERTIES INCLUDE_DIRECTORIES "${ITACROOT}/include")
   set_itac_link_flags(cnc_socket_itac)
   target_link_libraries(cnc_socket_itac cnc ${CNC_ADD_LIBS} ${ITACCS_LIB})
   if(BUILD_LIBS_FOR_MPI)
     set(CNC_LIBS ${CNC_LIBS} cnc_mpi_itac)
     add_library(cnc_mpi_itac SHARED ${CNC_MPI_SOURCES} )
     set_target_properties(cnc_mpi_itac PROPERTIES COMPILE_FLAGS "${CNC_MPI_FLAGS} ${CNC_ITAC_FLAGS}")
+    # doesn't seem to work:  set_target_properties(cnc_mpi_itac PROPERTIES INCLUDE_DIRECTORIES "${MPIROOT}/${MPIARCH}/include" INCLUDE_DIRECTORIES "${ITACROOT}/include")
+    include_directories("${MPIROOT}/${MPIARCH}/include" "${ITACROOT}/include")
     set_itac_link_flags(cnc_mpi_itac)
     target_link_libraries(cnc_mpi_itac cnc ${CNC_ADD_LIBS} ${MPI_LIB} ${ITAC_LIB})
   endif(BUILD_LIBS_FOR_MPI)
