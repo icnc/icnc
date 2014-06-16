@@ -1,0 +1,48 @@
+/**
+\page samples Samples used in this documentation
+
+\section fib_code samples/fib/fib_tutorial/fibTutorial.cpp
+\include fibTutorial.cpp
+\section fib_trace_code samples/fib/fib_trace/fib_trace.cpp
+\include fib_trace.cpp
+\section fib_trace_h samples/fib/fib_trace/fib.h
+\include fib_trace/fib.h
+\section fib_stats_code samples/fib/fib_stats/fib_stats.cpp
+\include fib_stats.cpp
+\section fib_stats_h samples/fib/fib_stats/fib.h
+\include fib_stats/fib.h
+\section fib_tuner_code samples/fib/fib_tuner/fib_tuner.cpp
+\include fib_tuner.cpp
+\section fib_preschedule_code samples/fib/fib_preschedule/fib_preschedule.cpp
+\include fib_preschedule.cpp
+\section fib_getcount_code samples/fib/fib_getcount/fib_getcount.cpp 
+\include fib_getcount.cpp
+\section fib_getcount_h samples/fib/fib_getcount/fib.h
+\include fib_getcount/fib.h
+\section primes_range_code samples/primes/primes_range/primes_range.cpp
+\include primes_range.cpp
+\section primes_parfor_code samples/primes/primes_parfor/primes_parfor.cpp
+\include primes_parfor.cpp
+\section bs_tuner samples/blackscholes/blackscholes/blackscholes.h
+\include blackscholes.h
+\section cholesky_tuner samples/cholesky/cholesky/cholesky.h
+\include cholesky/cholesky.h
+\section count_words_code samples/count_words/count_words/count_words.cpp
+\include count_words.cpp
+\section count_all_words_code samples/count_all_words/count_all_words/count_all_words.cpp
+\include count_all_words.cpp
+\section mapreduce_code samples/count_all_words/mapreduce/mapreduce.h
+\include mapreduce.h
+\section count_all_words_mr_code samples/count_all_words/mapreduce/mapreduce.cpp
+\include mapreduce.cpp
+\section reduce_2d_code samples/reduce_2d/reduce_2d/reduce_2d.cpp
+\include reduce_2d.cpp
+\section hidden_graph_code samples/hidden_graph/hidden_graph/hidden_graph.cpp
+\include hidden_graph.cpp
+\section mpicnc_code samples/mpicnc/mpicnc/mpicnc.cpp
+\include mpicnc.cpp
+\section matrix_inverse_distenv_code matrix_inverse/matrix_inverse_distenv/matrix_inverse.cpp
+\include matrix_inverse_distenv/matrix_inverse.cpp
+\section mysql_simple_code samples/db/mysql_simple/mysql_simple.cpp
+\include mysql_simple.cpp
+**/

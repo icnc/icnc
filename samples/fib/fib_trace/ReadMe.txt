@@ -1,0 +1,1 @@
+This sample shows how to enable the trace feature.

@@ -1,0 +1,1 @@
+This sample demonstrates how to have the scheduler statistics displayed.

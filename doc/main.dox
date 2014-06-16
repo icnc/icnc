@@ -1,0 +1,1148 @@
+/**
+\mainpage Intel(R) Concurrent Collections C++ API
+The concepts of Concurrent Collections (CnC) are described
+elsewhere in generic CnC documentation.
+A brief introduction can be found at the beginning of the
+
+<b>\ref tutorial</b>
+
+which guides you step-by-step through creating your CnC
+application directly in C++.
+
+The API presented here provides a natural way to program directly in
+C++ using the CnC design methodology.  The API provides classes
+representing item collections (CnC::item_collection) and tag
+collections (CnC::tag_collection) and the context (CnC::context) which
+brings together the collections and steps. More advanced features
+include a capabilities for tuning (\ref tuning) and <b>\ref distcnc</b>.
+
+Here's the <a class="el" href="pages.html">list of topics</a> covered this documentation.
+
+Here's the <a class="el" href="annotated.html">class-overview.</a>
+
+**/
+
+/**
+\page tutorial CnC C++ Tutorial
+<b>
+The CnC programming model is quite different from most other parallel
+programming models in several important ways. Hence, we highly
+recommend you carefully read the following introduction sections (\ref intro)
+carefully before diving into the hands-on tutorial. It'll take only a
+few minutes but you'll have a much easier time, more fun and faster
+success! Promise, it'll pay off!
+</b>
+
+- \ref intro
+- \ref fib
+- \ref debug
+- \ref tuning
+- \ref tag_ranges
+- \ref reuse
+- \ref runtime
+- \ref distcnc
+- \ref dist_tuning
+- \ref non_cnc
+
+\section intro CnC in a Nutshell
+CnC is a new programming model which is different from most others. It
+designed for creating parallel applications, but not for expressing
+parallelism explicitly. In CnC the programmer declaratively specifies
+the dependencies among computation units, but does not in any
+way indicate how those are to be met. It is specifically designed for
+addressing the coordination among potentially parallel computation units
+and data.
+
+In essence, the programmer declares certain dependencies between two
+(or more) computation units. Specifying the dependencies is simpler
+than expressing parallelism, because it only makes application
+semantics explicit - and does not depend on the platform or any
+specific parallelization technique. Additionally, it exposes more
+parallelism potential because it does not bind a particular parallelism to the
+algorithm/program. The CnC runtime will do the hard work of figuring
+out how to execute things in parallel; it will try to maximize
+parallelism, limited only by the ordering constraints defined by the
+programmer.
+
+The only 2 ordering constraints which semantically exist in any
+program come from the following 2 relationships
+-# producer/consumer
+-# controller/controlee
+
+It is apparent that a producer needs to executed before the consumer
+can run. Similarly, if one computation unit decides whether another
+computation needs to be executed or not, the decision maker (e.g. the
+controller) needs to go before the controlled computation(s).
+
+These two relationships (producer/consumer and controller/controlee)
+are the only relations needed to determine semantically correct
+parallel or sequential execution orders. This information is known to
+any programmer, even when writing sequential programs. It only gets
+lost because traditional programming languages have no means to
+explicitly express it. Exactly this is what a CnC program
+specifies (on top of the computation functionality of course).
+
+
+\section cook Burgers with Fries and Pies for Dessert
+\subsection burgers Burgers and fries are parallel
+Let's make burgers and French Fries. Let's say the ready-to-process
+ingredients (cut potatoes and prepared meat) get delivered to a
+service hatch, from which the cook can take them for processing.
+In CnC such hatches are \em item-collections, which store input and
+output data/items. Each collection can hold multiple instances of the
+same data(-type). In our kitchen that would mean we have a hatch for
+potatoes and a another hatch for the meat. Similarly, whatever we create
+and cook (our output) would be placed in such a hatch
+(item-collection). Our hungry guests can pick up the delicacies from
+this hatch once they have been produced.
+
+The tasks for our cooks are frying the potatoes and barbecuing the
+meat. In CnC we call such tasks \em steps, which are basically just
+normal functions.  The interesting question is: are there any
+dependencies between the two cooking tasks/steps? Of course not:
+neither uses the result of the other and neither decides whether the
+other needs to be done (or not). Hence, there is no ordering required,
+we can fry the potatoes first, or do the meat first or do them
+in parallel.
+\note If we insisted on working one-handed and
+allowed only one cook active at the same time, we needed to decide on
+a (arbitrary) sequence. In serial languages, the programmer is
+required to make that arbitrary choice but doesn't indicate that the
+choice was optional.
+
+\subsection pies Can't bake a pie until it's prepared
+Let's add mini cherry pies to our meal for dessert. A mini-pie has to
+be prepared and baked (prepare_pie, bake_pie). Altogether, we now
+have four steps, three of which (barbecue_burger, fry_potatoes,
+prepare_pie) have no dependencies between them. However, we need the
+pie in order to bake it. We don't need to know where it comes from, we
+only need the ready assembled pie: we take it from the hatch once it's
+there and bake it. Similarly, for the task of preparing a pie we don't
+need to know what's going to happen with it afterwards, we just create
+it and put it on the hatch.
+
+Incidentally, there is a \em producer/consumer relationship between
+prepare_pie and bake_pie. A producer/consumer relationship constitutes
+one of the two before-mentioned ordering constraints: the producer
+needs to be executed before the consumer can use the produced item.
+Note, the programmer does not explicitly indicate a specific execution order.
+The runtime takes care of it: as it knows about the relationship, it
+will never bake a pie before it has been prepared.
+
+\subsection waiter Waiter controlling cooks
+Now, let's say our guest are individuals and not all of them want the
+same menu. Some of them might want the full menu: a burger, fries and
+a pie. Someone else might prefer 2 burgers, no fries but a pie, and so
+on. So let's take orders (take_orders) first. Only if they know the
+orders, our cooks can actually start cooking. When taking orders, we
+must assign a unique identifier (a tag) to each order so that we later
+know which burgers, fries and pies are for which guest. To
+communicate the orders with the kitchen, our CnC kitchen
+uses special bowls, one for each step (barbecue_burger, fry_potatoes,
+bake_pie and prepare_pie). Whenever a step needs to be executed for a
+given order, the waiter simply puts the corresponding guest-tag into
+the step's bowl. For example, if guestA wants a burger and Fries, we
+put the tag/token 'A' into barbecue_burger's bowl and into
+fry_potatoes' bowl. Our cooks will then prepare a burger and fries for
+guest 'A', but as there is no token/tag in the pie bowl, they will not
+make a pie for 'A'. CnC calls such bowls \em tag-collections.
+
+We have just declared a controller/controlee relationship. Our waiter
+decides which steps need to be executed. Moreover, our CnC
+kitchen assigns a tag (a unique identifier) to each execution
+instance. With this our chef (e.g. the CnC runtime) can now coordinate
+the different tasks as they come in (e.g. to make sure burgers and
+fries from the same order are ready together).
+
+
+\subsection done We have a CnC specification!
+We have now introduced the dependencies which imply a certain
+(partial) ordering. This partial ordering allows us (e.g. the CnC
+runtime) to determine a legal scheduling of the step instances
+(computation units), be
+it serial or parallel.  If we have ten cooks or one, all they need to
+know are the ordering constraints (besides knowing how to cook, of
+course). They could do everything in parallel, except they need to
+1. wait for the tags to come in before starting a task
+2. wait for each pie to be prepared before baking it.
+
+\note The constraints we defined are semantic attributes, they are
+requirements only of the algorithm. They exist independent of the
+programming language or programming tool, e.g. even if not using CnC
+they must be obeyed: a pie simply needs to be prepared before put into the
+oven. And it doesn't make sense to start frying potatoes unless we
+know that someone actually wants fries.
+
+Basically we came up with a CnC specification for our kitchen
+problem. What we have done is
+- identified the computation units (barbecue_burger, fry_potatoes,
+prepare_pie, bake_pie and take_orders)
+- identified the data entities (meat, potatoes, fries, burgers, pies)
+- identified the control tags (guest-id)
+- consumer/producer relationships (prepare_pie -> pies -> bake_pie)
+- controller/controlee relationships (take_orders => xxx_bowls => steps)
+
+That's what makes a CnC specification; paired with an
+implementation of each computation step it makes an application ready for parallel
+execution. Nothing else is needed in the CnC world - the rest is
+handled by the CnC runtime. The CnC approach leaves the CnC runtime
+with all freedom to execute things in parallel as long as it satisfies
+the defined semantics.
+
+\subsection but But...
+..of course there are rules when programming in CnC:
+-# Computation units (steps) must execute statelessly, e.g. computation must
+not access or even alter any global data and leave no traces behind
+other than putting things into CnC's collections.
+-# Data is immutable. Once put, data-items cannot be altered. instead
+of changing a value, in CnC you put a new value with a new tag.
+
+The rules might sound more restricting than they actually
+are. Actually, in this tutorial you will almost certainly start
+appreciating the rules. They are much easier to follow than the common
+rules of traditional parallel frameworks. For example, almost all
+threading frameworks tell the programmer "Don't create races". That's
+a very vague rule and verifying it's correct implementation is close
+to impossible. CnC's rules are easy to follow, easy to check and they
+will actually give race-freedom and determinism without you needing to
+think about it.
+
+
+\section recipe The CnC Recipe
+The challenge in using CnC certainly lies in applying its concepts to
+a given problem (application). Luckily, once that's accomplished, the
+remaining tasks are straight forward and later changes to the design
+are relatively simple to make. The thought process to getting to a
+complete CnC design for your application can happen in several small
+phases:
+-# Define the data and computation entities of your application
+(step-, item- and tag-collections)
+-# Define how to distinguish between instances of these entities (what
+do the identifiers/tags look like?)
+-# Define the relations between the entities (producer/consumer and
+controller/controlee)
+
+This tutorial will guide you through these phases with a simple
+example program. It'll explain the use of CnC with the C++ API by
+creating a program to compute Fibonacci numbers. Due to nature of
+Fibonacci CnC doesn't necessarily provide the most natural
+expressiveness for it. However, Fibonacci has the right complexity and
+characteristics to demonstrate CnC and Intel's C++ API without getting
+lost in details of non-CnC related issues.
+
+After creating a first program, we will introduce a
+debugging-interface and more advanced features like a tuning interface
+providing powerful tuning knobs.
+
+\ref fib "I am ready, let's go!"
+**/
+
+/**
+\page fib Getting Started with Fibonacci
+We use Fibonacci as an educative example; what we show here is not
+meant to be an ideal or elegant implementation of
+Fibonacci. We only use Fibonacci as a simple enough problem to
+demonstrate CnC and highlight some of its features.
+
+Let's start.
+
+The Fibonacci number of a given value n is recursively defined as
+fib(n) = fib(n-1) + fib(n-2). 
+As the values can grow very large, let's
+define our own data type that we can adjust if needed:
+\dontinclude
+fibTutorial.cpp
+\skipline fib_type
+
+
+\section fibsepc The CnC Specification
+
+\subsection compent Identifying Computation Units
+Fibonacci is a very simple algorithm. There only one computation which
+simply adds the values of the two previous Fibonacci numbers. Let's
+call it "fib_step". In CnC all execution instances of such a function
+are held in one collection, a CnC::step_collection. Declaring such a
+step-collection instance (with name m_steps) for steps of type
+"fib_step" is as simple as this:
+\dontinclude fibTutorial.cpp
+\skipline m_steps
+As we do not need any other function to compute Fibonacci, one
+step-collection is enough. More complex programs will of course use
+more than just a single step-collection.
+
+\subsection dataent Data entities
+The only data we seem to care about are the Fibonacci numbers that we
+compute. The only way in CnC to read values from a computation is
+through item-collections. So we clearly need to store the final result
+in such an item-collection.  Additionally we need to get the result of
+another computation to compute a new value. Luckily, Fibonacci is
+recursive and the kind of the input data is the same as the output
+data (and with kind we mean that it not only has the same data-type but it
+also has the same meaning). So we can use one item-collection for the
+intermediate results and for the final result. More complex programs
+will of course use more than just a single item-collection.
+
+Defining an item-collection is straight forward:
+\skipline m_fibs
+Again, the C++ API provides a template class to
+define item-collections (CnC::item_collection). The second
+type-argument is the type of the data to be stored. For our
+Fibonacci numbers we declared our own type "fib_type", so "fib_type" is the
+second argument. But what about the first? The first type argument is
+the tag-type for identifying each data-instance. Just like a
+traditional key/value pair, the value of our item is accessible (only)
+through its identifier, the tag. What would make a good identifier
+for a Fibonacci number? Of course we can simply use an integer;
+so semantically, the above item-collection maps an integer key to its Fibonacci value.
+Our "fib_step" will fill this data structure during execution.
+
+In general you can use any C++ type or class for tags and items as long as they
+provide a copy-constructor (which is true for most types). The tag types must also
+separately be supported by a hash-function (by default cnc_tag_hash_compare).
+
+
+\subsection steps Steps: The Computation Units
+Apparently we need the step which actually computes the Fibonacci
+number from a given value. Computation units in CnC are defined as steps.
+Such a step is a class with an execute method which accepts two arguments:
+a control tag and a second argument, which usually is the context (see below)
+but could also be anything else.
+\dontinclude fibTutorial.cpp
+\skipline fib_step
+\until };
+Note that the execute method must be "const" and is not allowed
+to have side-effects (other than on item-collections).
+
+From the step's perspective, the control tag
+distinguishes between execution instances of the same step.
+For example the control tag tells the above fib_step 
+for which Fibonacci number it is currently executed;
+this should not be confused with input data, which is handled
+by item-collections.
+
+It is recommended to pass the tag by const-reference, in
+particular if you are not using standard data types.
+
+
+\subsection tags Control Tags
+In CnC steps are never called
+explicitly. If a step needs to be executed with a given tag, this tag
+is put into a so called tag-collection. The tag-collection will make
+sure that the step gets executed eventually. So putting a tag tells
+the CnC runtime that a step-instance needs to be executed, but does
+not (and can not) say when it is going to run. So let's define the
+tag-collection which we will use to control our step-collections
+above:
+\skipline m_tags
+The CnC C++ API once achieves generality
+through templates; tags can be of any type, as long as it provides a
+copy-constructor.
+
+
+\subsection ctxt The Context: Bringing it all together
+Before we can actually write the step-code, we need the before
+mentioned context. The context is what in the CnC literature is often
+referred to as "graph". It brings together the different collections
+(tags, items and steps) by defining them as members.
+Internally it takes care for the runtime
+mechanics and is used to control the graph evaluation (e.g. waiting
+for completion). Hence it is recommended to define tag- and
+item-collections as members of the context.
+
+Each context must be derived from a base class, which again is a
+template. The accepted template argument is the newly defined derived
+class. Don't bother about the recursive nature if you are not used to
+it, it's legal C++. In our case it could look like this
+\dontinclude fibTutorial.cpp
+\skipline CnC::context
+\until };
+ 
+So far we have all the definitions of all collections and the
+context. Now we need the mechanics, e.g. the relations between the
+different collections.  Producer and consumer relations are declared
+by calling the respective produces/consumes methods.  Then we want
+that for each tag which is put into the tag-collection m_tags a step
+from m_steps is executed. We do this by simply calling prescribe on
+m_tags.  We declare all these relations in the context-constructor:
+\skipline fib_context
+\until }
+
+\section stp Writing the step
+Now we have set up the graph and are ready to define the step
+functionality. The second argument to our step is the context, through
+which we have access to the tag- and item-collections. To compute the
+result for a given value, we need the results for the previous two
+values, which is expressed through getting them from the
+item-collection. Publishing/producing the result is the reverse operation: a put
+to the item-collection. The step-code could look as follows:
+\skipline execute
+\until }
+\until }
+
+\note A step does not care about where the input data comes from, nor
+does it care about were the output goes to. It only requests/gets the exact data
+instances it needs and puts the ones it produces. The CnC runtime
+will take care of all the coordination between producers and
+consumers. The programmer does not need to think about it (not even if
+it is run on distributed memory).
+
+
+\section env Writing main, the environment
+Let's now complete the program by providing the "main", in which we
+instantiate our context
+\skipline ctxt
+trigger the Fibonacci evaluation
+\skipline for
+You might have noticed that the fib(n-1) will not become available
+until a corresponding step-instances has been executed. Hence, it will
+not be sufficient to prescribe only the desired step-instances, that's why we
+need to put all tags up to that number.
+
+Now we wait for the evaluation to complete
+\skipline ctxt.wait
+. The full main could read the desired input value from the
+command line and print it to stdout:
+\dontinclude fibTutorial.cpp
+\skipline main(
+\until }
+\until }
+
+Here is the full example code: \ref fib_code
+
+The code can also be found in the "Samples" directory, including
+project files for VS on MS Windows* and Makefiles for Linux.
+
+Next: \ref debug
+
+
+\page debug Debugging features
+\section tracing Tracing
+As quite a lot is ongoing under CnC hood, you might sometimes be
+interested in what's actually happening. The C++ API provides a
+convenient interface to provide debugging output which describes
+what's happening. You can control what parts to see and which to be
+quiet about.
+
+You need to include
+\code
+#include <cnc/cnc_debug.h>
+\endcode
+which declares the debugging interface. Debug output can be retrieved for
+steps, tag-collections and item-collections by calling
+CnC::debug::trace with the respective collections. To trace our
+Fibonacci step and the item-collection you could issue the respective
+calls within the constructor of the context or just after creating the context:
+\dontinclude fib_trace.cpp
+\skipline debug output
+\until m_fibs
+
+when running the program you will see a trace event for every step
+invocation and for every put/get of items. The trace includes
+annotations about the successful or unsuccessful completion of the
+traced operations.
+
+If your application uses more than one step-, tag- or item-collection
+it will be hard to determine to which collection instance individual
+entries of the default trace belong. To create a more meaningful trace
+you can assign names to the individual collections. For this their constructor  
+accepts and optional string argument:
+\dontinclude fib_trace/fib.h
+\skipline fib_context()
+\until tags
+
+Here is the full example code: \ref fib_trace_h and \ref fib_trace_code 
+
+\section stats Scheduling Statistics
+Another interesting feature
+provides statistics about the internal scheduler. Depending on the
+availability of dependent items, a step might have been executed to
+early and needs being replayed when the missing item becomes
+available. The respective information can be printed when the context
+is destroyed (in our example when the program terminates). All you
+need to do is enabling this feature using
+CnC::debug::collect_scheduler_statistics:
+\dontinclude fib_stats.cpp
+\skipline _statis
+
+In the example \ref fib_stats_code we have not placed it into the
+context's constructor (\ref fib_stats_h), but we could have done so.
+Of course, it is possible to enable tracing and statistics gathering concurrently.
+
+Next: \ref tuning
+
+
+\page tuning The Tuners
+The CnC concepts allow tuning the program independently of the actual
+program core. Without touching the code in steps and only adding a few
+declarations in the collection definitions the tuning interface allows
+providing tuning hints. In the following you will learn about the
+features of the modular, flexible and easy-to-use tuning interface.
+
+\section tuner_deps Pre-declaring data dependencies
+Supporting the full generality of the CnC programming model obviously
+comes at some cost in the runtime. In order to accelerate the
+evaluation of a specific application, the API provides capabilities to
+influence the execution performance. Most importantly it allows the
+specification of a "tuner" for each collection. Through the tuners you
+can provide various hints to the CnC runtime. The tuner-type is an
+optional template argument to the collection classes. Here is an
+example of how the tuner type "fib_tuner" is assigned to the
+step-collection:
+\dontinclude fib_tuner/fib.h
+\skipline fib_tuner
+
+To define a tuner, you should derive your tuner-class from the default implementations
+which are provided by the CnC runtime. Otherwise you will need to provide the entire tuner
+interface even if you intend to use only parts of the interface.
+The appropriate class for a step-collection tuner is CNC::step_tuner<>:
+\dontinclude fib_tuner.cpp
+\skipline fib_tuner
+
+The funky "<>" stems from the way C++ handles default template parameters.
+This default parameter is only needed for the more advanced use of ranges (\ref tune_ranges).
+
+Besides features for distributed memory (\ref distcnc) probably the
+most relevant feature of a step-tuner is the ability to pre-declare
+item-dependencies. Upon putting a tag normal CnC execution will create
+a step-instance and hand it over to the underlying scheduler which
+will eventually launch the step. Only during the actual execution the
+runtime will observe the unavailability of items (e.g. if a get fails)
+and needs to re-schedule the step. If the tuner pre-declares items the
+step-instances will not be scheduled before those items are actually
+available. To pre-declare item-dependencies you need to provide a
+template method named "depends", which accepts the same arguments as
+the step::execute method and an additional parameter. Here's how this
+would look like in our Fibonacci example:
+\dontinclude fib_tuner.cpp
+\skipline fib_tuner
+\until };
+Declaring dependencies is straight-forward through calling "depends" on the
+provided template object. 
+\skipline template
+\until }
+\until }
+
+You can find the full code here: \ref fib_tuner_code
+
+A similar effect can be achieved by pre-scheduling a step, which
+executes a step on the same thread which puts the prescribing tag
+until the first unavailable item was accessed. Obviously this
+mechanism will not exploit parallelism if all items are available,
+because the entire step will be executed. Still, this mechanism is
+much simpler and can yield performance improvements.
+
+Pre-scheduling is enabled by providing a tuner which provides the
+method "pre-schedule" returning true (\ref fib_preschedule_code):
+\dontinclude fib_preschedule.cpp
+\skipline fib_tuner
+\until };
+
+In combination with the unsafe version of get and
+context::flush_gets() pre-scheduling allows interesting things. For
+example you can inhibit step execution beyond a call to
+context::flush_gets() within the pre-scheduling phase, which might
+increase parallelism. Just uncomment
+\dontinclude fib_preschedule.cpp
+\skipline flush_gets
+and see how the scheduler statistics change.
+
+\section moresteptuner More Tuning of Steps
+The step_tuner interface provides more advanced capabilities:
+- Specifying priorities (CnC::step_tuner::priority, see also CNCROOT/samples/floyd_warshall)
+- Define affinity (to threads) (CnC::step_tuner::affinity)
+- Step cancellation (CnC::step_tuner::was_canceled, CnC::cancel_tuner, see also CNCROOT/samples/nqueens)
+
+They all work on individual step instances (identified by their control tag)
+and are used similar to the above.
+
+
+\section tune_items Tuning item-collections
+Without additional information the runtime
+cannot decide when no more gets to a data item will be issued. However,
+Without this information it is not possible to remove a data item from
+the internal storage. As the CnC programming model never declares
+"when" something happens, it is also not generally possible to let the
+user indicate which is the last get of an item.
+
+As keeping data items in memory for ever can quickly (and
+unnecessarily) blow the available memory a mechanism preventing this
+is needed. When putting an data item, the CnC C++ API lets you declare
+the number of gets that will ever be issued. When this "get-count"
+number of gets has been reached the CnC runtime will remove the item
+from its internal store and free the memory for other use.
+
+In our Fibonacci example we know that each intermediate item 'x' will
+be accessed exactly twice: once by fib(x+1) and once again by
+fib(x+2). Hence the get-count for every Fibonacci item is exactly "2". 
+
+The get-count is an attribute of an item, hence the necessary
+functionality is located in the item-tuners. Declaration of the
+get-count is straight-forward by providing a const method
+actually putting the item:
+\dontinclude fib_getcount.cpp
+\skipline ::get_count
+\until }
+
+Like with tag- and step-collections, the tuner needs to made available
+in the item-collection definition:
+\dontinclude fib_getcount/fib.h
+\skipline item_tuner
+
+Each data item will now be freed once it was accessed the second
+time. The full code (\ref fib_getcount_code, \ref fib_getcount_h) also accounts for the
+corner case 0 but also ignores the smaller real get-count for n and
+n-1.
+
+The get-count features helps a lot keeping the memory-footprint under
+control and hence can significantly improve application performance.
+
+\note The current version does not decrement the get-count for gets issued
+      by the environment (e.g. when outside a step). To avoid get-count warnings
+      return CnC::NO_GETCOUNT for items which the environment consumes (gets).
+
+
+\section memoize Tag/Step Memoization
+As the execution of step-instances is state-less, e.g. functional,
+executing the same function more than once does not alter the result;
+it only adds unnecessary overhead. In Fibonacci, most of
+the tags which prescribe steps are put many times. By default, the CnC
+runtime will execute the corresponding steps as many times as the same
+tag is put. By providing a simple hint to the runtime, it will
+automatically elide duplicate steps. This feature is not enabled by
+default, because duplicate tags are not common and the automatic
+memoization apparently adds some overhead.
+
+The memoization is a matter of the tag-collections, hence the
+corresponding tuning feature is provided by assigning a tuner to the
+tag-collection. The memoization is enabled by requesting to preserve
+tags. CnC provides special base-class for tag-tuners to make
+this extremely convenient:
+\dontinclude fib_memoize/fib.h
+\skipline preserve_tuner
+
+That's all what's needed to let the runtime memoize step
+executions. In the Fibonacci example this feature has an
+amazing effect on performance as it elides most of the 
+computation, because due to the nature of the algorithm
+it stems from redundant computation (also apparent when comparing
+scheduling statistics).
+
+
+Next: \ref tag_ranges
+
+
+
+\page tag_ranges Tag-Ranges
+Often the natural granularity of a step is rather small in the sense
+of having only low compute load. As the CnC convenience of programming
+with CnC (e.g. all the automatic parallelism) apparently comes with
+some overhead, this might not always lead to an efficient program. The
+CnC C++ API comes with a possibility to prescribe a bunch of tags at
+once. This feature is closely related to TBB's range concept. Like in
+TBB, the put range will be subject to recursive
+splitting/partitioning. Instead of scheduling individual tags, the
+runtime will then schedule entire ranges and so avoid some overhead
+induced by the scheduler. Major differences to TBB's range concept are
+firstly that CnC doesn't really treat it as a consecutive range but
+only as an iteratable set, and secondly that the interface to steps
+stays at the granularity of individual tags. There is only one
+interface to steps, e.g. you still define the execute method on tags
+(and not on tag-ranges) which allows for mixing puts of tags and
+tag-ranges within the same program.
+
+In the primes example (/samples/primes/primes) we actually put a
+series of tags to trigger the graph evaluation. Let's use tag-ranges
+instead; it will give the runtime more freedom for optimization and
+some might even think it's nicer code. Primarily, tag-ranges as seen
+as a tuning capability so most of the functionality is within the
+tuning interface, e.g. in the tag-tuner.
+
+First of all we have to declare the type of range we are going to
+use. All we need is a blocked range of integers, so let's just use
+TBB's blocked range. The range-type is declared through a tuner; the
+tag-tuner interface accepts the range type as its first template
+argument. As we are not going to provide any custom code, we can just
+use the CnC tuner-class directly:
+\dontinclude primes_range.cpp
+\skipline m_tags
+
+Now we can put the range instead of writing a for-loop (in main):
+\skipline .put_range
+
+If you run and compile this code (\ref primes_range_code) you should
+observe from the scheduler statistics output that the number of
+scheduled steps is significantly smaller than the number of checked
+values. Please note that for this algorithm a more sophisticated
+partitioning strategy would be needed to achieve good scalability. The
+default partitioning creates equally sized ranges, which will lead to
+heavier partitions if the tag-values become bigger. Please refer to
+\ref tag_range_adv for more details on the partitioner interface.
+
+
+\section parfor CnC::parallel_for
+The above example checks twice as
+many values necessary, as it does execute the step also for even
+numbers. To avoid this, you can define your own range, which could for
+example use strides or list odd numbers in any other manner (see \ref
+tag_range_adv). Alternatively you can use the convenient parallel_for
+construct. Besides avoiding unnecessary work, it even simplifies the
+code: You don't need a tag-collection and instead of prescribing a
+step you simply apply the step to parallel_for:
+\dontinclude primes_parfor.cpp
+\skipline parallel_for
+The last argument "false" is
+a tuning parameter (see \ref tune_ranges) which tells the runtime that
+the step-code will not get any items (e.g. is independent of any other
+steps or items).See \ref primes_parfor_code for the full code.
+
+\attention In distributed mode, parallel_for will not distribute
+the given work across processes even if the tuner provides a matching
+compute_on function. All implied steps-instances will always be scheduled locally. 
+
+
+\section tune_ranges Tuning Ranges
+If you do use ranges or CnC::parallel_for and the step-code does
+not consume items, you can bypass overhead which is needed to handle
+data dependencies. The optional template parameter to step_tuner
+allows this in a very simple manner by setting it to "false":
+\code
+  struct my_step_tuner : public CnC::step_tuner< false >
+  { ... }
+\endcode
+
+A even more simplified version of this parameter is used in
+CnC::parallel_for and CnC::context::parallel_for, e.g in this example:
+\ref parfor.
+
+As mentioned in \ref tag_ranges the tuner also provides the
+partitioner. Tag ranges are a matter of tag-collections, so the
+providing a custom partitioner is done through assigning a tuner to
+the tag-collection.  All you need to do is provide the tuner as the
+second optional argument to tag_tuner (note that the tuner is needed
+anyway for ranges):
+\code
+  struct my_tag_tuner : public CnC::tag_tuner< my_range_type, my_partitioner_type >
+  { ... }
+\endcode
+
+
+\section tag_range_adv Advanced Range-Features
+Aspects of Tag-Ranges The implemented
+range-mechanism is very generic. It allows you to provide an arbitrary
+range as long as you also provide a partitioner which can handle the
+partitioning of your range (which might be anything, a tree, a matrix
+etc.). For a detailed description on the requirements on ranges and
+partitioners please refer to CnC::tag_collection::put_range and
+CnC::default_partitioner.
+
+It is possible to let a step work on ranges rather than on individual
+tags. All you need to do is use the range for both, the tag-type and
+the range-type. To let the runtime use recursive partitioning
+you also need to provide a partitioner. The API comes with a
+pre-defined partitioner for this: CnC::tag_partitioner which is
+otherwise identical to the CnC::default_partitioner. Note: if your
+tag-type is a range, using CnC::tag_collection::put will not partition
+the range, only CnC::tag_collection::put_range will do so.
+
+Partitioners are declared through providing a tuner at
+step-prescription time. Please read CnC::tag_tuner, CnC::default_partitioner and \ref tuning
+for more details.
+
+Next: \ref reuse
+
+
+\page reuse Re-using CnC graphs (reductions, cross/join...)
+CnC programs can be written in a way so that they can be re-used. An
+example could be a CnC graph which implements matrix-multiplication or
+a generic reduction. The idea is to reuse such an implementation
+either multiple times in the same application or in different
+applications.
+
+On the abstract, every CnC graph has input collections and output collections. The
+input collections of a given sub-graph must be the output collection
+of another graph (and/or the environment). Similarly, an output
+collection of a sub-graph is used as input by another graph (and/or
+the environment). To make a graph re-usable, all we need is a way of
+connecting its input and output collections to the rest of the
+application. The inner of such a re-usable graph is of no interest to
+the outside - it might be a normal CnC graph or something else. In any
+case, any communication with the graph is done with the normal
+semantics of CnC collections. At instantiation time, we simply need to
+give it the input and output collections that we want it to work on.
+
+
+\section using_graphs Using Sub-Graphs
+The CnC distribution ships with a few generic predefined graphs. Some
+of them are relatively complex template-classes as they aim to be as generic as
+possible. To facilitate their instantiation they are accompanied with
+a creator function. It accepts the input/output collections as its
+argument and returns a parametrized instance of the re-usable graph
+which is fully wired with the given collections. That's it, now we just
+use the input/output collections as normal, the sub-graph will
+automatically "execute" behind the scenes.
+
+\subsection reduce Example: Using A Generic Reduction Graph
+Here's a simple example (\ref count_words_code) which uses the CnC
+reduction to count the occurrences of strings in a file. The global
+graph consists of a collection for all the lines in the file (blocks),
+a collection with counts of strings per line (counts_per_line) and the
+collection with the final count per string (counts). Here's how the
+instantiation (and wiring) of the graph works by assigning the
+reduction graph to reduce using CnC::make_reduce_graph:
+
+\dontinclude count_words.cpp
+\skipline cw_context()
+\until }
+\until }
+
+Providing data as input to the reduction is a normal put. In this
+example, the step computes the number of occurrences for a given word
+and line and then just puts the computed value.
+
+\skipline get block
+\until }
+
+Similarly, using the result of the reduction is a normal get on the
+graph's output collection. Like in this example, we can also iterate
+on the output collection (in safe state only):
+
+\skipline iterate
+\until }
+
+Please see \ref count_words_code for
+the details of the code. You will realize that using the reduction
+(created by CnC::make_reduce_graph) requires providing the count of
+items that will be reduced in each reduction. Some might think that
+this is a strange requirement. In fact, it's a semantic requirement;
+similar information is required by all reduction implementations in
+other languages as well. Separating it from providing the data
+actually increases flexibility and the opportunity for asynchronous
+operation.
+
+\subsubsection red_flush What If The Number Of Reduced Items Is Unknown?
+Of course there are cases in which the exact number of
+reduced items is never known until finished. So instead of knowing the
+number of reduced items we know when the reduction can be
+completed. For such cases the reduction allows you to provide a
+done-flag, either for all reductions in the reduce-graph (by calling
+flush on the reduce-graph) or for individual
+reductions (by putting -1 as the count).
+
+An example is counting all words in a file (rather than a give set of
+words), see \ref count_all_words_code. Because we do not know the
+words we count, there is no way to say how many contributions there
+will be. So when the processing is done, we finalize the reduction by
+calling flush():
+
+\dontinclude count_all_words.cpp
+\skipline needs number
+\until flush
+\until ctxt.wait()
+
+Please refer to CnC::make_reduce_graph for details on using CnC
+reductions.
+
+\subsubsection mapreduce Map-Reduce
+An obvious application for the reduction is of course the popular 
+map-reduce paradigm. The above example contains almost everything
+needed to write a mapreduce framework based on CnC. Such a CnC based
+framework combines the ease of mapreduce with the flexibility of CnC as
+it allows naturally embedding mapreduce algorithms into CnC programs
+without introducing artificial constraints. As a proof of concept we
+implemented a mapreduce_context (\ref mapreduce_code) and use it to
+implement the same algorithm (count-all-words). To use the
+mapreduce_context you only need to provide the map-operation (working
+on a stream like other mapreduce frameworks do it), the reduce
+operation and then put the data files (see \ref count_all_words_mr_code).
+
+
+\subsubsection connect_graphs Connecting Several Graphs
+The above examples use a single graph to which they input data and
+take its output at the end. A more interesting case would be to
+connect two graphs together and let the asynchronous CnC semantics
+play nicely. Let's sum the entries of a 2d matrix using 2 reductions:
+the first reduction computes the sums for each row. We then feed this
+output (the sums of each row) into a second reduction which then sums
+those into a single value. We don't need barriers or anything like
+this. Following the CnC spirit, we just declare the dependencies - and
+everything can happen asynchronously. We just let the same
+item-collection (sum1) serve as the output for the first reduction and
+as the input for the second. This implies that as soon as the first
+reduction (red1) produces something into sum1, the second reduction
+(red2) can operate on it:
+
+\dontinclude reduce_2d.cpp
+\skipline prescribes(
+\until selector
+\until selector
+
+In this example the step simply puts the items and the environment
+consumes the final sum. We hope the code \ref reduce_2d_code is
+sufficiently well documented to understand how it works.
+
+
+\section def_graphs Writing Re-Usable Sub-Graphs
+When writing a CnC::graph three hurdles need to be taken
+- providing the graph's functionality
+- renaming input and output collections
+- generality
+- termination/quiescence detection
+
+\subsection def_graph_func Functionality
+A CnC::graph defines a piece of an application. Such a graph is part
+of the overall static CnC structure: it gets instantiated with the
+rest of CnC and exists until the surrounding CnC context goes away.
+Such a sub-graph can contain anything it wants, as long as its
+communication with the CnC environment goes through CnC collections.
+It can have internal state and/or have internal collections that are
+not accessible from the outside.
+
+\subsection def_graph_renaming Renaming Input And Output Collections
+The graph's connections to and from the CnC context are CnC
+collections from which a graph takes its inputs and where it puts its
+output. These input/output collections must live on the outside of the
+graph but the graph uses them.  A generic re-usable graph definition
+should make as little assumption as possible about these connecting
+collections - in particular it should not rely on their names on the
+outside. Moreover, different instantiations of the same graph might be
+used in the same application, using different collections as input and
+output.
+
+This implies that the input/output collections should be parameters of
+a generic re-usable graph.  Hence such a graph should accept the
+connecting collections as arguments of its constructor.  Internally it
+will store references to them and use those in the implementation of
+its functionality.
+
+
+\subsection graph_data Accessing Input Data
+The conventional way of getting data from collections (using ::get())
+is one way to get to the input data. However, this is possible only
+from within (graph-internal) CnC steps. Step-like data access is limits
+the things that can be done to what a CnC can express (e.g. it is
+not possible to operate on a stream of incoming data with unknown tags).
+
+To lift this restriction CnC provides a callback interface to tag-
+and item collections. A graph can register callbacks on each collection.
+Whenever something is put into the collection the registered callback
+is called, providing the tag (and data) of what's currently put.
+Every collection defines the type of this callback:
+CnC::item_collection::callback_type and CnC::tag_collection::callback_type.
+The callback needs to implement the corresponding on_put method
+(see CnC::item_collection::callback_type and CnC::tag_collection::callback_type)
+and is registered with a collection by calling CnC::item_collection::on_put
+or CnC::tag_collection::on_put. The callback object can carry state and 
+keep references to the graph. This provides a very flexible mechanism to
+implement almost anything within a CnC graph, even if it's - internally! -
+not obeying the CnC semantics.
+
+Let's look at a simple example of such a callback. We need a class
+which derives from CnC::item_collection::callback_type and implements
+the on_put method:
+
+\dontinclude hidden_graph.cpp
+\skipline the callback
+\until };
+\until };
+
+on_put simply stores the incoming data in an internal queue. In the
+graph's constructor we register an instance of our callback:
+
+\skipline m_input.on_put
+
+The graph can now operate on the internal copies of the data in any
+way it wants. When communicating back the CnC environment, the graph
+must use its output-collections. As a simple example, let's have a thread pop
+each data from the internal queue, sleep for a while and then produce
+control tags and output data:
+
+\dontinclude hidden_graph.cpp
+\skipline do {
+\until } while
+
+Please see \ref hidden_graph_code for the full code.
+
+\note The hidden_graph example uses its own thread and so requires additional
+      care (see \ref graph_term).
+
+
+\subsection graph_generic Writing generic graphs
+As a typed language C++ requires static knowledge of used types. The
+types of tags and items must be known at compile time. A generic graph
+definition needs to adjust to these types at compile time. In C++ this
+is achieved by using templates and the template arguments of a
+"templated graph" depend at least on the input and output
+collections. As CnC's collection templates accept not only the tag and
+data types but also the tuner type, an increasing number of
+input/output collections easily leads to a very long list of template
+parameters.
+
+To instantiate an object of a template class requires specifying all
+template arguments in the type definition. Template functions are
+easier to use as the C++ compiler can automatically deduce the
+template arguments. Hence it is recommended to accompany every
+template graph with generator function accepting all input/output
+collections and other initialization parameters.
+
+In addition to the mere type declaration issue, the internals of a
+(hidden) graph might actually operate on tags and items. A generic
+definition must ensure that those operations are valid for all types. It
+should be possible for a user to provide the functionality so that the
+graph works on custom types. For example, the graph might use the
+operator '+' on items. If you overload the operator '+' of your custom
+type it'll work just fine.  Instead of overloading you can also make
+such operators (template) parameters of your graph.  The reduction
+graph is an example, it let's you provide the reduction operation.
+
+Note that this is not only true for the data items but also for
+tags. Whenever the graph works on a tag, it makes some assumptions
+about what the tag means or what kind of information it can extract
+from it. For example, if the graph semantically operates on a
+one-dimensional data set, it should still be possible to use the graph
+if the actual tag-space is 2-dimensional (or even higher).  In other words,
+even if the graph's operation is one-dimensional, it should be able to
+operate on a higher-dimensional item-collection (e.g. apply a reduction on
+every row for a 2-dimensional matrix). Like with the above
+operators, this can be addressed by letting the user provide the
+functionality to extract the information the graph needs. An example is
+the selector function in the reduction (see also \ref reduce_2d for an
+sample use).
+
+
+\subsection graph_term Detection Of Graph Quiescence/Termination
+If a graph executes things only within (internal) CnC steps or within
+the the execution scope of the callbacks the runtime can automatically
+detect when the graph execution is finished. Examples of such graphs
+are CnC::reduction (as returned by CnC::make_reduce_graph) and
+CnC::join (as returned by CnC::make_join_graph).
+
+Restricting executing code to steps and callbacks will suffice in many
+cases.  Some algorithms might require starting threads or reacting on
+events outside the CnC scope (such as sensors). In such cases the
+graph is responsible of communicating to the CnC runtime whether it's
+currently active or quiescent.  As soon as the runtime finds
+everything in quiescent state it will terminate the execution.
+
+For signaling activity and/or quiescence CnC::graph provides
+CnC::graph::leave_quiescence and CnC::graph::enter_quiescence. A call
+to enter_quiescence must be paired with a preceding call to
+leave_quiescence but can otherwise be allowed at any
+time. leave_quiescence must be called only within the constructor of
+the graph, within a (internal) CnC step or within a on_put callback.
+
+Our hidden_graph example starts a thread which operates on the data.
+This is outside any CnC call so we must communicate when it leaves and
+enters quiescence. As a graph gets born in quiescent state we call 
+leave_quiescence (to enter active state) in the constructor and then
+register our callback:
+
+\dontinclude hidden_graph.cpp
+\skipline the constructor
+\until }
+
+When our thread is done, it calls enter_quiescence before it terminates.
+
+\dontinclude hidden_graph.cpp
+\skipline  } while
+\until }
+
+Note that this is a very simple and artificial example. In particular,
+our graph has only one region of activity. However, conceptually and in
+practice there is no problem letting the graph alternate between
+quiescent and active state - as long as it obeys the above rules.
+
+\note The usual caveats apply to distributed memory: each remote "clone" of 
+      a sub-graph must report quiescence for the runtime to detect global
+      quiescence. This might require explicit communication (see \ref def_graph_dist).
+
+
+\subsection def_graph_dist Sub-Graphs on Distributed Memory
+Sub-graphs, in particular hidden ones, might require explicitly addressing
+distributed memory. A "clone" of the graph exists on each process, hence,
+as soon as you're using non-CnC things you have to explicitly take care
+for any communication that's needed between the siblings. 
+
+Examples for such explicit communication are reductions (reduce.h) and joins (join.h).
+
+The tuners can be used to configure where items go in the usual way.
+If your graph has internal CnC steps you might consider letting the user
+provide a tuner for it and so control its distribution.
+
+Please see CnC::graph, CnC::item_collection  and CnC::tag_collection
+for the details about communication between siblings and where
+callbacks get executed.
+
+
+Next: \ref runtime
+
+
+\page runtime Runtime Options
+\section num_threads Number of Threads
+The API allows adjusting the
+number of worker threads in the code: see
+CnC::debug::set_num_threads. You can also set the number of threads at
+runtime by setting the environment variable CNC_NUM_THREADS to the
+desired number of threads.
+\note The given number must include the environment thread, e.g. n-1
+worker threads will be created if CNC_NUM_THREADS is set to n.
+\note Depending on the scheduling strategy, the runtime might actually
+spawn one or more extra internal helper threads. These threads will
+mostly be idle and should not have any significant effect on the other
+threads.
+
+
+\section scheduler Scheduler
+The CnC runtime comes with a selection of different scheduling strategies from
+which you can chose at runtime. At start-up time, the runtime selects
+the scheduler upon the evaluation of the environment variable
+CNC_SCHEDULER. Allowable values are
+- TBB_TASK uses the TBB task-stealing scheduler (default)
+- FIFO_SINGLE uses a single FIFO task-queue
+- FIFO_STEAL implements task-stealing on thread-local FIFO task-queues
+- FIFO_AFFINITY is the same as FIFO_STEAL but additionally evaluates step_er::affinity()
+
+\note: tuner::affinity() is only evaluated by FIFO_AFFINITY. If your tuner provides
+       affinity hints, you need to use FIFO_AFFINITY to actually make use of it.
+
+The default scheduler is TBB_TASK. Depending on your application
+characteristics you might observe significant performance variations
+with different schedulers. Our experience is that in many cases either
+TBB_TASK or TBB_FIFO shows best (or best-equivalent) performance.
+
+\subsection priorpin Scheduler Control
+The CnC runtime reacts on a few more flags that can be controlled through environment variables:
+- CNC_USE_PRIORITY: by default, the step_tuner::priority() hint is not evaluated.
+  The FIFO schedulers (but not TBB_TASK) will evaluate step_tuner::priority() if CNC_USE_PRIORITY is set to 1
+- CNC_PIN_THREADS: The runtime can pin threads to the available cores. The value specified in CNC_PIN_THREADS
+  will be used as the stride to distribute threads in a strided round-robin fashion. This allows 
+  adjusting the thread-to-core mapping to the HW hierarchy (sockets, caches etc). Examples for 8 cores (c0-c7)
+  CNC_PIN_THREADS=1: t0->c0, t1->c1, t2->c2, t3->c3, ...
+  CNC_PIN_THREADS=2: t0->c0, t1->c2, t2->c4, t3->c6, t4->c1, t5->c3, t6->c5, t7->c7, t8->c0, ...
+  CNC_PIN_THREADS=4: t0->c0, t1->c4, t2->c1, t3->c5, t4->c2, t5->c6, t6->c3, t7->c7, t8->c0, ...<br>
+  By default, pinning is off.
+  \note On Intel(R) Xeon Phi(TM) (MIC) pinning is on by default with stride 4.
+  
+
+\subsection bypass Bypassing the Scheduler
+The CnC runtime can optionally execute the first step-instance that is
+created by the current step (e.g. by putting a tag) right after the
+currently executing step. This successor step-instance will not go through
+the normal scheduling procedure and thus avoids overhead. The trade-off
+is that it can also limit parallelism. Hence this feature is disabled
+by default. To enable it set CNC_SCHEDULER_BYPASS to a number which is
+unequal to  0.
+
+Next: \ref distcnc
+
+
+\page non_cnc Beyond And With CnC
+CnC doesn't live in isolation, it can be combined with other 
+programming models and tools. To give you an impression on what's
+possible, here are a few examples:
+- \ref def_graphs "Embedding non-deterministic or otherwise non-CnC modules into CnC"
+- Combining MPI (SPMD-style) programs with CnC, see CnC::dist_cnc_init,
+  \ref mpicnc_code and \ref matrix_inverse_distenv_code
+- Attaching item collections to Databases (see \ref mysql_simple_code)
+
+
+**/

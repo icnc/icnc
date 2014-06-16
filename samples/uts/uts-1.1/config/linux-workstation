@@ -1,0 +1,77 @@
+# Specify which targets should be built when a "make all"
+# is performed.  The default is only uts-seq.
+
+TARGETS_ALL = uts-seq uts-stat time_rng uts-pthread
+
+# -------------------------------------
+# C Compiler 
+# -------------------------------------
+CC = icc
+CC_OPTS = -g -O0
+LD_OPTS = -lm -pthread
+
+# -------------------------------------
+# CnC
+# -------------------------------------
+CXX = g++
+CNC_OPTS = -I$(CNCROOT)/include $(CC_OPTS) -DNDEBUG -pthread
+# -DCNC_USE_ASSERT
+# -DNDEBUG
+# -DCNC_WITH_ITAC -I$(VT_ROOT)/include
+CNCLD_OPTS = -L$(CNCROOT)/lib/$(ARCH) -lcnc -ltbb -ltbbmalloc $(LD_OPTS) -lrt
+# -L$(VT_SLIB_DIR) -lVTcs $(VT_ADD_LIBS)
+
+# -------------------------------------
+# MPI Compiler 
+# -------------------------------------
+MPICC = mpiicc
+MPICC_OPTS = $(CC_OPTS)
+MPILD_OPTS = $(LD_OPTS)
+
+
+# -------------------------------------
+# UPC Compiler 
+# -------------------------------------
+UPCC = false
+UPCC_OPTS = 
+UPCLD_OPTS = 
+
+
+# -------------------------------------
+# OPENMP Compiler 
+# -------------------------------------
+OMPCC = icc
+OMPCC_OPTS = -openmp
+OMPLD_OPTS = -openmp
+
+
+# -------------------------------------
+# SHMEM Compiler 
+# -------------------------------------
+SHMCC = false
+SHMCC_OPTS =	
+SHMLD_OPTS = 
+
+# -------------------------------------
+# GPSHMEM Compiler 
+# -------------------------------------
+GPSHMCC = false
+GPSHMCC_OPTS = 
+GPSHMLD_OPTS = 
+
+
+# -------------------------------------
+# Optional Build Flags:
+# -------------------------------------
+### Include Chunk tracking debug messages
+#FLAGS += -DCTRK
+### Turn on Paraver traces
+#FLAGS += -DTRACE
+
+# -------------------------------------
+# Select random number generator
+# -------------------------------------
+
+#RNG=Devine
+#RNG=ALFG
+RNG=BRG
