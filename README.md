@@ -12,7 +12,7 @@ mkdir build
 cd build
 cmake <options> ..
 ```
-Primary <options> are
+Primary \<options\> are
 * Build libraries to use MPI (distributed memory): -DBUILD_LIBS_FOR_MPI=TRUE
 * Build libraries for profiling with Intel(R) Trace Analyzer and Collector: -DBUILD_LIBS_FOR_ITAC=TRUE
 * See generic options below
@@ -30,7 +30,7 @@ mkdir build
 cd build
 cmake <options> ..
 ```
-Primary <options> are
+Primary \<options\> are
 * Specify CnC install/root directory: CNCROOT=\<path_to_cnc\>
 * Enable distributed memory: -DDIST_CNC=TRUE
 * Enable hooks for tracing with Intel(R) Trace Analyzer and Collector: -DUSE_ITAC=TRUE
