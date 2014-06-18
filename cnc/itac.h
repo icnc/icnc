@@ -62,7 +62,7 @@ simply set VT_LOGFILE_FORMAT=SINGLESTF when runnig your application.
 
 Usually CnC codes are threaded. ITC will create a trace in which every
 thread is shown as busy from it's first acitivity to its termination,
-even if it is actually idle. To prevent this set VT_ENTER_USCERCODE=0
+even if it is actually idle. To prevent this set VT_ENTER_USERCODE=0
 at application runtime.
 
 \section mpitrace Intel(R) MPI and ITC
