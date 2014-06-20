@@ -4,6 +4,14 @@
 
 The CnC homepage is here: https://icnc.github.io
 
+###Prerequisites
+* Linux\* or Windows\* (iOS\* should work, but hasn’t been tested yet)
+* TBB (Intel(R) Threading Building Blocks) version 4.1 or later (http://threadingbuildingblocks.org/download)
+* cmake (http://www.cmake.org/cmake/resources/software.html)
+* C++ compiler: g++ >= 4.4, icc >= 11.0, Microsoft Visual Studio* >= 10 (2010)
+* make (Linux\*), nmake or Microsoft Visual Studio\* (Windows\*)
+
+
 ###Building CnC
 You need cmake to prepare building the CnC libraries from source
 ```bash
