@@ -2,7 +2,7 @@
 
 **Parallelism without the Pain**
 
-The CnC homepage is here: https://icnc.github.io/index.html 
+The CnC homepage is here: https://icnc.github.io
 
 ###Building CnC
 You need cmake to prepare building the CnC libraries from source
