@@ -60,3 +60,5 @@ Most header files start with a description of the functionality of the given mod
 All header files which are need to write a CnC application with pre-compiled libraries resides in the cnc directory. Internal headers are in cnc/internal, internals for distributed memory can be found in cnc/internal/dist. Anything else is in src.
 
 Every class has its own header-file (and sometimes also a cpp file).
+
+##Your contribution is welcome!
