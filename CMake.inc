@@ -77,11 +77,16 @@ set(MPI_LIB optimized ${MPI_LIB_OPT} debug ${MPI_LIB_DBG} CACHE INTERNAL "use fo
 # ITAC stuff
 
 function(find_itac)
+  if($ENV{VT_ADD_LIBS})
+    set(VT_ADD_LIBS_ENV $ENV{VT_ADD_LIBS})
+  else()
+    set(VT_ADD_LIBS_ENV "vtaddlibs")
+  endif($ENV{VT_ADD_LIBS})
   if(CMAKE_SYSTEM_NAME STREQUAL Windows)
-    string(REPLACE ".lib" "" VT_ADD_LIBS__ $ENV{VT_ADD_LIBS})
+    string(REPLACE ".lib" "" VT_ADD_LIBS__ ${VT_ADD_LIBS_ENV})
     set(CMAKE_PREFIX_PATH ${ITACROOT}/lib/impi64)
   else()
-    string(REPLACE "-l" "" VT_ADD_LIBS__ $ENV{VT_ADD_LIBS})
+    string(REPLACE "-l" "" VT_ADD_LIBS__ ${VT_ADD_LIBS_ENV})
     set(CMAKE_PREFIX_PATH "${ITACROOT}/intel64/slib")
   endif(CMAKE_SYSTEM_NAME STREQUAL Windows)
   string(REPLACE " " ";" VT_ADD_LIBS_ ${VT_ADD_LIBS__})
