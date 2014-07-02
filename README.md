@@ -2,7 +2,15 @@
 
 **Parallelism without the Pain**
 
-The CnC homepage is here: https://icnc.github.io/index.html 
+The CnC homepage is here: https://icnc.github.io
+
+###Prerequisites
+* Linux\* or Windows\* (iOS\* should work, but hasn’t been tested yet)
+* TBB (Intel(R) Threading Building Blocks) version 4.1 or later (http://threadingbuildingblocks.org/download)
+* cmake (http://www.cmake.org/cmake/resources/software.html)
+* C++ compiler: g++ >= 4.4, icc >= 11.0, Microsoft Visual Studio* >= 10 (2010)
+* make (Linux\*), nmake or Microsoft Visual Studio\* (Windows\*)
+
 
 ###Building CnC
 You need cmake to prepare building the CnC libraries from source
@@ -60,3 +68,5 @@ Most header files start with a description of the functionality of the given mod
 All header files which are need to write a CnC application with pre-compiled libraries resides in the cnc directory. Internal headers are in cnc/internal, internals for distributed memory can be found in cnc/internal/dist. Anything else is in src.
 
 Every class has its own header-file (and sometimes also a cpp file).
+
+###Your contribution is welcome!
