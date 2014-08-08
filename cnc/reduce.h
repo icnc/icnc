@@ -377,7 +377,8 @@ namespace CnC
     {
         if( trace_level() > 2 ) {
             Internal::Speaker oss(std::cout);
-            oss << this->name() << " try_put_value [" << otag << "]"
+            oss << this->name() << " try_put_value [";
+            cnc_format( oss, otag ) << "]"
 #ifdef _DIST_CNC_
                 << " nValues " << i->second.nValues << " status " << i->second.status
 #endif
@@ -411,7 +412,8 @@ namespace CnC
             (*ser) & DISTRED::GATHERCOUNT & otag & _cnt;
             if( trace_level() > 2 ) {
                 Internal::Speaker oss(std::cout);
-                oss << this->name() << " send GATHERCOUNT [" << otag << "] " << _cnt << " to " << to;
+                oss << this->name() << " send GATHERCOUNT [";
+                cnc_format( oss, otag ) << "] " << _cnt << " to " << to;
             }
             this->send_msg( ser, to );
             return true;
@@ -438,7 +440,8 @@ namespace CnC
     {
         if( trace_level() > 2 ) {
             Internal::Speaker oss(std::cout);
-            oss << this->name() << " try_send_or_put_value [" << otag << "] nValues " << i->second.nValues << " status " << i->second.status;
+            oss << this->name() << " try_send_or_put_value [";
+            cnc_format( oss, otag ) << "] nValues " << i->second.nValues << " status " << i->second.status;
         }
         if( i->second.nValues.fetch_and_decrement() == 1 ) {
             if( i->second.owner == CnC::tuner_base::myPid() ) {
@@ -455,7 +458,9 @@ namespace CnC
                 const int to = my_parent_for_root( i->second.owner );
                 if( trace_level() > 2 ) {
                     Internal::Speaker oss(std::cout);
-                    oss << this->name() << " send VALUE [" << otag << "] " << _val << " to " << to;
+                    oss << this->name() << " send VALUE [";
+                    cnc_format( oss, otag ) << "] ";
+                    cnc_format( oss, _val ) << " to " << to;
                 }
                 this->send_msg( ser, to );
                 i->second.status = DONE;
@@ -504,7 +509,8 @@ namespace CnC
         int _c = bcast( ser, root );
         if( _c && trace_level() > 2 ) {
             Internal::Speaker oss(std::cout);
-            oss << this->name() << " bcast " << (val != M1 ? " BCASTCOUNT [" : " DONE [") << tag << "]";
+            oss << this->name() << " bcast " << (val != M1 ? " BCASTCOUNT [" : " DONE [");
+            cnc_format( oss, tag ) << "]";
         }
         return _c;
     };
@@ -557,7 +563,8 @@ namespace CnC
             (*ser) & _tag & _cnt;
             if( trace_level() > 2 ) {
                 Internal::Speaker oss(std::cout);
-                oss << this->name() << " recvd GATHERCOUNT [" << _tag << "] " << _cnt;
+                oss << this->name() << " recvd GATHERCOUNT [";
+                cnc_format( oss, _tag ) << "] " << _cnt;
             }
             m_oncount->on_gatherCount( _tag, get( _tag ), _cnt );
             break;
@@ -569,7 +576,8 @@ namespace CnC
             (*ser) & _tag & _owner & _cnt ;
             if( trace_level() > 2 ) {
                 Internal::Speaker oss(std::cout);
-                oss << this->name() << " recvd BCASTCOUNT [" << _tag << "] " << _cnt << " " << _owner;
+                oss << this->name() << " recvd BCASTCOUNT [";
+                cnc_format( oss, _tag ) << "] " << _cnt << " " << _owner;
             }
             m_oncount->on_bcastCount( _tag, get( _tag ), _cnt, _owner );
             break;
@@ -580,7 +588,9 @@ namespace CnC
             (*ser) & _tag & _val;
             if( trace_level() > 2 ) {
                 Internal::Speaker oss(std::cout);
-                oss << this->name() << " recvd VALUE [" << _tag << "] " << _val;
+                oss << this->name() << " recvd VALUE [";
+                cnc_format( oss, _tag ) << "] ";
+                cnc_format( oss, _val );
             }
             m_ondata->on_value( _tag, get( _tag ), _val );
             break;
@@ -591,7 +601,8 @@ namespace CnC
             (*ser) & _tag & _owner;
             if( trace_level() > 2 ) {
                 Internal::Speaker oss(std::cout);
-                oss << this->name() << " recvd DONE [" << _tag << "] " << _owner;
+                oss << this->name() << " recvd DONE [";
+                cnc_format( oss, _tag ) << "] " << _owner;
             }
             m_oncount->on_done( _tag, get( _tag ), _owner );
             break;
@@ -679,8 +690,10 @@ namespace CnC
             if( m_reduce->trace_level() > 0 ) { 
                 Internal::Speaker oss(std::cout);
                 oss << m_reduce->name() << " on_put [";
-                cnc_format( oss, tag );
-                oss << "] for [" << otag << "] " << val << " nred now " << _n << "/" << i->second.n
+                cnc_format( oss, tag ) << "] for [";
+                cnc_format( oss, otag ) << "] ";
+                cnc_format( oss, val );
+                oss << " nred now " << _n << "/" << i->second.n
 #ifdef _DIST_CNC_
                     << " owner " << i->second.owner << " status " << i->second.status << " nCounts " << i->second.nCounts
 #endif
@@ -713,8 +726,7 @@ namespace CnC
         } else if( m_reduce->trace_level() > 0 ) { 
             Internal::Speaker oss(std::cout);
             oss << m_reduce->name() << " [";
-            cnc_format( oss, tag );
-            oss << "] was not selected";
+            cnc_format( oss, tag ) << "] was not selected";
         }
     }
             
@@ -735,8 +747,9 @@ namespace CnC
         TRACE( "::on_done" );
         if( m_reduce->trace_level() > 2 ) { 
             Internal::Speaker oss(std::cout);
-            oss << m_reduce->name() << " on_done for [" << otag << "] nred now " << i->second.nreduced << "/" << i->second.n
-                << " owner " << i->second.owner << " status " << i->second.status;
+            oss << m_reduce->name() << " on_done for [";
+            cnc_format( oss, otag ) << "] nred now " << i->second.nreduced << "/" << i->second.n
+                                    << " owner " << i->second.owner << " status " << i->second.status;
         }
         i->second.owner = owner;
         if( owner != CnC::tuner_base::myPid() || i->second.status.compare_and_swap( BCAST_DONE, CNT_AVAILABLE ) == CNT_AVAILABLE ) {
@@ -783,7 +796,8 @@ namespace CnC
         i->second.nreduced += cnt;
         if( m_reduce->trace_level() > 2 ) { 
             Internal::Speaker oss(std::cout);
-            oss << m_reduce->name() << " on_gatherCount [" << otag << "] now " << i->second.nreduced << "/" << i->second.n << " nCounts " << i->second.nCounts;
+            oss << m_reduce->name() << " on_gatherCount [";
+            cnc_format( oss, otag ) << "] now " << i->second.nreduced << "/" << i->second.n << " nCounts " << i->second.nCounts;
         }
         // at root, we might need to trigger done phase
         if( --i->second.nCounts <= 0 ) { // there might be extra counts

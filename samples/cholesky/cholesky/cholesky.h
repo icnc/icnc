@@ -245,6 +245,7 @@ struct cholesky_context : public CnC::context< cholesky_context >
 #if 0
         CnC::debug::trace_all( *this );
 #endif
+        CnC::debug::collect_scheduler_statistics(*this);
     }
 
 #ifdef _DIST_

@@ -20,7 +20,7 @@ option(CNC_PRODUCT_BUILD   "Build an \"official\" binary release" FALSE)
 
 set(CNC_SRC_ROOT ${CMAKE_SOURCE_DIR})
 set(EXECUTABLE_OUTPUT_PATH "bin")
-set(LIBRARY_OUTPUT_PATH "lib")
+set(LIBRARY_OUTPUT_PATH "lib/intel64")
 
 ################################################################################
 # source files for different libs
