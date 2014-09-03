@@ -1,0 +1,26 @@
+CnC Total Time: [\d\.]+ sec
+Floating point elements per matrix: 1980 x 1980
+Floating point elements per tile: 90 x 90
+Floating-point operations executed per unit time: +[\d\.]+ billions/sec
+Floating-point operations executed per unit time: +[\d\.]+ billions/sec
+Floating-point operations executed: 15\.524784 billion
+Floating-point operations executed: 15\.524784 billion
+Generating matrix of size 1980
+Invert CnC steps
+Invert serially
+Serial Total Time: [e\-\d\.]+ sec
+Steps created\( \d+ \)
+Steps requeued\( \d+ \) resumed\( \d+ \)
+Steps scheduled\( \d+ \) inflight\( 0, 0 \)
+dim\(22\) size\(1980\)
+resident memory MB [\de\+\.]+ +increment MB [\-\d\.]+
+resident memory MB [\de\+\.]+ +increment MB [\-\d\.]+
+resident memory MB [\de\+\.]+ +increment MB [\-\d\.]+
+resident memory MB [\de\+\.]+ +increment MB [\-\d\.]+
+resident memory MB [\de\+\.]+ +increment MB [\-\d\.]+
+tiles created \d+ tiles deleted \d+ tiles remaining [\-\d]+
+tiles created \d+ tiles deleted \d+ tiles remaining [\-\d]+
+tiles created \d+ tiles deleted \d+ tiles remaining [\-\d]+
+tiles created \d+ tiles deleted \d+ tiles remaining [\-\d]+
+tiles created \d+ tiles deleted \d+ tiles remaining [\-\d]+
+tiles per matrix: 22 x 22

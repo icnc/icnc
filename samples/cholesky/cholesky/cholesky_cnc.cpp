@@ -27,6 +27,7 @@
 #include <cassert>
 #include <cstdio>
 #include <cmath>
+#include <cstring>
 #include <tbb/tick_count.h>
 
 #include "cholesky_types.h"
@@ -227,7 +228,7 @@ void cholesky( double * A, const int n, const int b, const char * oname, dist_ty
     printf("The time taken for parallel execution a matrix of size %d x %d : %g sec\n", n, n, (t3-t2).seconds());
     
     if(oname) {
-        fout = fopen(oname, "w");
+        fout =  strcmp(oname, "-") ? fopen(oname,"w") : stdout;
         for (int i = 0; i < p; i++) {
             for(int i_b = 0; i_b < b; i_b++) {
                 k = 1;

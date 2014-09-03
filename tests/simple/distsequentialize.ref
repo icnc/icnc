@@ -1,0 +1,40 @@
+Messages sent
+Steps created\( 18 \)
+Steps requeued\( . \) resumed\( . \)
+Steps scheduled\( 1 \) inflight\( 0, 0 \)
+\[CnC 0\] End step my_step\(11\)
+\[CnC 0\] End step my_step\(15\)
+\[CnC 0\] End step my_step\(3\)
+\[CnC 0\] End step my_step\(7\)
+\[CnC 0\] Put tag my_tags<0>
+\[CnC 0\] Put tag my_tags<10>
+\[CnC 0\] Put tag my_tags<11>
+\[CnC 0\] Put tag my_tags<12>
+\[CnC 0\] Put tag my_tags<13>
+\[CnC 0\] Put tag my_tags<14>
+\[CnC 0\] Put tag my_tags<15>
+\[CnC 0\] Put tag my_tags<16>
+\[CnC 0\] Put tag my_tags<17>
+\[CnC 0\] Put tag my_tags<1>
+\[CnC 0\] Put tag my_tags<2>
+\[CnC 0\] Put tag my_tags<3>
+\[CnC 0\] Put tag my_tags<4>
+\[CnC 0\] Put tag my_tags<5>
+\[CnC 0\] Put tag my_tags<6>
+\[CnC 0\] Put tag my_tags<7>
+\[CnC 0\] Put tag my_tags<8>
+\[CnC 0\] Put tag my_tags<9>
+\[CnC 0\] Start step my_step\(11\) @0
+\[CnC 0\] Start step my_step\(11\) @0
+\[CnC 0\] Start step my_step\(15\) @0
+\[CnC 0\] Start step my_step\(3\) @0
+\[CnC 0\] Start step my_step\(7\) @0
+\[CnC 0\] Start step my_step\(7\) @0
+\[CnC 0\] Start step my_step\(7\) @0
+\[CnC 0\] Suspend step my_step\(11\) -> input item not ready 0
+\[CnC 0\] Suspend step my_step\(7\) -> input item not ready 0
+\[CnC 0\] Suspend step my_step\(7\) -> input item not ready 0
+\[CnC 0\] tag 11 with value 999982
+\[CnC 0\] tag 15 with value 1000000
+\[CnC 0\] tag 3 with value 999985
+\[CnC 0\] tag 7 with value 999971

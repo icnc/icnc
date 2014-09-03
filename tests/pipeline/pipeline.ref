@@ -1,0 +1,4 @@
+Stages: 10 streams: 10 time: [\d.]+ sec
+Steps created\( 100 \)
+Steps requeued\( \d+ \) resumed\( \d+ \)
+Steps scheduled\( \d+ \) inflight\( 0, 0 \)

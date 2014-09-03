@@ -1,0 +1,12 @@
+
+
+  GEO parameters: gen_mx = 6, shape function = 0 \(Linear decrease\)
+  root branching factor b_0 = 4\.0, root seed = 0
+Compute granularity: 1
+Execution strategy:  Parallel search using threads
+Random number generator: SHA-1 \(state size = 20B\)
+Tree shape parameters:
+Tree size = 1732, tree depth = 5, num leaves = 1050 \(60\.62%\)
+Tree type:  1 \(Geometric\)
+UTS - Unbalanced Tree Search 2\.1 \(CnC\)
+Wallclock time = [\.\d]+ sec, performance = \d+ nodes/sec \(\d+ nodes/sec per PE\)

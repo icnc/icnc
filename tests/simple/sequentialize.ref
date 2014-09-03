@@ -1,0 +1,78 @@
+Steps created\( 18 \)
+Steps requeued\( . \) resumed\( . \)
+Steps scheduled\( 9 \) inflight\( 0, 0 \)
+\[CnC\] End step my_step\(0\)
+\[CnC\] End step my_step\(1\)
+\[CnC\] End step my_step\(10\)
+\[CnC\] End step my_step\(11\)
+\[CnC\] End step my_step\(12\)
+\[CnC\] End step my_step\(13\)
+\[CnC\] End step my_step\(14\)
+\[CnC\] End step my_step\(15\)
+\[CnC\] End step my_step\(16\)
+\[CnC\] End step my_step\(17\)
+\[CnC\] End step my_step\(2\)
+\[CnC\] End step my_step\(3\)
+\[CnC\] End step my_step\(4\)
+\[CnC\] End step my_step\(5\)
+\[CnC\] End step my_step\(6\)
+\[CnC\] End step my_step\(7\)
+\[CnC\] End step my_step\(8\)
+\[CnC\] End step my_step\(9\)
+\[CnC\] Put tag my_tags<0>
+\[CnC\] Put tag my_tags<10>
+\[CnC\] Put tag my_tags<11>
+\[CnC\] Put tag my_tags<12>
+\[CnC\] Put tag my_tags<13>
+\[CnC\] Put tag my_tags<14>
+\[CnC\] Put tag my_tags<15>
+\[CnC\] Put tag my_tags<16>
+\[CnC\] Put tag my_tags<17>
+\[CnC\] Put tag my_tags<1>
+\[CnC\] Put tag my_tags<2>
+\[CnC\] Put tag my_tags<3>
+\[CnC\] Put tag my_tags<4>
+\[CnC\] Put tag my_tags<5>
+\[CnC\] Put tag my_tags<6>
+\[CnC\] Put tag my_tags<7>
+\[CnC\] Put tag my_tags<8>
+\[CnC\] Put tag my_tags<9>
+\[CnC\] Start step my_step\(0\) @0
+\[CnC\] Start step my_step\(1\) @0
+\[CnC\] Start step my_step\(10\) @0
+\[CnC\] Start step my_step\(11\) @0
+\[CnC\] Start step my_step\(11\) @0
+\[CnC\] Start step my_step\(12\) @0
+\[CnC\] Start step my_step\(13\) @0
+\[CnC\] Start step my_step\(13\) @0
+\[CnC\] Start step my_step\(14\) @0
+\[CnC\] Start step my_step\(15\) @0
+\[CnC\] Start step my_step\(16\) @0
+\[CnC\] Start step my_step\(17\) @0
+\[CnC\] Start step my_step\(2\) @0
+\[CnC\] Start step my_step\(3\) @0
+\[CnC\] Start step my_step\(3\) @0
+\[CnC\] Start step my_step\(4\) @0
+\[CnC\] Start step my_step\(5\) @0
+\[CnC\] Start step my_step\(5\) @0
+\[CnC\] Start step my_step\(6\) @0
+\[CnC\] Start step my_step\(7\) @0
+\[CnC\] Start step my_step\(7\) @0
+\[CnC\] Start step my_step\(8\) @0
+\[CnC\] Start step my_step\(9\) @0
+\[CnC\] Start step my_step\(9\) @0
+\[CnC\] Suspend step my_step\(11\) -> input item not ready 0
+\[CnC\] Suspend step my_step\(13\) -> input item not ready 0
+\[CnC\] Suspend step my_step\(3\) -> input item not ready 0
+\[CnC\] Suspend step my_step\(5\) -> input item not ready 0
+\[CnC\] Suspend step my_step\(7\) -> input item not ready 0
+\[CnC\] Suspend step my_step\(9\) -> input item not ready 0
+\[CnC\] tag 1 with value 999968
+\[CnC\] tag 11 with value 999943
+\[CnC\] tag 13 with value 999932
+\[CnC\] tag 15 with value 999983
+\[CnC\] tag 17 with value 1000000
+\[CnC\] tag 3 with value 999967
+\[CnC\] tag 5 with value 999964
+\[CnC\] tag 7 with value 999959
+\[CnC\] tag 9 with value 999952

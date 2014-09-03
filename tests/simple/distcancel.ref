@@ -1,0 +1,61 @@
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+\[CnC 0\] Canceled step \(1\)
+\[CnC 0\] Canceled step \(103\)
+\[CnC 0\] Canceled step \(104\)
+\[CnC 0\] Canceled step \(3\)
+\[CnC 0\] End step \(0\)
+\[CnC 0\] End step \(0\)
+\[CnC 0\] End step \(1\)
+\[CnC 0\] End step \(100\)
+\[CnC 0\] End step \(101\)
+\[CnC 0\] End step \(102\)
+\[CnC 0\] End step \(2\)
+\[CnC 0\] End step \(2\)
+\[CnC 0\] End step \(3\)
+\[CnC 0\] End step \(4\)
+\[CnC 0\] End step \(4\)
+\[CnC 0\] Send step \(105\) to 1
+\[CnC 0\] Send step \(106\) to 1
+\[CnC 0\] Send step \(107\) to 1
+\[CnC 0\] Send step \(108\) to 1
+\[CnC 0\] Send step \(109\) to 1
+\[CnC 0\] Send step \(5\) to 1
+\[CnC 0\] Send step \(5\) to 1
+\[CnC 0\] Send step \(6\) to 1
+\[CnC 0\] Send step \(6\) to 1
+\[CnC 0\] Send step \(7\) to 1
+\[CnC 0\] Send step \(7\) to 1
+\[CnC 0\] Send step \(8\) to 1
+\[CnC 0\] Send step \(8\) to 1
+\[CnC 0\] Send step \(9\) to 1
+\[CnC 0\] Send step \(9\) to 1
+\[CnC 0\] Start step \(0\) 
+\[CnC 0\] Start step \(0\) 
+\[CnC 0\] Start step \(1\) 
+\[CnC 0\] Start step \(100\) 
+\[CnC 0\] Start step \(100\) 
+\[CnC 0\] Start step \(101\) 
+\[CnC 0\] Start step \(101\) 
+\[CnC 0\] Start step \(102\) 
+\[CnC 0\] Start step \(102\) 
+\[CnC 0\] Start step \(103\) 
+\[CnC 0\] Start step \(104\) 
+\[CnC 0\] Start step \(2\) 
+\[CnC 0\] Start step \(2\) 
+\[CnC 0\] Start step \(3\) 
+\[CnC 0\] Start step \(4\) 
+\[CnC 0\] Start step \(4\) 
+\[CnC 0\] Suspend step \(100\) -> input item not ready 0
+\[CnC 0\] Suspend step \(101\) -> input item not ready 0
+\[CnC 0\] Suspend step \(102\) -> input item not ready 0
+\[CnC 0\] Suspend step \(103\) -> input item not ready 0
+\[CnC 0\] Suspend step \(104\) -> input item not ready 0

@@ -1,0 +1,83 @@
+\[CnC 0\] End step ds\(0\)
+\[CnC 0\] End step ds\(4\)
+\[CnC 0\] End step ds\(8\)
+\[CnC 0\] End step ds2\(0\)
+\[CnC 0\] End step ds2\(4\)
+\[CnC 0\] End step ds2\(8\)
+\[CnC 0\] End step ss\(0\)
+\[CnC 0\] End step ss\(1\)
+\[CnC 0\] End step ss\(10\)
+\[CnC 0\] End step ss\(2\)
+\[CnC 0\] End step ss\(3\)
+\[CnC 0\] End step ss\(4\)
+\[CnC 0\] End step ss\(5\)
+\[CnC 0\] End step ss\(6\)
+\[CnC 0\] End step ss\(7\)
+\[CnC 0\] End step ss\(8\)
+\[CnC 0\] End step ss\(9\)
+\[CnC 0\] Put tag dt2<0>
+\[CnC 0\] Put tag dt2<10>
+\[CnC 0\] Put tag dt2<1>
+\[CnC 0\] Put tag dt2<2>
+\[CnC 0\] Put tag dt2<3>
+\[CnC 0\] Put tag dt2<4>
+\[CnC 0\] Put tag dt2<5>
+\[CnC 0\] Put tag dt2<6>
+\[CnC 0\] Put tag dt2<7>
+\[CnC 0\] Put tag dt2<8>
+\[CnC 0\] Put tag dt2<9>
+\[CnC 0\] Put tag dt<0>
+\[CnC 0\] Put tag dt<10>
+\[CnC 0\] Put tag dt<1>
+\[CnC 0\] Put tag dt<2>
+\[CnC 0\] Put tag dt<3>
+\[CnC 0\] Put tag dt<4>
+\[CnC 0\] Put tag dt<5>
+\[CnC 0\] Put tag dt<6>
+\[CnC 0\] Put tag dt<7>
+\[CnC 0\] Put tag dt<8>
+\[CnC 0\] Put tag dt<9>
+\[CnC 0\] Put tag sd<0>
+\[CnC 0\] Put tag sd<10>
+\[CnC 0\] Put tag sd<1>
+\[CnC 0\] Put tag sd<2>
+\[CnC 0\] Put tag sd<3>
+\[CnC 0\] Put tag sd<4>
+\[CnC 0\] Put tag sd<5>
+\[CnC 0\] Put tag sd<6>
+\[CnC 0\] Put tag sd<7>
+\[CnC 0\] Put tag sd<8>
+\[CnC 0\] Put tag sd<9>
+\[CnC 0\] Send step ds\(1\) to 1
+\[CnC 0\] Send step ds\(10\) to 2
+\[CnC 0\] Send step ds\(2\) to 2
+\[CnC 0\] Send step ds\(3\) to 3
+\[CnC 0\] Send step ds\(5\) to 1
+\[CnC 0\] Send step ds\(6\) to 2
+\[CnC 0\] Send step ds\(7\) to 3
+\[CnC 0\] Send step ds\(9\) to 1
+\[CnC 0\] Send step ds2\(1\) to 3
+\[CnC 0\] Send step ds2\(10\) to 2
+\[CnC 0\] Send step ds2\(2\) to 2
+\[CnC 0\] Send step ds2\(3\) to 1
+\[CnC 0\] Send step ds2\(5\) to 3
+\[CnC 0\] Send step ds2\(6\) to 2
+\[CnC 0\] Send step ds2\(7\) to 1
+\[CnC 0\] Send step ds2\(9\) to 3
+\[CnC 0\] Start step ds\(0\) @0
+\[CnC 0\] Start step ds\(4\) @0
+\[CnC 0\] Start step ds\(8\) @0
+\[CnC 0\] Start step ds2\(0\) @0
+\[CnC 0\] Start step ds2\(4\) @0
+\[CnC 0\] Start step ds2\(8\) @0
+\[CnC 0\] Start step ss\(0\) @0
+\[CnC 0\] Start step ss\(1\) @0
+\[CnC 0\] Start step ss\(10\) @0
+\[CnC 0\] Start step ss\(2\) @0
+\[CnC 0\] Start step ss\(3\) @0
+\[CnC 0\] Start step ss\(4\) @0
+\[CnC 0\] Start step ss\(5\) @0
+\[CnC 0\] Start step ss\(6\) @0
+\[CnC 0\] Start step ss\(7\) @0
+\[CnC 0\] Start step ss\(8\) @0
+\[CnC 0\] Start step ss\(9\) @0

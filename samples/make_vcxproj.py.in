@@ -1,0 +1,44 @@
+import sys, re, os
+
+tbbroot  = r'@TBBROOT@'
+cncroot  = r'@CNCROOT@'
+vtroot   = r'@ITACROOT@'
+build    = r'@CMAKE_CURRENT_BINARY_DIR@'
+vsroot   = r'C:\Program Files (x86)\Windows Kits\8.0\Lib\win8\um\x64'
+
+tbbroot = re.sub('/[^/]+/\.\.$', '', tbbroot)
+tbbroot_re = re.compile(re.sub('[\\/: ()]', '.', tbbroot), re.IGNORECASE)
+cncroot_re = re.compile(re.sub('[\\/: ()]', '.', cncroot), re.IGNORECASE)
+vtroot_re  = re.compile(re.sub('[\\/: ()]', '.', vtroot), re.IGNORECASE)
+build_re   = re.compile(re.sub('[\\/: ()]', '.', build), re.IGNORECASE)
+
+#version = '1.0.001'
+dist_dir = os.path.join('./')
+
+samples = [@ALL_SAMPLES@]
+
+def make_vcxproj(buffer, vsroot):
+    buffer = re.sub(re.compile(r'<CustomBuild.*CustomBuild>', re.DOTALL), '', buffer)
+    buffer = re.sub(re.compile(r'<ProjectReference[^\n]*ZERO_CHECK.vcxproj.*ProjectReference>', re.DOTALL), '', buffer)
+    buffer = re.sub(tbbroot_re, "$(TBBROOT)", buffer)
+    buffer = re.sub(cncroot_re, "$(CNCROOT)", buffer)
+    buffer = re.sub(vtroot_re, "$(VT_ROOT)", buffer)
+    buffer = re.sub(build_re, r'../..', buffer)
+    buffer = re.sub(re.compile(r'<ImportLibrary>.*ImportLibrary>.*\n'), '', buffer)
+    buffer = re.sub(re.compile(r'<ProgramDataBaseFile.*ProgramDataBaseFile>.*\n'), '', buffer)
+    buffer = re.sub(r'Include=\"\.\.\\\.\.\\\.\.\\[^\\]*\\[^\\]*\\', r'Include="', buffer)
+    buffer = re.sub(re.escape(vsroot+'\\'), r'', buffer)
+    buffer = re.sub(re.compile(r'_vs\d\d\.\d\.lib'), '_vs$(VisualStudioVersion).lib', buffer)
+    buffer = re.sub(re.compile(r'<PlatformToolset>.*PlatformToolset>.*\n'), '', buffer)
+    buffer = re.sub(re.compile(r'true</LinkIncremental>'), r'false</LinkIncremental>', buffer)
+    return buffer
+
+for proj in samples:
+    fname = os.path.basename(proj)+'.vcxproj'
+    with open(os.path.join('samples/build/', proj, fname), "r") as inf:
+        buf=inf.read()
+    buf = make_vcxproj(buf, vsroot)
+    if not os.path.exists(os.path.join(dist_dir, proj)):
+        os.makedirs(os.path.join(dist_dir, proj))
+    with open(os.path.join(dist_dir, proj, fname), "w") as outf:
+        outf.write(buf)
