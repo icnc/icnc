@@ -36,14 +36,14 @@ namespace CnC {
         ///      0:4:8 expands to 0,4 (excluding 8)
         /// This range is compabitble with CnC range concepts.
         /// FIXME: do we want this to be exposed in the API?
-        template< class Index >
+        template< class Index, typename Increment = Index >
         class strided_range
         {
         public:
             class const_iterator
             {
             public:
-                inline const_iterator( const Index & i, const Index & s, const Index & e ) : m_val( i ), m_stride( s ), m_end( e ) {}
+                inline const_iterator( const Index & i, const Increment & s, const Index & e ) : m_val( i ), m_end( e ), m_stride( s ) {}
                 inline bool operator==( const const_iterator & i ) const { return m_val == i.m_val; } // || ( m_val > m_end && i.m_val == m_end ) || ( i.m_val > m_end && m_val == m_end ); }
                 inline bool operator!=( const const_iterator & i ) const { return m_val != i.m_val; } // && ( ( m_val == m_end && i.m_val < m_end ) || ( i.m_val == m_end && m_val < m_end ) ); }
                 inline const Index & operator*() const { return m_val; }
@@ -53,16 +53,17 @@ namespace CnC {
                 inline operator Index() const { return m_val; }
             private:
                 Index m_val;
-                Index m_stride;
                 Index m_end;
+                Increment m_stride;
             };
 
             typedef Index value_type;
+            typedef Increment incr_type;
 
             strided_range( strided_range & r, tbb::split )
                 : m_step( r.m_step )
             {
-                value_type _m = ( r.m_start + r.m_last ) / 2;
+                value_type _m = r.m_start + ( r.m_last - r.m_start ) / 2;
                 value_type _tmp = r.m_start + m_step;
                 while( _tmp < _m ) _tmp += m_step;
                 _m = _tmp;
@@ -75,7 +76,7 @@ namespace CnC {
                 CNC_ASSERT( ! r.empty() );
             }
 
-            strided_range( value_type start, value_type last, value_type step )
+            strided_range( value_type start, value_type last, incr_type step )
                 : m_start( start ), m_last( last ), m_step( step ){ init_size(); }
 
             strided_range( value_type start, value_type last )
@@ -115,7 +116,7 @@ namespace CnC {
 
             value_type m_start;
             value_type m_last;
-            value_type m_step;
+            incr_type  m_step;
             int        m_size;
         };
 

@@ -509,7 +509,7 @@ namespace CnC {
     namespace Internal {
         class distributor;
         template< class T > class creator;
-        template< class Index, class Functor, class Tuner > class pfor_context;
+        template< class Index, class Functor, class Tuner, typename Increment > class pfor_context;
     }
 
     /**
@@ -590,17 +590,17 @@ namespace CnC {
     ///
     /// For different values of i, function execution might occur in parallel.
     /// Returns functor object ocne all iterations have been executed.
-    /// Type Index must support operator+.
+    /// Type Index must support operator+(increment) and operator-(Index), like C++ random access iterators do.
     /// Executes on the local process only. No distribution to other processes supported.
     /// \param first  starting index of parallel iteration
     /// \param last   iteration stops before reaching last
     /// \param incr   increment index by this value in each iteration
     /// \param f      function to be executed
     /// \param tuner  defaults to pfor_tuner<>
-    template< class Index, class Functor, class Tuner >
-    void parallel_for( Index first, Index last, Index incr, const Functor & f, const Tuner & tuner );
-    template< class Index, class Functor >
-    void parallel_for( Index first, Index last, Index incr, const Functor & f );
+    template< class Index, class Functor, class Tuner, typename Increment >
+    void parallel_for( Index first, Index last, Increment incr, const Functor & f, const Tuner & tuner );
+    template< class Index, class Functor, typename Increment >
+    void parallel_for( Index first, Index last, Increment incr, const Functor & f );
 
 } // namespace cnc
 

@@ -37,8 +37,8 @@ namespace CnC {
         /// A scheduler needs a context but parallel_for does not have one -> create a temporary context.
         /// The actual implementation of parallel for does not involve a tag-collection. Steps are 
         /// directly created from a local step_collection.
-        template< class Index, class Functor, class Tuner >
-        class pfor_context : public context< pfor_context< Index, Functor, Tuner > >
+        template< class Index, class Functor, class Tuner, typename Increment = Index >
+        class pfor_context : public context< pfor_context< Index, Functor, Tuner, Increment > >
         {
         public:
             pfor_context( const Functor & f );
@@ -47,7 +47,7 @@ namespace CnC {
 	    pfor_context(); // undefined, must not occur; only to make the compiler happy
 #endif
             ~pfor_context();
-            const Functor & parallel_for( Index first, Index last, Index step, const Functor & f );
+            const Functor & parallel_for( Index first, Index last, Increment step, const Functor & f );
 
             // from creatable
             /// parallel_for cannot distribute work, we have no handle on the functor (lambda) which is
@@ -55,8 +55,8 @@ namespace CnC {
             virtual int factory_id() { CNC_ABORT( "pfor_context::factoryId should never get called." ); return 0; }
 
         private:
-            typedef pfor_context< Index, Functor, Tuner > context_type;
-            typedef Internal::strided_range< Index >           range_type;
+            typedef pfor_context< Index, Functor, Tuner, Increment > context_type;
+            typedef Internal::strided_range< Index, Increment >      range_type;
             class functor_step;
             struct tuner_type;
             typedef step_collection< functor_step, tuner_type > step_coll_type;
@@ -70,8 +70,8 @@ namespace CnC {
         // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-        template< class Index, class Functor, class Tuner >
-        class pfor_context< Index, Functor, Tuner >::functor_step
+        template< class Index, class Functor, class Tuner, typename Increment >
+        class pfor_context< Index, Functor, Tuner, Increment >::functor_step
         {
         public:
             functor_step( const Functor & f )
@@ -93,8 +93,8 @@ namespace CnC {
         // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
         /// a tuner that never distributes work
-        template< class Index, class Functor, class Tuner >
-        struct pfor_context< Index, Functor, Tuner >::tuner_type : public Tuner
+        template< class Index, class Functor, class Tuner, typename Increment >
+        struct pfor_context< Index, Functor, Tuner, Increment >::tuner_type : public Tuner
         {
             tuner_type(){}
             tuner_type( const Tuner & t ) : Tuner( t ) {}
@@ -117,7 +117,7 @@ namespace CnC {
                 return false;
             }
 
-            typedef typename pfor_context< Index, Functor, Tuner >::range_type range_type;
+            typedef typename pfor_context< Index, Functor, Tuner, Increment >::range_type range_type;
             typedef Internal::no_tag_table tag_table_type;
         };
         
@@ -128,9 +128,9 @@ namespace CnC {
 # pragma warning (push)
 # pragma warning (disable: 4355)
 #endif
-        template< class Index, class Functor, class Tuner >
-        pfor_context< Index, Functor, Tuner >::pfor_context( const Functor & f )
-            : context< pfor_context< Index, Functor, Tuner > >( true ),
+        template< class Index, class Functor, class Tuner, typename Increment >
+        pfor_context< Index, Functor, Tuner, Increment >::pfor_context( const Functor & f )
+            : context< pfor_context< Index, Functor, Tuner, Increment > >( true ),
               m_tuner( get_default_tuner< Tuner >() ),
               m_stepColl( *this, "pfor", f, m_tuner ),
               m_stepLauncher( *this, *this, m_stepColl, m_tuner, this->scheduler() )
@@ -141,9 +141,9 @@ namespace CnC {
             //            m_stepLauncher = new step_launcher_type( *this, *this, m_stepColl, this->scheduler() );
         }
 
-        template< class Index, class Functor, class Tuner >
-        pfor_context< Index, Functor, Tuner >::pfor_context( const Functor & f, const Tuner & t )
-            : context< pfor_context< Index, Functor, Tuner > >( true ),
+        template< class Index, class Functor, class Tuner, typename Increment >
+        pfor_context< Index, Functor, Tuner, Increment >::pfor_context( const Functor & f, const Tuner & t )
+            : context< pfor_context< Index, Functor, Tuner, Increment > >( true ),
               m_tuner( t ),
               m_stepColl( *this, "pfor", f, m_tuner ),
               m_stepLauncher( *this, *this, m_stepColl, m_tuner, this->scheduler() )
@@ -159,16 +159,16 @@ namespace CnC {
 
         // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-        template< class Index, class Functor, class Tuner >
-        pfor_context< Index, Functor, Tuner >::~pfor_context()
+        template< class Index, class Functor, class Tuner, typename Increment >
+        pfor_context< Index, Functor, Tuner, Increment >::~pfor_context()
         {
             //            delete m_stepLauncher;
         }
 
         // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-        template< class Index, class Functor, class Tuner >
-        const Functor & pfor_context< Index, Functor, Tuner >::parallel_for( Index first, Index last, Index step, const Functor & f )
+        template< class Index, class Functor, class Tuner, typename Increment >
+        const Functor & pfor_context< Index, Functor, Tuner, Increment >::parallel_for( Index first, Index last, Increment step, const Functor & f )
         {
             range_type   _range( first, last, step );
             //            int          _sz = _range.size();
@@ -184,17 +184,17 @@ namespace CnC {
     // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-    template< class Index, class Functor >
-    void parallel_for( Index first, Index last, Index step, const Functor & f )
+    template< class Index, class Functor, typename Increment >
+    void parallel_for( Index first, Index last, Increment step, const Functor & f )
     {
-        Internal::pfor_context< Index, Functor, pfor_tuner<> > _ctxt( f );
+        Internal::pfor_context< Index, Functor, pfor_tuner<>, Increment > _ctxt( f );
         _ctxt.parallel_for( first, last, step, f );
     }
 
-    template< class Index, class Functor, class Tuner >
-    void parallel_for( Index first, Index last, Index step, const Functor & f, const Tuner & tuner )
+    template< class Index, class Functor, class Tuner, typename Increment >
+    void parallel_for( Index first, Index last, Increment step, const Functor & f, const Tuner & tuner )
     {
-        Internal::pfor_context< Index, Functor, Tuner > _ctxt( f, tuner );
+        Internal::pfor_context< Index, Functor, Tuner, Increment > _ctxt( f, tuner );
 	_ctxt.parallel_for( first, last, step, f );
     }
 

@@ -5,6 +5,8 @@
 
 #include <iostream>
 #include <sstream>
+#include <vector>
+
 #ifdef _DIST_
 # include <cnc/dist_cnc.h>
 #else
@@ -48,5 +50,12 @@ int main( int, char *[] )
     my_context c;
     for( int i = 0; i<10; ++ i ) c.m_tags.put( i );
     c.wait();
+
+    std::vector< int > _vec( 32, 4711 );
+    int * _b = &_vec[0], *_e = _b + 32;
+    CnC::parallel_for( _b, _e, 2, [](int * i) {
+            CnC::Internal::Speaker oss;
+            oss << *i;
+        } );
     return 0;
 }
