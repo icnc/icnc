@@ -37,7 +37,7 @@ Running the tests
 cd tests
 mkdir build
 cd build
-cmake .. CMAKE_BUILD_TYPE=<Release|Debug> <opts like -j 8>
+cmake .. -DCMAKE_BUILD_TYPE=<Release|Debug> <opts like -j 8>
 cmake test
 
 
