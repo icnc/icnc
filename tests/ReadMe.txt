@@ -19,8 +19,9 @@ In general a CnC test works as follows
 5. do 1-3 on distributed memory using SOCKETS
 6. do 1-3 on distributed memory using SHMEM
 
-0. Prerequisites
-----------------
+
+Prerequisites
+-------------
 Cmake and CTest
   We use CMake/CTest for all the test. We use the cmake script
   run_compare.cmake to run the programs to compare them. run_compare
@@ -30,11 +31,22 @@ Python
   2 python scripts are used to run and compare
 Compilers etc.
 
+
+Running the tests
+-----------------
+cd tests
+mkdir build
+cd build
+cmake .. CMAKE_BUILD_TYPE=<Release|Debug> <opts like -j 8>
+cmake test
+
+
 1. compile sources and link a binary
 ------------------------------------
 Some tests reside in a tests directory, others keep their sources in
 the samples directory. The provided CMake files make it very simple to
 compile/link binaries by simply providing the list of source files.
+
 
 2. run the test
 ---------------
@@ -42,6 +54,7 @@ run_compare uses run.py to launch a given program. run.py takes care
 for setting environment variables (like DIST_CNC) and using launchers
 (like mpirun) whenever needed. It accepts an output filename to which
 it will pipe the programs stdout.
+
 
 3. compare the test output against a reference file
 ---------------------------------------------------
@@ -51,6 +64,7 @@ the provided reference file. The reference file can contain python
 regular expressions. The output file is accepted even if it contains
 additional text as long as the reference expressions are found in the
 same order.
+
 
 Adding a new test
 -----------------
