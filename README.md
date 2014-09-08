@@ -62,7 +62,7 @@ On Linux, just type 'make', On Windows use the tool according to the generator y
 * Specify ITAC install/root directory: -DITACROOT=\<path_to_itac\> (defaults to $VT_ROOT)
 
 ###Testing
-See [tests/ReadMe.txt](tests/ReadMe.txt).
+See [tests/ReadMe.txt](tests).
 
 ###Code documentation
 Most header files start with a description of the functionality of the given module. As this is a template library, most code is actually in header files.
