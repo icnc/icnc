@@ -67,11 +67,19 @@ if(CMAKE_SYSTEM_NAME STREQUAL Windows)
 else()
   set(MPIARCH intel64)
 endif(CMAKE_SYSTEM_NAME STREQUAL Windows)
-set(CMAKE_PREFIX_PATH "${MPIROOT}/${MPIARCH}/lib")
-find_library(MPI_LIB_OPT NAMES mpi_mt impimt)
-find_library(MPI_LIB_DBG NAMES mpi_dbg_mt impidmt)
+set(CMAKE_PREFIX_PATH "${MPIROOT}/${MPIARCH}/include" /usr/lib/mpich2/include /usr/include)
+find_path(MPI_INC_DIR mpi.h)
+set(CMAKE_PREFIX_PATH ${MPI_INC_DIR}/../lib)
+find_library(MPI_LIB_OPT NAMES mpi_mt impimt mpich)
+find_library(MPI_LIB_DBG NAMES mpi_dbg_mt impidmt mpich)
 set(MPI_LIB optimized ${MPI_LIB_OPT} debug ${MPI_LIB_DBG} CACHE INTERNAL "use for mpi-dependent links")
 
+#find_path(MPI_LIB_DIR NAMES mpi_mt impimt mpich)
+#set(CMAKE_PREFIX_PATH ${MPI_LIB_DIR})
+#set(CMAKE_PREFIX_PATH ${MPI_LIB_DIR}/../include)
+#find_path(MPI_INC_DIR mpi.h)
+
+#"${MPIROOT}/${MPIARCH}/lib" /usr/lib/mpich2/lib/ /usr/lib)
 
 ################################################################################
 # ITAC stuff

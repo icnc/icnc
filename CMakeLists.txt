@@ -116,7 +116,7 @@ if(BUILD_LIBS_FOR_MPI)
   set(CNC_MPI_FLAGS "-DNO_MSG_TRACING -DPRE_SEND_MSGS")
   set_target_properties(cnc_mpi PROPERTIES COMPILE_FLAGS "${CNC_MPI_FLAGS}")
   # doesn't seem to work:  set_target_properties(cnc_mpi PROPERTIES INCLUDE_DIRECTORIES "${MPIROOT}/${MPIARCH}/include")
-  include_directories("${MPIROOT}/${MPIARCH}/include")
+  include_directories(${MPI_INC_DIR})
   target_link_libraries(cnc_mpi cnc ${CNC_ADD_LIBS} ${MPI_LIB})
 endif(BUILD_LIBS_FOR_MPI)
 
