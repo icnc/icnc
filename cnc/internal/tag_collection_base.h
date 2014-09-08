@@ -74,7 +74,10 @@ namespace CnC {
             const_iterator end() const { return m_tagTable.end(); }
 
             /// the callback type for writing re-usable graphs (CnC::graph)
-            typedef struct _callback { virtual void on_put( const Tag & ) = 0; } callback_type;
+            typedef struct _callback {
+                virtual void on_put( const Tag & ) = 0;
+                virtual ~_callback() {}; 
+            } callback_type;
             /// register a callback, called whe a tag is put
             /// not thread safe
             void on_put( callback_type * cb );

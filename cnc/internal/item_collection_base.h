@@ -180,7 +180,10 @@ namespace CnC {
             item_type * create( const item_type & org ) const;
             void uncreate( item_type * item ) const;
 
-            typedef struct _callback { virtual void on_put( const T &, const item_type & ) = 0; } callback_type;
+            typedef struct _callback {
+                virtual void on_put( const T &, const item_type & ) = 0;
+                virtual ~_callback() {};
+            } callback_type;
             void on_put( callback_type * cb );
 
             const Tuner & tuner() const { return m_tuner; }
