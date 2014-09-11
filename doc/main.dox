@@ -46,7 +46,7 @@ success! Promise, it'll pay off!
 
 \section intro CnC in a Nutshell
 CnC is a new programming model which is different from most others. It
-designed for creating parallel applications, but not for expressing
+is designed for creating parallel applications, but not for expressing
 parallelism explicitly. In CnC the programmer declaratively specifies
 the dependencies among computation units, but does not in any
 way indicate how those are to be met. It is specifically designed for
@@ -141,7 +141,7 @@ communicate the orders with the kitchen, our CnC kitchen
 uses special bowls, one for each step (barbecue_burger, fry_potatoes,
 bake_pie and prepare_pie). Whenever a step needs to be executed for a
 given order, the waiter simply puts the corresponding guest-tag into
-the step's bowl. For example, if guestA wants a burger and Fries, we
+the step's bowl. For example, if guest A wants a burger and Fries, we
 put the tag/token 'A' into barbecue_burger's bowl and into
 fry_potatoes' bowl. Our cooks will then prepare a burger and fries for
 guest 'A', but as there is no token/tag in the pie bowl, they will not
@@ -163,12 +163,12 @@ runtime) to determine a legal scheduling of the step instances
 it serial or parallel.  If we have ten cooks or one, all they need to
 know are the ordering constraints (besides knowing how to cook, of
 course). They could do everything in parallel, except they need to
-1. wait for the tags to come in before starting a task
+1. wait for the tags to come in before starting a task and
 2. wait for each pie to be prepared before baking it.
 
 \note The constraints we defined are semantic attributes, they are
 requirements only of the algorithm. They exist independent of the
-programming language or programming tool, e.g. even if not using CnC
+programming language or programming tool, i.e. even if not using CnC
 they must be obeyed: a pie simply needs to be prepared before put into the
 oven. And it doesn't make sense to start frying potatoes unless we
 know that someone actually wants fries.
@@ -201,8 +201,8 @@ The rules might sound more restricting than they actually
 are. Actually, in this tutorial you will almost certainly start
 appreciating the rules. They are much easier to follow than the common
 rules of traditional parallel frameworks. For example, almost all
-threading frameworks tell the programmer "Don't create races". That's
-a very vague rule and verifying it's correct implementation is close
+threading frameworks tell the programmer "Don't create races." That's
+a very vague rule and verifying its correct implementation is close
 to impossible. CnC's rules are easy to follow, easy to check and they
 will actually give race-freedom and determinism without you needing to
 think about it.
@@ -224,8 +224,8 @@ controller/controlee)
 
 This tutorial will guide you through these phases with a simple
 example program. It'll explain the use of CnC with the C++ API by
-creating a program to compute Fibonacci numbers. Due to nature of
-Fibonacci CnC doesn't necessarily provide the most natural
+creating a program to compute Fibonacci numbers. Due to the nature of
+Fibonacci, CnC doesn't necessarily provide the most natural
 expressiveness for it. However, Fibonacci has the right complexity and
 characteristics to demonstrate CnC and Intel's C++ API without getting
 lost in details of non-CnC related issues.
@@ -258,7 +258,7 @@ fibTutorial.cpp
 \section fibsepc The CnC Specification
 
 \subsection compent Identifying Computation Units
-Fibonacci is a very simple algorithm. There only one computation which
+Fibonacci is a very simple algorithm. There is only one computation which
 simply adds the values of the two previous Fibonacci numbers. Let's
 call it "fib_step". In CnC all execution instances of such a function
 are held in one collection, a CnC::step_collection. Declaring such a
@@ -455,8 +455,8 @@ Here is the full example code: \ref fib_trace_h and \ref fib_trace_code
 \section stats Scheduling Statistics
 Another interesting feature
 provides statistics about the internal scheduler. Depending on the
-availability of dependent items, a step might have been executed to
-early and needs being replayed when the missing item becomes
+availability of dependent items, a step might be executed too
+early and needs to be replayed when the missing item becomes
 available. The respective information can be printed when the context
 is destroyed (in our example when the program terminates). All you
 need to do is enabling this feature using
@@ -558,13 +558,13 @@ and are used similar to the above.
 
 \section tune_items Tuning item-collections
 Without additional information the runtime
-cannot decide when no more gets to a data item will be issued. However,
-Without this information it is not possible to remove a data item from
-the internal storage. As the CnC programming model never declares
-"when" something happens, it is also not generally possible to let the
+cannot decide when no more gets to a data item will be issued,
+meaning it is not possible to remove a data item from internal
+storage. As the CnC programming model never declares "when"
+something happens, it is also not generally possible to let the
 user indicate which is the last get of an item.
 
-As keeping data items in memory for ever can quickly (and
+As keeping data items in memory forever can quickly (and
 unnecessarily) blow the available memory a mechanism preventing this
 is needed. When putting an data item, the CnC C++ API lets you declare
 the number of gets that will ever be issued. When this "get-count"
@@ -602,7 +602,7 @@ control and hence can significantly improve application performance.
 
 
 \section memoize Tag/Step Memoization
-As the execution of step-instances is state-less, e.g. functional,
+As the execution of step-instances is state-less, i.e. functional,
 executing the same function more than once does not alter the result;
 it only adds unnecessary overhead. In Fibonacci, most of
 the tags which prescribe steps are put many times. By default, the CnC
@@ -634,7 +634,7 @@ Next: \ref tag_ranges
 
 \page tag_ranges Tag-Ranges
 Often the natural granularity of a step is rather small in the sense
-of having only low compute load. As the CnC convenience of programming
+of having only low compute load. As the convenience of programming
 with CnC (e.g. all the automatic parallelism) apparently comes with
 some overhead, this might not always lead to an efficient program. The
 CnC C++ API comes with a possibility to prescribe a bunch of tags at
@@ -693,7 +693,7 @@ step you simply apply the step to parallel_for:
 The last argument "false" is
 a tuning parameter (see \ref tune_ranges) which tells the runtime that
 the step-code will not get any items (e.g. is independent of any other
-steps or items).See \ref primes_parfor_code for the full code.
+steps or items). See \ref primes_parfor_code for the full code.
 
 \attention In distributed mode, parallel_for will not distribute
 the given work across processes even if the tuner provides a matching
@@ -710,7 +710,7 @@ allows this in a very simple manner by setting it to "false":
   { ... }
 \endcode
 
-A even more simplified version of this parameter is used in
+An even more simplified version of this parameter is used in
 CnC::parallel_for and CnC::context::parallel_for, e.g in this example:
 \ref parfor.
 
@@ -727,7 +727,7 @@ anyway for ranges):
 
 
 \section tag_range_adv Advanced Range-Features
-Aspects of Tag-Ranges The implemented
+The implemented
 range-mechanism is very generic. It allows you to provide an arbitrary
 range as long as you also provide a partitioner which can handle the
 partitioning of your range (which might be anything, a tree, a matrix
@@ -828,7 +828,7 @@ done-flag, either for all reductions in the reduce-graph (by calling
 flush on the reduce-graph) or for individual
 reductions (by putting -1 as the count).
 
-An example is counting all words in a file (rather than a give set of
+An example is counting all words in a file (rather than a given set of
 words), see \ref count_all_words_code. Because we do not know the
 words we count, there is no way to say how many contributions there
 will be. So when the processing is done, we finalize the reduction by
@@ -882,7 +882,7 @@ sufficiently well documented to understand how it works.
 
 
 \section def_graphs Writing Re-Usable Sub-Graphs
-When writing a CnC::graph three hurdles need to be taken
+When writing a CnC::graph four hurdles need to be overcome:
 - providing the graph's functionality
 - renaming input and output collections
 - generality
