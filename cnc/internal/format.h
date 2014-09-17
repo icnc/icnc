@@ -155,7 +155,7 @@ inline std::ostream & cnc_format( std::ostream & o, const std::string & t )
     {
         os << "[";
         for( typename std::vector< T, Allocator >::const_iterator i = x.begin(); i != x.end(); ++ i ) {
-            os << *i;
+            cnc_format( os, *i );
             os << ",";
         }
          return os << "]";

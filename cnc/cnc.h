@@ -583,7 +583,7 @@ namespace CnC {
         friend class ::CnC::graph;
         template< typename Tag, bool check_deps, typename Hasher, typename Equality > friend class ::CnC::cancel_tuner;
         template< class T > friend class ::CnC::Internal::creator;
-        template< class Index, class Functor, class Tuner > friend class ::CnC::Internal::pfor_context;
+        template< class Index, class Functor, class Tuner, typename Increment > friend class ::CnC::Internal::pfor_context;
     };
 
     /// \brief Execute f( i ) for every i in {first <= i=first+step*x < last and 0 <= x}.
