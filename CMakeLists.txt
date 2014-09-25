@@ -163,5 +163,8 @@ endif(DOXYGEN_FOUND)
 ################################################################################
 # Install
 
-install(TARGETS ${CNC_LIBS} RUNTIME DESTINATION bin/ LIBRARY DESTINATION lib)
+if (NOT DEFINED LIB)
+  set(LIB "lib")
+endif(NOT DEFINED LIB)
+install(TARGETS ${CNC_LIBS} RUNTIME DESTINATION bin/ LIBRARY DESTINATION ${LIB})
 install(DIRECTORY ${CNC_SRC_ROOT}/cnc DESTINATION include FILES_MATCHING PATTERN "*.h")
