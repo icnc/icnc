@@ -53,11 +53,13 @@ set(CMAKE_DEBUG_POSTFIX "_debug")
 
 set(CMAKE_PREFIX_PATH "${TBBROOT}/lib/intel64/gcc4.4" "${TBBROOT}/lib/intel64/cc4.1.0_libc2.4_kernel2.6.16.21" "${TBBROOT}/lib/intel64/${TBB_DLL_PFX}")
 find_library(TBB_LIB tbb)
-find_library(TBB_LIB_DBG tbb_debug)
 find_library(TBBMALLOC_LIB tbbmalloc)
-find_library(TBBMALLOC_LIB_DBG tbbmalloc_debug)
-set(CNC_ADD_LIBS ${CNC_ADD_LIBS} optimized ${TBB_LIB} optimized ${TBBMALLOC_LIB} debug ${TBB_LIB_DBG} debug ${TBBMALLOC_LIB_DBG})
-
+set(CNC_ADD_LIBS ${CNC_ADD_LIBS} optimized ${TBB_LIB} optimized ${TBBMALLOC_LIB})
+if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+  find_library(TBB_LIB_DBG tbb_debug)
+  find_library(TBBMALLOC_LIB_DBG tbbmalloc_debug)
+  set(CNC_ADD_LIBS ${CNC_ADD_LIBS} debug ${TBB_LIB_DBG} debug ${TBBMALLOC_LIB_DBG})
+endif()
 
 ################################################################################
 # MPI deps
@@ -71,8 +73,12 @@ set(CMAKE_PREFIX_PATH "${MPIROOT}/${MPIARCH}/include" "${MPIROOT}/include")
 find_path(MPI_INC_DIR mpi.h)
 set(CMAKE_PREFIX_PATH ${MPI_INC_DIR}/../lib)
 find_library(MPI_LIB_OPT NAMES mpi_mt impimt mpich)
-find_library(MPI_LIB_DBG NAMES mpi_dbg_mt impidmt mpich)
-set(MPI_LIB optimized ${MPI_LIB_OPT} debug ${MPI_LIB_DBG} CACHE INTERNAL "use for mpi-dependent links")
+if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+  find_library(MPI_LIB_DBG NAMES mpi_dbg_mt impidmt mpich)
+  set(MPI_LIB optimized ${MPI_LIB_OPT} debug ${MPI_LIB_DBG} CACHE INTERNAL "use for mpi-dependent links")
+else()
+  set(MPI_LIB optimized ${MPI_LIB_OPT} CACHE INTERNAL "use for mpi-dependent links")
+endif()
 
 
 ################################################################################
