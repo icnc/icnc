@@ -80,7 +80,7 @@ namespace CnC {
               m_pendingSteps(),
               m_seqSteps(),
               m_mutex(),
-              m_root( distributor::distributed_env() ? m_root : distributor::myPid() ),
+              m_root( distributor::myPid() ), //distributor::distributed_env() ?  : distributor::myPid() ),
               m_userStepsInFlight(),
               m_activeGraphs(),
               m_bypass( getenv( "CNC_SCHEDULER_BYPASS" ) ?  (atoi( getenv( "CNC_SCHEDULER_BYPASS" ) )!=0) : false )
