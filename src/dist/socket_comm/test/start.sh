@@ -66,7 +66,7 @@ else
     __my_host=localhost
 fi
 
-_CLIENT_CMD1_="ssh $__my_host 'cd $__my_wdir && $__my_xterm env CNC_NUM_THREADS=$CNC_NUM_THREADS env CNC_SOCKET_CLIENT=$contactString env DIST_CNC=SOCKETS env LD_LIBRARY_PATH=$LD_LIBRARY_PATH $__my_debugger $__my_exe'"
+_CLIENT_CMD1_="ssh $__my_host 'cd $__my_wdir && $__my_xterm env CNC_NUM_THREADS=$CNC_NUM_THREADS env CNC_SOCKET_CLIENT=$contactString env DIST_CNC=SOCKETS env LD_LIBRARY_PATH=$LD_LIBRARY_PATH $__my_debugger $__my_exe $CLIENT_ARGS'"
 
 # start client process 
 #echo $_CLIENT_CMD1_
