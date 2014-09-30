@@ -236,7 +236,7 @@ namespace CnC
     /// Convenience macro for defining that a type should be treated
     /// as bitwise serializable:
 #   define CNC_BITWISE_SERIALIZABLE( T ) \
-        inline CnC::bitwise_serializable serializer_category( const T * ) { \
+        static inline CnC::bitwise_serializable serializer_category( const T * ) { \
             return CnC::bitwise_serializable(); \
         }
 
@@ -301,7 +301,7 @@ namespace CnC
 
 #    define CNC_POINTER_SERIALIZABLE( T )                       \
     namespace CnC {                                             \
-        void serialize( serializer & ser, T *& t ) {  \
+        static inline void serialize( serializer & ser, T *& t ) {  \
             ser & chunk< T >(t, 1);                        \
         }                                                       \
     }
