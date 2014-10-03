@@ -38,7 +38,7 @@ namespace CnC
     {
         void ChannelInterface::setNumProcs( int numProcs )
         {
-            m_commData.resize( numProcs );
+		  m_commData.resize( numProcs );
         }
 
         //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -46,7 +46,7 @@ namespace CnC
         void ChannelInterface::deactivate( int localId )
         {
             CNC_ASSERT( 0 <= localId && localId < numProcs() );
-            m_commData[localId].m_isActive = false;
+            m_commData[localId]->m_isActive = false;
         }
 
         //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

@@ -30,6 +30,7 @@
 
 #include <tbb/spin_mutex.h>
 #include <vector>
+#include <memory>
 #include <cnc/serializer.h>
 
 namespace CnC
@@ -99,10 +100,10 @@ namespace CnC
             int numProcs() const { return (int)m_commData.size(); }
 
             /// Is channel with given id active? (id = 0,1,...)
-            bool isActive( int id ) const { return m_commData[id].m_isActive; }
+            bool isActive( int id ) const { return m_commData[id]->m_isActive; }
 
             /// Get the send mutex for communication with process of given id
-            tbb::spin_mutex & getMutex( int id ) { return m_commData[id].m_sendMutex; }
+            tbb::spin_mutex & getMutex( int id ) { return m_commData[id]->m_sendMutex; }
 
         private:
             /// Comminucation channels:
@@ -116,7 +117,7 @@ namespace CnC
             };
 
             /// General communication data
-            std::vector< CommData > m_commData;
+            std::vector< std::unique_ptr<CommData> > m_commData;
 
             /// my local id: host gets 0, clients 1,2,...
             int m_localId;
