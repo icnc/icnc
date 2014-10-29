@@ -62,7 +62,9 @@ namespace CnC {
 
             bool prepare_from_range( tagged_step_instance< range_type > * rsi, const tag_type & tag, step_delayer & sD ) const;
             CnC::Internal::StepReturnValue_t execute_from_range( step_instance_base * rsi, const tag_type & tag ) const;
-        
+            virtual std::ostream & format( std::ostream & os ) const;
+
+            // name of instance, used for tracing
         private:
             CnC::Internal::StepReturnValue_t do_execute();
             const StepLauncher * m_stepLauncher;
@@ -117,8 +119,8 @@ namespace CnC {
                                                                      m_stepLauncher->itacid() );
             } else if( m_stepLauncher->m_stepColl.trace_level() > 0 ) {
                 Speaker oss;
-                oss << "Canceled step " << m_stepLauncher->m_stepColl.name() << "(";
-                cnc_format( oss, _tag )  << ")";
+                oss << "Canceled step ";
+                format( oss );
             }
             return CNC_Success;
         }
@@ -152,8 +154,8 @@ namespace CnC {
                                                                      m_stepLauncher->itacid() );
             } else if( m_stepLauncher->m_stepColl.trace_level() > 0 ) {
                         Speaker oss;
-                        oss << "Canceled step " << m_stepLauncher->m_stepColl.name() << "(";
-                        cnc_format( oss, tag ) << ")";
+                        oss << "Canceled step ";
+                        format( oss );
             }
             return CNC_Success;
         }
@@ -242,6 +244,15 @@ namespace CnC {
         void step_instance< StepLauncher >::compute_on( int target )
         {
             m_stepLauncher->compute_on( this->m_tag.Value(), target );
+        }
+
+        // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+        template< class StepLauncher >
+        std::ostream & step_instance< StepLauncher >::format( std::ostream & os ) const
+        {
+            os << m_stepLauncher->name() << "(";
+            return cnc_format( os, this->m_tag.Value() ) << ")";
         }
 
     } //   namespace Internal

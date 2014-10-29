@@ -37,30 +37,30 @@ Steps scheduled\( 9 \) inflight\( 0, 0 \)
 \[CnC\] Put tag my_tags<7>
 \[CnC\] Put tag my_tags<8>
 \[CnC\] Put tag my_tags<9>
-\[CnC\] Start step my_step\(0\) @0
-\[CnC\] Start step my_step\(1\) @0
-\[CnC\] Start step my_step\(10\) @0
-\[CnC\] Start step my_step\(11\) @0
-\[CnC\] Start step my_step\(11\) @0
-\[CnC\] Start step my_step\(12\) @0
-\[CnC\] Start step my_step\(13\) @0
-\[CnC\] Start step my_step\(13\) @0
-\[CnC\] Start step my_step\(14\) @0
-\[CnC\] Start step my_step\(15\) @0
-\[CnC\] Start step my_step\(16\) @0
-\[CnC\] Start step my_step\(17\) @0
-\[CnC\] Start step my_step\(2\) @0
-\[CnC\] Start step my_step\(3\) @0
-\[CnC\] Start step my_step\(3\) @0
-\[CnC\] Start step my_step\(4\) @0
-\[CnC\] Start step my_step\(5\) @0
-\[CnC\] Start step my_step\(5\) @0
-\[CnC\] Start step my_step\(6\) @0
-\[CnC\] Start step my_step\(7\) @0
-\[CnC\] Start step my_step\(7\) @0
-\[CnC\] Start step my_step\(8\) @0
-\[CnC\] Start step my_step\(9\) @0
-\[CnC\] Start step my_step\(9\) @0
+\[CnC\] Start step my_step\(0\)
+\[CnC\] Start step my_step\(1\)
+\[CnC\] Start step my_step\(10\)
+\[CnC\] Start step my_step\(11\)
+\[CnC\] Start step my_step\(11\)
+\[CnC\] Start step my_step\(12\)
+\[CnC\] Start step my_step\(13\)
+\[CnC\] Start step my_step\(13\)
+\[CnC\] Start step my_step\(14\)
+\[CnC\] Start step my_step\(15\)
+\[CnC\] Start step my_step\(16\)
+\[CnC\] Start step my_step\(17\)
+\[CnC\] Start step my_step\(2\)
+\[CnC\] Start step my_step\(3\)
+\[CnC\] Start step my_step\(3\)
+\[CnC\] Start step my_step\(4\)
+\[CnC\] Start step my_step\(5\)
+\[CnC\] Start step my_step\(5\)
+\[CnC\] Start step my_step\(6\)
+\[CnC\] Start step my_step\(7\)
+\[CnC\] Start step my_step\(7\)
+\[CnC\] Start step my_step\(8\)
+\[CnC\] Start step my_step\(9\)
+\[CnC\] Start step my_step\(9\)
 \[CnC\] Suspend step my_step\(11\) -> input item not ready 0
 \[CnC\] Suspend step my_step\(13\) -> input item not ready 0
 \[CnC\] Suspend step my_step\(3\) -> input item not ready 0

@@ -40,8 +40,8 @@ namespace CnC {
         {
         public:
             virtual ~tag_base() {};
-            virtual std::ostream & put( std::ostream & s ) const = 0;  
-            friend std::ostream & operator<<( std::ostream & o, const tag_base & t ) { return t.put( o ); }
+            // virtual std::ostream & put( std::ostream & s ) const = 0;  
+            // friend std::ostream & operator<<( std::ostream & o, const tag_base & t ) { return t.put( o ); }
         }; // class tag_base
 
     } //    namespace Internal 

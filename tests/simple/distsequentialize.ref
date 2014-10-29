@@ -24,13 +24,13 @@ Steps scheduled\( 1 \) inflight\( 0, 0 \)
 \[CnC 0\] Put tag my_tags<7>
 \[CnC 0\] Put tag my_tags<8>
 \[CnC 0\] Put tag my_tags<9>
-\[CnC 0\] Start step my_step\(11\) @0
-\[CnC 0\] Start step my_step\(11\) @0
-\[CnC 0\] Start step my_step\(15\) @0
-\[CnC 0\] Start step my_step\(3\) @0
-\[CnC 0\] Start step my_step\(7\) @0
-\[CnC 0\] Start step my_step\(7\) @0
-\[CnC 0\] Start step my_step\(7\) @0
+\[CnC 0\] Start step my_step\(11\)
+\[CnC 0\] Start step my_step\(11\)
+\[CnC 0\] Start step my_step\(15\)
+\[CnC 0\] Start step my_step\(3\)
+\[CnC 0\] Start step my_step\(7\)
+\[CnC 0\] Start step my_step\(7\)
+\[CnC 0\] Start step my_step\(7\)
 \[CnC 0\] Suspend step my_step\(11\) -> input item not ready 0
 \[CnC 0\] Suspend step my_step\(7\) -> input item not ready 0
 \[CnC 0\] Suspend step my_step\(7\) -> input item not ready 0

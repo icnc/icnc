@@ -86,6 +86,8 @@ namespace CnC {
             // now the stuff needed for partitioner
             void originate_range( const Range & ) const;
             void originate( const Tag & ) const;
+
+            virtual std::ostream & format( std::ostream & os ) const;
             
         private:
             typedef step_args< Tag, Range, step_launcher_type, range_step_instance< Tag, Step, Arg, TagTuner, StepTuner, Range > > step_args_type;
@@ -270,6 +272,14 @@ namespace CnC {
             this->m_stepLauncher.compute_on_range( this->m_tag.Value(), target );
         }
 
+        // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+        template< class Tag, class Step, class Arg, class TagTuner, class StepTuner, class Range >
+        std::ostream & range_step_instance< Tag, Step, Arg, TagTuner, StepTuner, Range >::format( std::ostream & os ) const
+        {
+            os << "Range<" << m_stepLauncher.name() << ">(";
+            return cnc_format( os, this->m_tag.Value() ) << ")";
+        }
 
     } //   namespace Internal
 } // namespace CnC

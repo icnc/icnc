@@ -969,8 +969,11 @@ namespace CnC {
                 typedef std::string argument_type;
                 void operator()( schedulable * instance, argument_type s ) const
                 {
-                    Speaker oss( std::cerr );
-                    oss << instance << s;
+                    if( instance ) {
+                        Speaker oss( std::cerr );
+                        oss << "Warning: step ";
+                        instance->format( oss ) << s;
+                    }
                 }
             };
 

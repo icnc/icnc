@@ -164,14 +164,12 @@ inline std::ostream & cnc_format( std::ostream & o, const std::string & t )
 
 #include <tbb/blocked_range.h>
 
-namespace tbb {
     template< class T >
-    inline std::ostream & cnc_format( std::ostream & os, const blocked_range< T > & x )
+    inline std::ostream & cnc_format( std::ostream & os, const tbb::blocked_range< T > & x )
     {
         os << "[";
         if( ! x.empty() ) os << x.begin() << ", " << x.end();
         return os << "[";
     }
-}
 
 #endif // FORMAT_HH_ALREADY_INCLUDED

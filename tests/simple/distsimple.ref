@@ -2112,41 +2112,41 @@ IP\(900, 900\)
 \[CnC 0\] Put tag m_tags<\(9,2\)>
 \[CnC 0\] Put tag m_tags<\(90,2\)>
 \[CnC 0\] Put tag m_tags<\(900,2\)>
-\[CnC 0\] Start step my_step\(\(10,2\)\) @0
-\[CnC 0\] Start step my_step\(\(10,2\)\) @0
-\[CnC 0\] Start step my_step\(\(10,2\)\) @0
-\[CnC 0\] Start step my_step\(\(200,2\)\) @0
-\[CnC 0\] Start step my_step\(\(200,2\)\) @0
-\[CnC 0\] Start step my_step\(\(200,2\)\) @0
-\[CnC 0\] Start step my_step\(\(30,2\)\) @0
-\[CnC 0\] Start step my_step\(\(30,2\)\) @0
-\[CnC 0\] Start step my_step\(\(30,2\)\) @0
-\[CnC 0\] Start step my_step\(\(300,2\)\) @0
-\[CnC 0\] Start step my_step\(\(300,2\)\) @0
-\[CnC 0\] Start step my_step\(\(40,2\)\) @0
-\[CnC 0\] Start step my_step\(\(40,2\)\) @0
-\[CnC 0\] Start step my_step\(\(40,2\)\) @0
-\[CnC 0\] Start step my_step\(\(60,2\)\) @0
-\[CnC 0\] Start step my_step\(\(60,2\)\) @0
-\[CnC 0\] Start step my_step\(\(60,2\)\) @0
-\[CnC 0\] Start step my_step\(\(600,2\)\) @0
-\[CnC 0\] Start step my_step\(\(600,2\)\) @0
-\[CnC 0\] Start step my_step\(\(700,2\)\) @0
-\[CnC 0\] Start step my_step\(\(700,2\)\) @0
-\[CnC 0\] Start step my_step\(\(700,2\)\) @0
-\[CnC 0\] Start step my_step\(\(8,2\)\) @0
-\[CnC 0\] Start step my_step\(\(9,2\)\) @0
-\[CnC 0\] Start step my_step\(\(90,2\)\) @0
-\[CnC 0\] Start step my_step\(\(90,2\)\) @0
-\[CnC 0\] Start step my_step2\(10\) @0
-\[CnC 0\] Start step my_step2\(200\) @0
-\[CnC 0\] Start step my_step2\(30\) @0
-\[CnC 0\] Start step my_step2\(300\) @0
-\[CnC 0\] Start step my_step2\(40\) @0
-\[CnC 0\] Start step my_step2\(60\) @0
-\[CnC 0\] Start step my_step2\(600\) @0
-\[CnC 0\] Start step my_step2\(700\) @0
-\[CnC 0\] Start step my_step2\(90\) @0
+\[CnC 0\] Start step my_step\(\(10,2\)\)
+\[CnC 0\] Start step my_step\(\(10,2\)\)
+\[CnC 0\] Start step my_step\(\(10,2\)\)
+\[CnC 0\] Start step my_step\(\(200,2\)\)
+\[CnC 0\] Start step my_step\(\(200,2\)\)
+\[CnC 0\] Start step my_step\(\(200,2\)\)
+\[CnC 0\] Start step my_step\(\(30,2\)\)
+\[CnC 0\] Start step my_step\(\(30,2\)\)
+\[CnC 0\] Start step my_step\(\(30,2\)\)
+\[CnC 0\] Start step my_step\(\(300,2\)\)
+\[CnC 0\] Start step my_step\(\(300,2\)\)
+\[CnC 0\] Start step my_step\(\(40,2\)\)
+\[CnC 0\] Start step my_step\(\(40,2\)\)
+\[CnC 0\] Start step my_step\(\(40,2\)\)
+\[CnC 0\] Start step my_step\(\(60,2\)\)
+\[CnC 0\] Start step my_step\(\(60,2\)\)
+\[CnC 0\] Start step my_step\(\(60,2\)\)
+\[CnC 0\] Start step my_step\(\(600,2\)\)
+\[CnC 0\] Start step my_step\(\(600,2\)\)
+\[CnC 0\] Start step my_step\(\(700,2\)\)
+\[CnC 0\] Start step my_step\(\(700,2\)\)
+\[CnC 0\] Start step my_step\(\(700,2\)\)
+\[CnC 0\] Start step my_step\(\(8,2\)\)
+\[CnC 0\] Start step my_step\(\(9,2\)\)
+\[CnC 0\] Start step my_step\(\(90,2\)\)
+\[CnC 0\] Start step my_step\(\(90,2\)\)
+\[CnC 0\] Start step my_step2\(10\)
+\[CnC 0\] Start step my_step2\(200\)
+\[CnC 0\] Start step my_step2\(30\)
+\[CnC 0\] Start step my_step2\(300\)
+\[CnC 0\] Start step my_step2\(40\)
+\[CnC 0\] Start step my_step2\(60\)
+\[CnC 0\] Start step my_step2\(600\)
+\[CnC 0\] Start step my_step2\(700\)
+\[CnC 0\] Start step my_step2\(90\)
 \[CnC 0\] Suspend step my_step\(\(10,2\)\) -> input item not ready 0
 \[CnC 0\] Suspend step my_step\(\(10,2\)\) -> input item not ready 0
 \[CnC 0\] Suspend step my_step\(\(200,2\)\) -> input item not ready 0

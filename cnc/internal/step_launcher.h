@@ -91,6 +91,8 @@ namespace CnC {
 
             // from traceable
             virtual void set_tracing( int level );
+            // for tracing/errors
+            const std::string & name() const { return m_stepColl.name(); }
 
             int itacid() const
 #ifdef CNC_WITH_ITAC
@@ -373,7 +375,7 @@ namespace CnC {
                 if( m_stepColl.trace_level() > 2 ) {
                     Speaker oss;
                     oss << "Receive range-step " << m_stepColl.name() << "(";
-                    cnc_format( oss, range ) << ") @" << _si;
+                    cnc_format( oss, range ) << ")";
                 }
                 //                m_scheduler->prepare( _si, false );
                 serializer _clser;

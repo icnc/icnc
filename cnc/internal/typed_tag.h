@@ -70,12 +70,18 @@ namespace CnC {
             }
     
             // printing 
-            virtual std::ostream & put( std::ostream & o ) const { o << "<"; cnc_format( o, value ); return o << ">"; }
-            friend std::ostream & operator<<( std::ostream & o, const typed_tag & t ) { return t.put( o ); }
+            // virtual std::ostream & put( std::ostream & o ) const { o << "<"; cnc_format( o, value ); return o << ">"; }
+            // friend std::ostream & operator<<( std::ostream & o, const typed_tag & t ) { return t.put( o ); }
         }; // class typed_tag
 
     } //    namespace Internal 
 } // end namespace CnC
+
+template< typename T >
+inline std::ostream & cnc_format( std::ostream & os, const CnC::Internal::typed_tag< T > & tag )
+{
+    return os << tag.Value();
+}
 
 
 #endif // TAG_TYPED_HH_ALREADY_INCLUDED

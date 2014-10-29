@@ -27,8 +27,10 @@ set(CMAKE_PREFIX_PATH "${CNCROOT}/lib/intel64")
 find_library(CNC_LIB NAMES "cnc" "cnc_${CNC_DLL_SFX}")
 find_library(CNC_LIB_DBG NAMES "cnc${CNC_DBG_SFX}" "cnc${CNC_DBG_SFX}_${CNC_DLL_SFX}")
 
-set(NEEDED_LIBS optimized ${CNC_LIB} debug ${CNC_LIB_DBG} ${CNC_ADD_LIBS})
-
+#if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+set(NEEDED_LIBS optimized ${CNC_LIB} debug ${CNC_LIB_DBG})
+set(NEEDED_LIBS ${NEEDED_LIBS} ${CNC_ADD_LIBS}) 
+message(${NEEDED_LIBS})
 if(DIST_CNC)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_DIST_")
 endif(DIST_CNC)

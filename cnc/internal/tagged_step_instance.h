@@ -1,4 +1,4 @@
-/* *******************************************************************************
+ /* *******************************************************************************
  *  Copyright (c) 2007-2014, Intel Corporation
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -166,7 +166,7 @@ namespace CnC {
             if( do_trace ) {
                 Speaker oss;
                 oss << "Start step " << traceName << "(";
-                cnc_format( oss, tag ) << ") @" << si;
+                cnc_format( oss, tag ) << ")";
             }
             
             StepReturnValue_t rv = CNC_Unfinished;

@@ -107,6 +107,10 @@ namespace CnC {
             virtual char prepare( step_delayer &, int &, const schedulable * ) = 0;
             virtual void compute_on( int target ) = 0;
 
+            // we need this for proper error messages
+            virtual std::ostream & format( std::ostream & os ) const
+            { os << "schedulable"; }
+
         protected:
             schedulable       * m_succStep;
             scheduler_i       & m_scheduler;

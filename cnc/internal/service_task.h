@@ -49,6 +49,9 @@ namespace CnC {
 			virtual StepReturnValue_t execute();
             virtual char prepare( step_delayer &, int &, const schedulable * );
             virtual void compute_on( int target ) { CNC_ABORT( "A service task cannot be passed on to another process." ); }
+            // we need this for proper error messages
+            virtual std::ostream & format( std::ostream & os ) const
+            { os << "service task";}
         private:
             F   m_func;
             Arg m_arg;
