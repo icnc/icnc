@@ -159,6 +159,8 @@ namespace CnC {
             item_collection_base( context_base & g, const std::string & name );
             item_collection_base( context_base & g, const std::string & name, const Tuner & tnr );
             ~item_collection_base();
+            inline std::ostream & format( std::ostream & os, const char * str, const T & tag, step_instance_base * si ) const;
+            inline std::ostream & format( std::ostream & os, const char * str, const T & tag, const item_type * item, step_instance_base * si ) const;
             void set_max( size_t mx );
             void put(  const T & user_tag, const item_type & item );
             void put_or_delete( const T & user_tag, item_type * item, int amOwner = UNKNOWN_PID, bool fromRemote = false );
@@ -231,6 +233,7 @@ namespace CnC {
             /// will release the given lock/accessor
             void block_for_put( const T & user_tag, typename table_type::accessor & a );
 
+            
         protected:
             void erase( typename table_type::accessor & a );
             table_type tagItemTable;
@@ -390,7 +393,29 @@ namespace CnC {
         {
             m_tuner.init_table( tagItemTable );
         }
-    
+
+        // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        
+        template< class T, class item_type, class Tuner >
+        std::ostream & item_collection_base< T, item_type, Tuner >::format( std::ostream & oss, const char * str, const T & tag, step_instance_base * si ) const
+        {
+            if( si ) {
+                oss << "step ";
+                si->format( oss ) << ": ";
+            }
+            oss << str << name() <<  "[";
+            cnc_format( oss, tag ) << "]";
+        }
+
+        template< class T, class item_type, class Tuner >
+        std::ostream & item_collection_base< T, item_type, Tuner >::format( std::ostream & oss, const char * str, const T & tag, const item_type * item, step_instance_base * si ) const
+        {
+            format( oss, str, tag, si );
+            oss << " = ";
+            if( item ) cnc_format( oss, *item );
+            else oss << "not ready";
+        }
+
         // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
@@ -437,9 +462,7 @@ namespace CnC {
                         if( _tmpitem.second ) this->update_get_list( _stepInstance, user_tag );
                         if ( trace_level() > 0 ) {
                             Speaker oss;
-                            oss << "Get item " << name() <<  "[";
-                            cnc_format( oss, user_tag ) << "] -> ";
-                            cnc_format( oss, item );
+                            format( oss, "Get item ", user_tag, &item, _stepInstance );
                         }
                         return;
                     } else {
@@ -448,8 +471,7 @@ namespace CnC {
                         
                         if ( trace_level() > 0 ) {
                             Speaker oss;
-                            oss << "Get item " << name() <<  "[";
-                            cnc_format( oss, user_tag ) << "] -> not ready";
+                            format( oss, "Get item ", user_tag, NULL, _stepInstance );
                         }
                         
                         _tmpitem = this->wait_for_put( user_tag, a, _stepInstance ); // will throw( data_not_ready( this, new typed_tag< T >( user_tag ) ) );
@@ -474,9 +496,7 @@ namespace CnC {
                         a.release();
                         if ( trace_level() > 0 ) {
                             Speaker oss;
-                            oss << "Get item " << name() <<  "[";
-                            cnc_format( oss, user_tag ) << "] -> ";
-                            cnc_format( oss, item );
+                            format( oss, "Get item ", user_tag, &item, NULL );
                         }
                         return;
                     } else {
@@ -514,10 +534,10 @@ namespace CnC {
                 } while( ++_trials < NUM_TRIALS );
                 // If not available, simply warn a user and proceed
                 Speaker oss;
-                oss << "Error: Graph execution finished"
-                    << (( _trials < NUM_TRIALS ) ? "" : " (presumingly)")
-                    << ", but item is not available " << name() << "[";
-                    cnc_format( oss, user_tag ) << "]. Returning value is undefined.";
+                oss << "Error: ";
+                format( oss, "item is not available ", user_tag, NULL );
+                oss << " but graph execution finished" << (( _trials < NUM_TRIALS ) ? "" : " (presumingly)")
+                    << ". Returning value is undefined.";
             }
         }
 
@@ -538,9 +558,7 @@ namespace CnC {
 
                 if ( trace_level() > 0 ) {
                     Speaker oss;
-                    oss << "Unsafe get item " << name() <<  "[";
-                    cnc_format( oss, user_tag ) << "] -> ";
-                    cnc_format( oss, item );
+                    format( oss, "Unsafe get item ", user_tag, &item, _si );
                 }
                 
                 return true;
@@ -613,9 +631,9 @@ namespace CnC {
             } else { 
                 // This must come from a getlist decrement -> the item must be there!
                 std::ostringstream oss;
-                oss << "Error: initial ref count of item [" << name() << ": ";
-                cnc_format( oss, tag );
-                oss << "] was too low.\n";
+                oss << "Error: ";
+                format( oss, "initial ref count of item", tag, m_context.current_step_instance() );
+                oss << " was too low.\n";
                 CNC_ABORT( oss.str() );
             }
         }
@@ -630,8 +648,8 @@ namespace CnC {
                 
             if( trace_level() > 1 ) {
                 Speaker oss;
-                oss << "Item " << name() <<  "[";
-                cnc_format( oss, tag ) << "] now has a get-count of " << _gc;
+                format( oss, "Item", tag, m_context.current_step_instance() );
+                oss << " now has a get-count of " << _gc;
             }
             if( _gc == 0 ) {
                 CNC_ASSERT( _prop->am_owner() );
@@ -776,16 +794,14 @@ namespace CnC {
 #endif
                     if( ! fromRemote || _prop->am_owner() ) {
                         Speaker oss( std::cerr );
-                        oss << "Warning: multiple assignments to same item " << name() << "[";
-                        cnc_format( oss, user_tag ) << "]";
+                        oss << "Warning:";
+                        format( oss, "multiple assignments to same item ", user_tag, m_context.current_step_instance() );
                     }
                 }
                 
                 if ( trace_level() > 0 ) {
                     Speaker oss;
-                    oss << "Put item " << name() <<  "[";
-                    cnc_format( oss, user_tag ) << "] -> ";
-                    cnc_format( oss, *aw.item() );
+                    format( oss, "Put item ", user_tag, aw.item(), m_context.current_step_instance() );
                     if( ( getcount & item_properties::NO_GET_COUNT ) != item_properties::NO_GET_COUNT ) {
                         oss << " with get-count " << aw.properties()->get_count();
                     }
@@ -814,8 +830,8 @@ namespace CnC {
 
             if ( trace_level() > 0 ) {
                 Speaker oss;
-                oss << "Delay item " << name() <<  "[";
-                cnc_format( oss, user_tag ) << "] " << ( _tmpitem.first ? "" : "-> not ready" );
+                format( oss, "Delay item ", user_tag, _tmpitem.first, s );
+                //                cnc_format( oss, user_tag ) << "] " << ( _tmpitem.first ? "" : " = not ready" );
             }
                     
             return _tmpitem;
@@ -1291,8 +1307,7 @@ namespace CnC {
             }
             if ( trace_level() > 2 ) {
                 Speaker oss;
-                oss << "Request item " << name() <<  "[";
-                cnc_format( oss, tag ) << "] ";
+                format( oss, "Request item ", tag, NULL );
                 if( rcpnt >= 0 ) oss << "with " << rcpnt;
                 else oss << "as bcast";
             }
@@ -1408,9 +1423,8 @@ namespace CnC {
             }
             if ( item != NULL && ( trace_level() > 2 ) ) {
                 Speaker oss;
-                oss << "Deliver item " << name() <<  "[";
-                cnc_format( oss, tag ) << "] to " << recpnt << " -> ";
-                cnc_format( oss, (*item) );
+                format( oss, "Deliver item ", tag, item, NULL );
+                oss << " to " << recpnt;
             }
         }
 
@@ -1440,9 +1454,8 @@ namespace CnC {
             _self = m_context.bcast_msg( _ser, &recpnts.front(), recpnts.size() ); 
             if ( item != NULL && ( trace_level() > 2 ) ) {
                 Speaker oss;
-                oss << "Deliver item " << name() <<  "[";
-                cnc_format( oss, tag ) << "] bcast -> ";
-                cnc_format( oss, (*item) );
+                format( oss, "Deliver item ", tag, item, NULL );
+                oss << " bcast";
             }
             return _self;
         }

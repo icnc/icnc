@@ -34,8 +34,7 @@ struct my_context : public CnC::context< my_context >
     {
         m_tags.prescribes( m_steps, *this );
         if( CnC::tuner_base::myPid() == 0 ) {
-            CnC::debug::trace( m_steps );
-            CnC::debug::trace( m_tags );
+            CnC::debug::trace_all( *this );
             CnC::debug::collect_scheduler_statistics( *this );
         }
     }
