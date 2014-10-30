@@ -1,11 +1,12 @@
-Messages sent
 Steps created\( 18 \)
-Steps requeued\( . \) resumed\( . \)
-Steps scheduled\( 1 \) inflight\( 0, 0 \)
+Steps scheduled\( \d* \) inflight\( 0, 0 \)
 \[CnC 0\] End step my_step\(11\)
 \[CnC 0\] End step my_step\(15\)
 \[CnC 0\] End step my_step\(3\)
 \[CnC 0\] End step my_step\(7\)
+\[CnC 0\] Put item my_items\[-1\] = -1
+\[CnC 0\] Put item my_items\[1\] = 999982 {from remote}
+\[CnC 0\] Put item my_items\[5\] = 999964 {from remote}
 \[CnC 0\] Put tag my_tags<0>
 \[CnC 0\] Put tag my_tags<10>
 \[CnC 0\] Put tag my_tags<11>
@@ -31,10 +32,25 @@ Steps scheduled\( 1 \) inflight\( 0, 0 \)
 \[CnC 0\] Start step my_step\(7\)
 \[CnC 0\] Start step my_step\(7\)
 \[CnC 0\] Start step my_step\(7\)
-\[CnC 0\] Suspend step my_step\(11\) -> input item not ready 0
-\[CnC 0\] Suspend step my_step\(7\) -> input item not ready 0
-\[CnC 0\] Suspend step my_step\(7\) -> input item not ready 0
+\[CnC 0\] Suspend step my_step\(11\)
+\[CnC 0\] Suspend step my_step\(7\)
+\[CnC 0\] Suspend step my_step\(7\)
+\[CnC 0\] step my_step\(11\): Get item my_items\[1\] = 999982
+\[CnC 0\] step my_step\(11\): Get item my_items\[1\] = not ready
+\[CnC 0\] step my_step\(11\): Put item my_items\[11\] = 999971
+\[CnC 0\] step my_step\(15\): Put item my_items\[15\] = 999985
+\[CnC 0\] step my_step\(3\): Get item my_items\[1\] = 999982
+\[CnC 0\] step my_step\(3\): Put item my_items\[3\] = 999982
+\[CnC 0\] step my_step\(7\): Get item my_items\[5\] = 999964
+\[CnC 0\] step my_step\(7\): Get item my_items\[5\] = not ready
+\[CnC 0\] step my_step\(7\): Get item my_items\[5\] = not ready
+\[CnC 0\] step my_step\(7\): Put item my_items\[7\] = 999964
 \[CnC 0\] tag 11 with value 999982
 \[CnC 0\] tag 15 with value 1000000
 \[CnC 0\] tag 3 with value 999985
 \[CnC 0\] tag 7 with value 999971
+\[CnC 2\] tag 1 with value 999983
+\[CnC 2\] tag 13 with value 999982
+\[CnC 2\] tag 17 with value 1000000
+\[CnC 2\] tag 5 with value 999969
+\[CnC 2\] tag 9 with value 999964

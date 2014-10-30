@@ -1,27 +1,27 @@
 Steps created\( 2 \)
 Steps requeued\( 3 \) resumed\( 4 \)
 Steps scheduled\( 5 \) inflight\( 0, 0 \)
-\[CnC\] Delay item my_items\[0\] -> not ready
-\[CnC\] Delay item my_items\[1\] -> not ready
-\[CnC\] Delay item my_items\[2\] -> not ready
-\[CnC\] Delay item my_items\[3\] -> not ready
 \[CnC\] End step my_step\(0\)
 \[CnC\] End step my_step\(1\)
-\[CnC\] Put item my_items\[0\] -> 0
-\[CnC\] Put item my_items\[1\] -> 1
-\[CnC\] Put item my_items\[2\] -> 2
-\[CnC\] Put item my_items\[3\] -> 3
 \[CnC\] Start step my_step\(0\)
 \[CnC\] Start step my_step\(1\)
 \[CnC\] Start step my_step\(1\)
 \[CnC\] Start step my_step\(1\)
 \[CnC\] Start step my_step\(1\)
-\[CnC\] Suspend step my_step\(1\) -> input item not ready 0
-\[CnC\] Suspend step my_step\(1\) -> input item not ready 0
-\[CnC\] Suspend step my_step\(1\) -> input item not ready 0
-\[CnC\] Unsafe get item my_items\[0\] -> 0
-\[CnC\] Unsafe get item my_items\[0\] -> 0
-\[CnC\] Unsafe get item my_items\[0\] -> 0
-\[CnC\] Unsafe get item my_items\[1\] -> 1
-\[CnC\] Unsafe get item my_items\[1\] -> 1
-\[CnC\] Unsafe get item my_items\[2\] -> 2
+\[CnC\] Suspend step my_step\(1\)
+\[CnC\] Suspend step my_step\(1\)
+\[CnC\] Suspend step my_step\(1\)
+\[CnC\] step my_step\(0\): Put item my_items\[0\] = 0
+\[CnC\] step my_step\(0\): Put item my_items\[1\] = 1
+\[CnC\] step my_step\(0\): Put item my_items\[2\] = 2
+\[CnC\] step my_step\(0\): Put item my_items\[3\] = 3
+\[CnC\] step my_step\(1\): Delay item my_items\[0\] = not ready
+\[CnC\] step my_step\(1\): Delay item my_items\[1\] = not ready
+\[CnC\] step my_step\(1\): Delay item my_items\[2\] = not ready
+\[CnC\] step my_step\(1\): Delay item my_items\[3\] = not ready
+\[CnC\] step my_step\(1\): Unsafe get item my_items\[0\] = 0
+\[CnC\] step my_step\(1\): Unsafe get item my_items\[0\] = 0
+\[CnC\] step my_step\(1\): Unsafe get item my_items\[0\] = 0
+\[CnC\] step my_step\(1\): Unsafe get item my_items\[1\] = 1
+\[CnC\] step my_step\(1\): Unsafe get item my_items\[1\] = 1
+\[CnC\] step my_step\(1\): Unsafe get item my_items\[2\] = 2

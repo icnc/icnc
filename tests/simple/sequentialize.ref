@@ -1,5 +1,5 @@
 Steps created\( 18 \)
-Steps requeued\( . \) resumed\( . \)
+Steps requeued\( 6 \) resumed\( 6 \)
 Steps scheduled\( 9 \) inflight\( 0, 0 \)
 \[CnC\] End step my_step\(0\)
 \[CnC\] End step my_step\(1\)
@@ -19,6 +19,7 @@ Steps scheduled\( 9 \) inflight\( 0, 0 \)
 \[CnC\] End step my_step\(7\)
 \[CnC\] End step my_step\(8\)
 \[CnC\] End step my_step\(9\)
+\[CnC\] Put item my_items\[-1\] = -1
 \[CnC\] Put tag my_tags<0>
 \[CnC\] Put tag my_tags<10>
 \[CnC\] Put tag my_tags<11>
@@ -61,12 +62,34 @@ Steps scheduled\( 9 \) inflight\( 0, 0 \)
 \[CnC\] Start step my_step\(8\)
 \[CnC\] Start step my_step\(9\)
 \[CnC\] Start step my_step\(9\)
-\[CnC\] Suspend step my_step\(11\) -> input item not ready 0
-\[CnC\] Suspend step my_step\(13\) -> input item not ready 0
-\[CnC\] Suspend step my_step\(3\) -> input item not ready 0
-\[CnC\] Suspend step my_step\(5\) -> input item not ready 0
-\[CnC\] Suspend step my_step\(7\) -> input item not ready 0
-\[CnC\] Suspend step my_step\(9\) -> input item not ready 0
+\[CnC\] Suspend step my_step\(11\)
+\[CnC\] Suspend step my_step\(13\)
+\[CnC\] Suspend step my_step\(3\)
+\[CnC\] Suspend step my_step\(5\)
+\[CnC\] Suspend step my_step\(7\)
+\[CnC\] Suspend step my_step\(9\)
+\[CnC\] step my_step\(1\): Get item my_items\[-1\] = -1
+\[CnC\] step my_step\(1\): Put item my_items\[1\] = 999967
+\[CnC\] step my_step\(11\): Get item my_items\[1\] = 999967
+\[CnC\] step my_step\(11\): Get item my_items\[1\] = not ready
+\[CnC\] step my_step\(11\): Put item my_items\[11\] = 999932
+\[CnC\] step my_step\(13\): Get item my_items\[1\] = 999967
+\[CnC\] step my_step\(13\): Get item my_items\[1\] = not ready
+\[CnC\] step my_step\(13\): Put item my_items\[13\] = 999919
+\[CnC\] step my_step\(15\): Put item my_items\[15\] = 999968
+\[CnC\] step my_step\(17\): Put item my_items\[17\] = 999983
+\[CnC\] step my_step\(3\): Get item my_items\[1\] = 999967
+\[CnC\] step my_step\(3\): Get item my_items\[1\] = not ready
+\[CnC\] step my_step\(3\): Put item my_items\[3\] = 999964
+\[CnC\] step my_step\(5\): Get item my_items\[3\] = 999964
+\[CnC\] step my_step\(5\): Get item my_items\[3\] = not ready
+\[CnC\] step my_step\(5\): Put item my_items\[5\] = 999959
+\[CnC\] step my_step\(7\): Get item my_items\[5\] = 999959
+\[CnC\] step my_step\(7\): Get item my_items\[5\] = not ready
+\[CnC\] step my_step\(7\): Put item my_items\[7\] = 999952
+\[CnC\] step my_step\(9\): Get item my_items\[7\] = 999952
+\[CnC\] step my_step\(9\): Get item my_items\[7\] = not ready
+\[CnC\] step my_step\(9\): Put item my_items\[9\] = 999943
 \[CnC\] tag 1 with value 999968
 \[CnC\] tag 11 with value 999943
 \[CnC\] tag 13 with value 999932

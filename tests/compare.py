@@ -27,6 +27,8 @@ def CompareFile(fp, fc):
     fileCompare.close()
     compLines.sort()
 
+#    print '\n'.join(compLines)
+
     patterns = []
     filePattern = open( fp )
     for line in filePattern.readlines():

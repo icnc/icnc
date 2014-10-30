@@ -1,48 +1,90 @@
 CnC recursive \(23\): 28657
-\[CnC\] Delay item fibs\[0\] -> not ready
-\[CnC\] Delay item fibs\[10\] -> not ready
-\[CnC\] Delay item fibs\[10\] -> not ready
-\[CnC\] Delay item fibs\[11\] -> not ready
-\[CnC\] Delay item fibs\[11\] -> not ready
-\[CnC\] Delay item fibs\[12\] -> not ready
-\[CnC\] Delay item fibs\[12\] -> not ready
-\[CnC\] Delay item fibs\[13\] -> not ready
-\[CnC\] Delay item fibs\[13\] -> not ready
-\[CnC\] Delay item fibs\[14\] -> not ready
-\[CnC\] Delay item fibs\[14\] -> not ready
-\[CnC\] Delay item fibs\[15\] -> not ready
-\[CnC\] Delay item fibs\[15\] -> not ready
-\[CnC\] Delay item fibs\[16\] -> not ready
-\[CnC\] Delay item fibs\[16\] -> not ready
-\[CnC\] Delay item fibs\[17\] -> not ready
-\[CnC\] Delay item fibs\[17\] -> not ready
-\[CnC\] Delay item fibs\[18\] -> not ready
-\[CnC\] Delay item fibs\[18\] -> not ready
-\[CnC\] Delay item fibs\[19\] -> not ready
-\[CnC\] Delay item fibs\[19\] -> not ready
-\[CnC\] Delay item fibs\[1\] -> not ready
-\[CnC\] Delay item fibs\[1\] -> not ready
-\[CnC\] Delay item fibs\[20\] -> not ready
-\[CnC\] Delay item fibs\[20\] -> not ready
-\[CnC\] Delay item fibs\[21\] -> not ready
-\[CnC\] Delay item fibs\[21\] -> not ready
-\[CnC\] Delay item fibs\[22\] -> not ready
-\[CnC\] Delay item fibs\[2\] -> not ready
-\[CnC\] Delay item fibs\[2\] -> not ready
-\[CnC\] Delay item fibs\[3\] -> not ready
-\[CnC\] Delay item fibs\[3\] -> not ready
-\[CnC\] Delay item fibs\[4\] -> not ready
-\[CnC\] Delay item fibs\[4\] -> not ready
-\[CnC\] Delay item fibs\[5\] -> not ready
-\[CnC\] Delay item fibs\[5\] -> not ready
-\[CnC\] Delay item fibs\[6\] -> not ready
-\[CnC\] Delay item fibs\[6\] -> not ready
-\[CnC\] Delay item fibs\[7\] -> not ready
-\[CnC\] Delay item fibs\[7\] -> not ready
-\[CnC\] Delay item fibs\[8\] -> not ready
-\[CnC\] Delay item fibs\[8\] -> not ready
-\[CnC\] Delay item fibs\[9\] -> not ready
-\[CnC\] Delay item fibs\[9\] -> not ready
+\[CnC\] 	{1 memoized}
+\[CnC\] 	{1 memoized}
+\[CnC\] 	{1 memoized}
+\[CnC\] 	{1 memoized}
+\[CnC\] 	{1 memoized}
+\[CnC\] 	{1 memoized}
+\[CnC\] 	{1 memoized}
+\[CnC\] 	{1 memoized}
+\[CnC\] 	{1 memoized}
+\[CnC\] 	{1 memoized}
+\[CnC\] 	{1 memoized}
+\[CnC\] 	{1 memoized}
+\[CnC\] 	{1 memoized}
+\[CnC\] 	{1 memoized}
+\[CnC\] 	{1 memoized}
+\[CnC\] 	{1 memoized}
+\[CnC\] 	{1 memoized}
+\[CnC\] 	{1 memoized}
+\[CnC\] 	{1 memoized}
+\[CnC\] 	{1 memoized}
+\[CnC\] 	{1 memoized}
+\[CnC\] 	{2 memoized}
+\[CnC\] 	{2 memoized}
+\[CnC\] 	{2 memoized}
+\[CnC\] 	{2 memoized}
+\[CnC\] 	{2 memoized}
+\[CnC\] 	{2 memoized}
+\[CnC\] 	{2 memoized}
+\[CnC\] 	{2 memoized}
+\[CnC\] 	{2 memoized}
+\[CnC\] 	{2 memoized}
+\[CnC\] 	{2 memoized}
+\[CnC\] 	{2 memoized}
+\[CnC\] 	{2 memoized}
+\[CnC\] 	{2 memoized}
+\[CnC\] 	{2 memoized}
+\[CnC\] 	{2 memoized}
+\[CnC\] 	{2 memoized}
+\[CnC\] 	{2 memoized}
+\[CnC\] 	{2 memoized}
+\[CnC\] 	{2 memoized}
+\[CnC\] 	{2 memoized}
+\[CnC\] Delay item fibs\[0\] = not ready
+\[CnC\] Delay item fibs\[10\] = not ready
+\[CnC\] Delay item fibs\[10\] = not ready
+\[CnC\] Delay item fibs\[11\] = not ready
+\[CnC\] Delay item fibs\[11\] = not ready
+\[CnC\] Delay item fibs\[12\] = not ready
+\[CnC\] Delay item fibs\[12\] = not ready
+\[CnC\] Delay item fibs\[13\] = not ready
+\[CnC\] Delay item fibs\[13\] = not ready
+\[CnC\] Delay item fibs\[14\] = not ready
+\[CnC\] Delay item fibs\[14\] = not ready
+\[CnC\] Delay item fibs\[15\] = not ready
+\[CnC\] Delay item fibs\[15\] = not ready
+\[CnC\] Delay item fibs\[16\] = not ready
+\[CnC\] Delay item fibs\[16\] = not ready
+\[CnC\] Delay item fibs\[17\] = not ready
+\[CnC\] Delay item fibs\[17\] = not ready
+\[CnC\] Delay item fibs\[18\] = not ready
+\[CnC\] Delay item fibs\[18\] = not ready
+\[CnC\] Delay item fibs\[19\] = not ready
+\[CnC\] Delay item fibs\[19\] = not ready
+\[CnC\] Delay item fibs\[1\] = not ready
+\[CnC\] Delay item fibs\[1\] = not ready
+\[CnC\] Delay item fibs\[20\] = not ready
+\[CnC\] Delay item fibs\[20\] = not ready
+\[CnC\] Delay item fibs\[21\] = not ready
+\[CnC\] Delay item fibs\[21\] = not ready
+\[CnC\] Delay item fibs\[22\] = not ready
+\[CnC\] Delay item fibs\[2\] = not ready
+\[CnC\] Delay item fibs\[2\] = not ready
+\[CnC\] Delay item fibs\[3\] = not ready
+\[CnC\] Delay item fibs\[3\] = not ready
+\[CnC\] Delay item fibs\[4\] = not ready
+\[CnC\] Delay item fibs\[4\] = not ready
+\[CnC\] Delay item fibs\[5\] = not ready
+\[CnC\] Delay item fibs\[5\] = not ready
+\[CnC\] Delay item fibs\[6\] = not ready
+\[CnC\] Delay item fibs\[6\] = not ready
+\[CnC\] Delay item fibs\[7\] = not ready
+\[CnC\] Delay item fibs\[7\] = not ready
+\[CnC\] Delay item fibs\[8\] = not ready
+\[CnC\] Delay item fibs\[8\] = not ready
+\[CnC\] Delay item fibs\[9\] = not ready
+\[CnC\] Delay item fibs\[9\] = not ready
 \[CnC\] End step ctrl\(0\)
 \[CnC\] End step ctrl\(1\)
 \[CnC\] End step ctrl\(10\)
@@ -91,120 +133,8 @@ CnC recursive \(23\): 28657
 \[CnC\] End step fib\(7\)
 \[CnC\] End step fib\(8\)
 \[CnC\] End step fib\(9\)
-\[CnC\] Get item fibs\[23\] -> 28657
-\[CnC\] Item fibs\[0\] now has a get-count of 0
-\[CnC\] Item fibs\[10\] now has a get-count of 0
-\[CnC\] Item fibs\[10\] now has a get-count of 1
-\[CnC\] Item fibs\[11\] now has a get-count of 0
-\[CnC\] Item fibs\[11\] now has a get-count of 1
-\[CnC\] Item fibs\[12\] now has a get-count of 0
-\[CnC\] Item fibs\[12\] now has a get-count of 1
-\[CnC\] Item fibs\[13\] now has a get-count of 0
-\[CnC\] Item fibs\[13\] now has a get-count of 1
-\[CnC\] Item fibs\[14\] now has a get-count of 0
-\[CnC\] Item fibs\[14\] now has a get-count of 1
-\[CnC\] Item fibs\[15\] now has a get-count of 0
-\[CnC\] Item fibs\[15\] now has a get-count of 1
-\[CnC\] Item fibs\[16\] now has a get-count of 0
-\[CnC\] Item fibs\[16\] now has a get-count of 1
-\[CnC\] Item fibs\[17\] now has a get-count of 0
-\[CnC\] Item fibs\[17\] now has a get-count of 1
-\[CnC\] Item fibs\[18\] now has a get-count of 0
-\[CnC\] Item fibs\[18\] now has a get-count of 1
-\[CnC\] Item fibs\[19\] now has a get-count of 0
-\[CnC\] Item fibs\[19\] now has a get-count of 1
-\[CnC\] Item fibs\[1\] now has a get-count of 0
-\[CnC\] Item fibs\[1\] now has a get-count of 1
-\[CnC\] Item fibs\[20\] now has a get-count of 0
-\[CnC\] Item fibs\[20\] now has a get-count of 1
-\[CnC\] Item fibs\[21\] now has a get-count of 0
-\[CnC\] Item fibs\[21\] now has a get-count of 1
-\[CnC\] Item fibs\[22\] now has a get-count of 1
-\[CnC\] Item fibs\[2\] now has a get-count of 0
-\[CnC\] Item fibs\[2\] now has a get-count of 1
-\[CnC\] Item fibs\[3\] now has a get-count of 0
-\[CnC\] Item fibs\[3\] now has a get-count of 1
-\[CnC\] Item fibs\[4\] now has a get-count of 0
-\[CnC\] Item fibs\[4\] now has a get-count of 1
-\[CnC\] Item fibs\[5\] now has a get-count of 0
-\[CnC\] Item fibs\[5\] now has a get-count of 1
-\[CnC\] Item fibs\[6\] now has a get-count of 0
-\[CnC\] Item fibs\[6\] now has a get-count of 1
-\[CnC\] Item fibs\[7\] now has a get-count of 0
-\[CnC\] Item fibs\[7\] now has a get-count of 1
-\[CnC\] Item fibs\[8\] now has a get-count of 0
-\[CnC\] Item fibs\[8\] now has a get-count of 1
-\[CnC\] Item fibs\[9\] now has a get-count of 0
-\[CnC\] Item fibs\[9\] now has a get-count of 1
-\[CnC\] Put item fibs\[0\] -> 0 with get-count 1
-\[CnC\] Put item fibs\[10\] -> 55 with get-count 2
-\[CnC\] Put item fibs\[11\] -> 89 with get-count 2
-\[CnC\] Put item fibs\[12\] -> 144 with get-count 2
-\[CnC\] Put item fibs\[13\] -> 233 with get-count 2
-\[CnC\] Put item fibs\[14\] -> 377 with get-count 2
-\[CnC\] Put item fibs\[15\] -> 610 with get-count 2
-\[CnC\] Put item fibs\[16\] -> 987 with get-count 2
-\[CnC\] Put item fibs\[17\] -> 1597 with get-count 2
-\[CnC\] Put item fibs\[18\] -> 2584 with get-count 2
-\[CnC\] Put item fibs\[19\] -> 4181 with get-count 2
-\[CnC\] Put item fibs\[1\] -> 1 with get-count 2
-\[CnC\] Put item fibs\[20\] -> 6765 with get-count 2
-\[CnC\] Put item fibs\[21\] -> 10946 with get-count 2
-\[CnC\] Put item fibs\[22\] -> 17711 with get-count 2
-\[CnC\] Put item fibs\[23\] -> 28657 with get-count 2
-\[CnC\] Put item fibs\[2\] -> 1 with get-count 2
-\[CnC\] Put item fibs\[3\] -> 2 with get-count 2
-\[CnC\] Put item fibs\[4\] -> 3 with get-count 2
-\[CnC\] Put item fibs\[5\] -> 5 with get-count 2
-\[CnC\] Put item fibs\[6\] -> 8 with get-count 2
-\[CnC\] Put item fibs\[7\] -> 13 with get-count 2
-\[CnC\] Put item fibs\[8\] -> 21 with get-count 2
-\[CnC\] Put item fibs\[9\] -> 34 with get-count 2
-\[CnC\] Put tag tags<0>
-\[CnC\] Put tag tags<10>
-\[CnC\] Put tag tags<10>
-\[CnC\] Put tag tags<11>
-\[CnC\] Put tag tags<11>
-\[CnC\] Put tag tags<12>
-\[CnC\] Put tag tags<12>
-\[CnC\] Put tag tags<13>
-\[CnC\] Put tag tags<13>
-\[CnC\] Put tag tags<14>
-\[CnC\] Put tag tags<14>
-\[CnC\] Put tag tags<15>
-\[CnC\] Put tag tags<15>
-\[CnC\] Put tag tags<16>
-\[CnC\] Put tag tags<16>
-\[CnC\] Put tag tags<17>
-\[CnC\] Put tag tags<17>
-\[CnC\] Put tag tags<18>
-\[CnC\] Put tag tags<18>
-\[CnC\] Put tag tags<19>
-\[CnC\] Put tag tags<19>
-\[CnC\] Put tag tags<1>
-\[CnC\] Put tag tags<1>
-\[CnC\] Put tag tags<20>
-\[CnC\] Put tag tags<20>
-\[CnC\] Put tag tags<21>
-\[CnC\] Put tag tags<21>
-\[CnC\] Put tag tags<22>
-\[CnC\] Put tag tags<23>
-\[CnC\] Put tag tags<2>
-\[CnC\] Put tag tags<2>
-\[CnC\] Put tag tags<3>
-\[CnC\] Put tag tags<3>
-\[CnC\] Put tag tags<4>
-\[CnC\] Put tag tags<4>
-\[CnC\] Put tag tags<5>
-\[CnC\] Put tag tags<5>
-\[CnC\] Put tag tags<6>
-\[CnC\] Put tag tags<6>
-\[CnC\] Put tag tags<7>
-\[CnC\] Put tag tags<7>
-\[CnC\] Put tag tags<8>
-\[CnC\] Put tag tags<8>
-\[CnC\] Put tag tags<9>
-\[CnC\] Put tag tags<9>
+\[CnC\] Get item fibs\[23\] = 28657
+\[CnC\] Put tag tags<23> mask -1 3 _found 0
 \[CnC\] Start step ctrl\(0\)
 \[CnC\] Start step ctrl\(1\)
 \[CnC\] Start step ctrl\(10\)
@@ -253,47 +183,159 @@ CnC recursive \(23\): 28657
 \[CnC\] Start step fib\(7\)
 \[CnC\] Start step fib\(8\)
 \[CnC\] Start step fib\(9\)
-\[CnC\] Unsafe get item fibs\[0\] -> 0
-\[CnC\] Unsafe get item fibs\[10\] -> 55
-\[CnC\] Unsafe get item fibs\[10\] -> 55
-\[CnC\] Unsafe get item fibs\[11\] -> 89
-\[CnC\] Unsafe get item fibs\[11\] -> 89
-\[CnC\] Unsafe get item fibs\[12\] -> 144
-\[CnC\] Unsafe get item fibs\[12\] -> 144
-\[CnC\] Unsafe get item fibs\[13\] -> 233
-\[CnC\] Unsafe get item fibs\[13\] -> 233
-\[CnC\] Unsafe get item fibs\[14\] -> 377
-\[CnC\] Unsafe get item fibs\[14\] -> 377
-\[CnC\] Unsafe get item fibs\[15\] -> 610
-\[CnC\] Unsafe get item fibs\[15\] -> 610
-\[CnC\] Unsafe get item fibs\[16\] -> 987
-\[CnC\] Unsafe get item fibs\[16\] -> 987
-\[CnC\] Unsafe get item fibs\[17\] -> 1597
-\[CnC\] Unsafe get item fibs\[17\] -> 1597
-\[CnC\] Unsafe get item fibs\[18\] -> 2584
-\[CnC\] Unsafe get item fibs\[18\] -> 2584
-\[CnC\] Unsafe get item fibs\[19\] -> 4181
-\[CnC\] Unsafe get item fibs\[19\] -> 4181
-\[CnC\] Unsafe get item fibs\[1\] -> 1
-\[CnC\] Unsafe get item fibs\[1\] -> 1
-\[CnC\] Unsafe get item fibs\[20\] -> 6765
-\[CnC\] Unsafe get item fibs\[20\] -> 6765
-\[CnC\] Unsafe get item fibs\[21\] -> 10946
-\[CnC\] Unsafe get item fibs\[21\] -> 10946
-\[CnC\] Unsafe get item fibs\[22\] -> 17711
-\[CnC\] Unsafe get item fibs\[2\] -> 1
-\[CnC\] Unsafe get item fibs\[2\] -> 1
-\[CnC\] Unsafe get item fibs\[3\] -> 2
-\[CnC\] Unsafe get item fibs\[3\] -> 2
-\[CnC\] Unsafe get item fibs\[4\] -> 3
-\[CnC\] Unsafe get item fibs\[4\] -> 3
-\[CnC\] Unsafe get item fibs\[5\] -> 5
-\[CnC\] Unsafe get item fibs\[5\] -> 5
-\[CnC\] Unsafe get item fibs\[6\] -> 8
-\[CnC\] Unsafe get item fibs\[6\] -> 8
-\[CnC\] Unsafe get item fibs\[7\] -> 13
-\[CnC\] Unsafe get item fibs\[7\] -> 13
-\[CnC\] Unsafe get item fibs\[8\] -> 21
-\[CnC\] Unsafe get item fibs\[8\] -> 21
-\[CnC\] Unsafe get item fibs\[9\] -> 34
-\[CnC\] Unsafe get item fibs\[9\] -> 34
+\[CnC\] step ctrl\(10\): Put tag tags<8> mask -1 3 _found -1
+\[CnC\] step ctrl\(10\): Put tag tags<9> mask -1 3 _found -1
+\[CnC\] step ctrl\(11\): Put tag tags<10> mask -1 3 _found 0
+\[CnC\] step ctrl\(11\): Put tag tags<9> mask -1 3 _found 0
+\[CnC\] step ctrl\(12\): Put tag tags<10> mask -1 3 _found -1
+\[CnC\] step ctrl\(12\): Put tag tags<11> mask -1 3 _found -1
+\[CnC\] step ctrl\(13\): Put tag tags<11> mask -1 3 _found 0
+\[CnC\] step ctrl\(13\): Put tag tags<12> mask -1 3 _found 0
+\[CnC\] step ctrl\(14\): Put tag tags<12> mask -1 3 _found -1
+\[CnC\] step ctrl\(14\): Put tag tags<13> mask -1 3 _found -1
+\[CnC\] step ctrl\(15\): Put tag tags<13> mask -1 3 _found 0
+\[CnC\] step ctrl\(15\): Put tag tags<14> mask -1 3 _found 0
+\[CnC\] step ctrl\(16\): Put tag tags<14> mask -1 3 _found -1
+\[CnC\] step ctrl\(16\): Put tag tags<15> mask -1 3 _found -1
+\[CnC\] step ctrl\(17\): Put tag tags<15> mask -1 3 _found 0
+\[CnC\] step ctrl\(17\): Put tag tags<16> mask -1 3 _found 0
+\[CnC\] step ctrl\(18\): Put tag tags<16> mask -1 3 _found -1
+\[CnC\] step ctrl\(18\): Put tag tags<17> mask -1 3 _found -1
+\[CnC\] step ctrl\(19\): Put tag tags<17> mask -1 3 _found 0
+\[CnC\] step ctrl\(19\): Put tag tags<18> mask -1 3 _found 0
+\[CnC\] step ctrl\(2\): Put tag tags<0> mask -1 3 _found 0
+\[CnC\] step ctrl\(2\): Put tag tags<1> mask -1 3 _found -1
+\[CnC\] step ctrl\(20\): Put tag tags<18> mask -1 3 _found -1
+\[CnC\] step ctrl\(20\): Put tag tags<19> mask -1 3 _found -1
+\[CnC\] step ctrl\(21\): Put tag tags<19> mask -1 3 _found 0
+\[CnC\] step ctrl\(21\): Put tag tags<20> mask -1 3 _found 0
+\[CnC\] step ctrl\(22\): Put tag tags<20> mask -1 3 _found -1
+\[CnC\] step ctrl\(22\): Put tag tags<21> mask -1 3 _found -1
+\[CnC\] step ctrl\(23\): Put tag tags<21> mask -1 3 _found 0
+\[CnC\] step ctrl\(23\): Put tag tags<22> mask -1 3 _found 0
+\[CnC\] step ctrl\(3\): Put tag tags<1> mask -1 3 _found 0
+\[CnC\] step ctrl\(3\): Put tag tags<2> mask -1 3 _found 0
+\[CnC\] step ctrl\(4\): Put tag tags<2> mask -1 3 _found -1
+\[CnC\] step ctrl\(4\): Put tag tags<3> mask -1 3 _found -1
+\[CnC\] step ctrl\(5\): Put tag tags<3> mask -1 3 _found 0
+\[CnC\] step ctrl\(5\): Put tag tags<4> mask -1 3 _found 0
+\[CnC\] step ctrl\(6\): Put tag tags<4> mask -1 3 _found -1
+\[CnC\] step ctrl\(6\): Put tag tags<5> mask -1 3 _found -1
+\[CnC\] step ctrl\(7\): Put tag tags<5> mask -1 3 _found 0
+\[CnC\] step ctrl\(7\): Put tag tags<6> mask -1 3 _found 0
+\[CnC\] step ctrl\(8\): Put tag tags<6> mask -1 3 _found -1
+\[CnC\] step ctrl\(8\): Put tag tags<7> mask -1 3 _found -1
+\[CnC\] step ctrl\(9\): Put tag tags<7> mask -1 3 _found 0
+\[CnC\] step ctrl\(9\): Put tag tags<8> mask -1 3 _found 0
+\[CnC\] step fib\(0\): Put item fibs\[0\] = 0 with get-count 1
+\[CnC\] step fib\(1\): Put item fibs\[1\] = 1 with get-count 2
+\[CnC\] step fib\(10\): Itemfibs\[8\] now has a get-count of 0
+\[CnC\] step fib\(10\): Itemfibs\[9\] now has a get-count of 1
+\[CnC\] step fib\(10\): Put item fibs\[10\] = 55 with get-count 2
+\[CnC\] step fib\(10\): Unsafe get item fibs\[8\] = 21
+\[CnC\] step fib\(10\): Unsafe get item fibs\[9\] = 34
+\[CnC\] step fib\(11\): Itemfibs\[10\] now has a get-count of 1
+\[CnC\] step fib\(11\): Itemfibs\[9\] now has a get-count of 0
+\[CnC\] step fib\(11\): Put item fibs\[11\] = 89 with get-count 2
+\[CnC\] step fib\(11\): Unsafe get item fibs\[10\] = 55
+\[CnC\] step fib\(11\): Unsafe get item fibs\[9\] = 34
+\[CnC\] step fib\(12\): Itemfibs\[10\] now has a get-count of 0
+\[CnC\] step fib\(12\): Itemfibs\[11\] now has a get-count of 1
+\[CnC\] step fib\(12\): Put item fibs\[12\] = 144 with get-count 2
+\[CnC\] step fib\(12\): Unsafe get item fibs\[10\] = 55
+\[CnC\] step fib\(12\): Unsafe get item fibs\[11\] = 89
+\[CnC\] step fib\(13\): Itemfibs\[11\] now has a get-count of 0
+\[CnC\] step fib\(13\): Itemfibs\[12\] now has a get-count of 1
+\[CnC\] step fib\(13\): Put item fibs\[13\] = 233 with get-count 2
+\[CnC\] step fib\(13\): Unsafe get item fibs\[11\] = 89
+\[CnC\] step fib\(13\): Unsafe get item fibs\[12\] = 144
+\[CnC\] step fib\(14\): Itemfibs\[12\] now has a get-count of 0
+\[CnC\] step fib\(14\): Itemfibs\[13\] now has a get-count of 1
+\[CnC\] step fib\(14\): Put item fibs\[14\] = 377 with get-count 2
+\[CnC\] step fib\(14\): Unsafe get item fibs\[12\] = 144
+\[CnC\] step fib\(14\): Unsafe get item fibs\[13\] = 233
+\[CnC\] step fib\(15\): Itemfibs\[13\] now has a get-count of 0
+\[CnC\] step fib\(15\): Itemfibs\[14\] now has a get-count of 1
+\[CnC\] step fib\(15\): Put item fibs\[15\] = 610 with get-count 2
+\[CnC\] step fib\(15\): Unsafe get item fibs\[13\] = 233
+\[CnC\] step fib\(15\): Unsafe get item fibs\[14\] = 377
+\[CnC\] step fib\(16\): Itemfibs\[14\] now has a get-count of 0
+\[CnC\] step fib\(16\): Itemfibs\[15\] now has a get-count of 1
+\[CnC\] step fib\(16\): Put item fibs\[16\] = 987 with get-count 2
+\[CnC\] step fib\(16\): Unsafe get item fibs\[14\] = 377
+\[CnC\] step fib\(16\): Unsafe get item fibs\[15\] = 610
+\[CnC\] step fib\(17\): Itemfibs\[15\] now has a get-count of 0
+\[CnC\] step fib\(17\): Itemfibs\[16\] now has a get-count of 1
+\[CnC\] step fib\(17\): Put item fibs\[17\] = 1597 with get-count 2
+\[CnC\] step fib\(17\): Unsafe get item fibs\[15\] = 610
+\[CnC\] step fib\(17\): Unsafe get item fibs\[16\] = 987
+\[CnC\] step fib\(18\): Itemfibs\[16\] now has a get-count of 0
+\[CnC\] step fib\(18\): Itemfibs\[17\] now has a get-count of 1
+\[CnC\] step fib\(18\): Put item fibs\[18\] = 2584 with get-count 2
+\[CnC\] step fib\(18\): Unsafe get item fibs\[16\] = 987
+\[CnC\] step fib\(18\): Unsafe get item fibs\[17\] = 1597
+\[CnC\] step fib\(19\): Itemfibs\[17\] now has a get-count of 0
+\[CnC\] step fib\(19\): Itemfibs\[18\] now has a get-count of 1
+\[CnC\] step fib\(19\): Put item fibs\[19\] = 4181 with get-count 2
+\[CnC\] step fib\(19\): Unsafe get item fibs\[17\] = 1597
+\[CnC\] step fib\(19\): Unsafe get item fibs\[18\] = 2584
+\[CnC\] step fib\(2\): Itemfibs\[0\] now has a get-count of 0
+\[CnC\] step fib\(2\): Itemfibs\[1\] now has a get-count of 1
+\[CnC\] step fib\(2\): Put item fibs\[2\] = 1 with get-count 2
+\[CnC\] step fib\(2\): Unsafe get item fibs\[0\] = 0
+\[CnC\] step fib\(2\): Unsafe get item fibs\[1\] = 1
+\[CnC\] step fib\(20\): Itemfibs\[18\] now has a get-count of 0
+\[CnC\] step fib\(20\): Itemfibs\[19\] now has a get-count of 1
+\[CnC\] step fib\(20\): Put item fibs\[20\] = 6765 with get-count 2
+\[CnC\] step fib\(20\): Unsafe get item fibs\[18\] = 2584
+\[CnC\] step fib\(20\): Unsafe get item fibs\[19\] = 4181
+\[CnC\] step fib\(21\): Itemfibs\[19\] now has a get-count of 0
+\[CnC\] step fib\(21\): Itemfibs\[20\] now has a get-count of 1
+\[CnC\] step fib\(21\): Put item fibs\[21\] = 10946 with get-count 2
+\[CnC\] step fib\(21\): Unsafe get item fibs\[19\] = 4181
+\[CnC\] step fib\(21\): Unsafe get item fibs\[20\] = 6765
+\[CnC\] step fib\(22\): Itemfibs\[20\] now has a get-count of 0
+\[CnC\] step fib\(22\): Itemfibs\[21\] now has a get-count of 1
+\[CnC\] step fib\(22\): Put item fibs\[22\] = 17711 with get-count 2
+\[CnC\] step fib\(22\): Unsafe get item fibs\[20\] = 6765
+\[CnC\] step fib\(22\): Unsafe get item fibs\[21\] = 10946
+\[CnC\] step fib\(23\): Itemfibs\[21\] now has a get-count of 0
+\[CnC\] step fib\(23\): Itemfibs\[22\] now has a get-count of 1
+\[CnC\] step fib\(23\): Put item fibs\[23\] = 28657 with get-count 2
+\[CnC\] step fib\(23\): Unsafe get item fibs\[21\] = 10946
+\[CnC\] step fib\(23\): Unsafe get item fibs\[22\] = 17711
+\[CnC\] step fib\(3\): Itemfibs\[1\] now has a get-count of 0
+\[CnC\] step fib\(3\): Itemfibs\[2\] now has a get-count of 1
+\[CnC\] step fib\(3\): Put item fibs\[3\] = 2 with get-count 2
+\[CnC\] step fib\(3\): Unsafe get item fibs\[1\] = 1
+\[CnC\] step fib\(3\): Unsafe get item fibs\[2\] = 1
+\[CnC\] step fib\(4\): Itemfibs\[2\] now has a get-count of 0
+\[CnC\] step fib\(4\): Itemfibs\[3\] now has a get-count of 1
+\[CnC\] step fib\(4\): Put item fibs\[4\] = 3 with get-count 2
+\[CnC\] step fib\(4\): Unsafe get item fibs\[2\] = 1
+\[CnC\] step fib\(4\): Unsafe get item fibs\[3\] = 2
+\[CnC\] step fib\(5\): Itemfibs\[3\] now has a get-count of 0
+\[CnC\] step fib\(5\): Itemfibs\[4\] now has a get-count of 1
+\[CnC\] step fib\(5\): Put item fibs\[5\] = 5 with get-count 2
+\[CnC\] step fib\(5\): Unsafe get item fibs\[3\] = 2
+\[CnC\] step fib\(5\): Unsafe get item fibs\[4\] = 3
+\[CnC\] step fib\(6\): Itemfibs\[4\] now has a get-count of 0
+\[CnC\] step fib\(6\): Itemfibs\[5\] now has a get-count of 1
+\[CnC\] step fib\(6\): Put item fibs\[6\] = 8 with get-count 2
+\[CnC\] step fib\(6\): Unsafe get item fibs\[4\] = 3
+\[CnC\] step fib\(6\): Unsafe get item fibs\[5\] = 5
+\[CnC\] step fib\(7\): Itemfibs\[5\] now has a get-count of 0
+\[CnC\] step fib\(7\): Itemfibs\[6\] now has a get-count of 1
+\[CnC\] step fib\(7\): Put item fibs\[7\] = 13 with get-count 2
+\[CnC\] step fib\(7\): Unsafe get item fibs\[5\] = 5
+\[CnC\] step fib\(7\): Unsafe get item fibs\[6\] = 8
+\[CnC\] step fib\(8\): Itemfibs\[6\] now has a get-count of 0
+\[CnC\] step fib\(8\): Itemfibs\[7\] now has a get-count of 1
+\[CnC\] step fib\(8\): Put item fibs\[8\] = 21 with get-count 2
+\[CnC\] step fib\(8\): Unsafe get item fibs\[6\] = 8
+\[CnC\] step fib\(8\): Unsafe get item fibs\[7\] = 13
+\[CnC\] step fib\(9\): Itemfibs\[7\] now has a get-count of 0
+\[CnC\] step fib\(9\): Itemfibs\[8\] now has a get-count of 1
+\[CnC\] step fib\(9\): Put item fibs\[9\] = 34 with get-count 2
+\[CnC\] step fib\(9\): Unsafe get item fibs\[7\] = 13
+\[CnC\] step fib\(9\): Unsafe get item fibs\[8\] = 21

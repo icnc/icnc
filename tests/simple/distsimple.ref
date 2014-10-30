@@ -2095,43 +2095,36 @@ IP\(900, 900\)
 \[CnC 0\] End step my_step2\(600\)
 \[CnC 0\] End step my_step2\(700\)
 \[CnC 0\] End step my_step2\(90\)
-\[CnC 0\] Error: Graph execution finished \(presumingly\), but item is not available \[74774\]\. Returning value is undefined\.
+\[CnC 0\] Error: item is not available \[74774\] but graph execution finished \(presumingly\)\. Returning value is undefined\.
 \[CnC 0\] Put tag m_tags<\(1,2\)>
-\[CnC 0\] Put tag m_tags<\(100,2\)>
+\[CnC 0\] Put tag m_tags<\(10,2\)>
 \[CnC 0\] Put tag m_tags<\(2,2\)>
+\[CnC 0\] Put tag m_tags<\(200,2\)>
 \[CnC 0\] Put tag m_tags<\(3,2\)>
-\[CnC 0\] Put tag m_tags<\(300,2\)>
+\[CnC 0\] Put tag m_tags<\(30,2\)>
 \[CnC 0\] Put tag m_tags<\(4,2\)>
-\[CnC 0\] Put tag m_tags<\(400,2\)>
+\[CnC 0\] Put tag m_tags<\(40,2\)>
 \[CnC 0\] Put tag m_tags<\(5,2\)>
 \[CnC 0\] Put tag m_tags<\(6,2\)>
-\[CnC 0\] Put tag m_tags<\(600,2\)>
+\[CnC 0\] Put tag m_tags<\(60,2\)>
 \[CnC 0\] Put tag m_tags<\(7,2\)>
+\[CnC 0\] Put tag m_tags<\(700,2\)>
 \[CnC 0\] Put tag m_tags<\(8,2\)>
-\[CnC 0\] Put tag m_tags<\(80,2\)>
 \[CnC 0\] Put tag m_tags<\(9,2\)>
-\[CnC 0\] Put tag m_tags<\(90,2\)>
-\[CnC 0\] Put tag m_tags<\(900,2\)>
-\[CnC 0\] Start step my_step\(\(10,2\)\)
 \[CnC 0\] Start step my_step\(\(10,2\)\)
 \[CnC 0\] Start step my_step\(\(10,2\)\)
 \[CnC 0\] Start step my_step\(\(200,2\)\)
 \[CnC 0\] Start step my_step\(\(200,2\)\)
-\[CnC 0\] Start step my_step\(\(200,2\)\)
-\[CnC 0\] Start step my_step\(\(30,2\)\)
 \[CnC 0\] Start step my_step\(\(30,2\)\)
 \[CnC 0\] Start step my_step\(\(30,2\)\)
 \[CnC 0\] Start step my_step\(\(300,2\)\)
 \[CnC 0\] Start step my_step\(\(300,2\)\)
 \[CnC 0\] Start step my_step\(\(40,2\)\)
 \[CnC 0\] Start step my_step\(\(40,2\)\)
-\[CnC 0\] Start step my_step\(\(40,2\)\)
-\[CnC 0\] Start step my_step\(\(60,2\)\)
 \[CnC 0\] Start step my_step\(\(60,2\)\)
 \[CnC 0\] Start step my_step\(\(60,2\)\)
 \[CnC 0\] Start step my_step\(\(600,2\)\)
 \[CnC 0\] Start step my_step\(\(600,2\)\)
-\[CnC 0\] Start step my_step\(\(700,2\)\)
 \[CnC 0\] Start step my_step\(\(700,2\)\)
 \[CnC 0\] Start step my_step\(\(700,2\)\)
 \[CnC 0\] Start step my_step\(\(8,2\)\)
@@ -2147,22 +2140,25 @@ IP\(900, 900\)
 \[CnC 0\] Start step my_step2\(600\)
 \[CnC 0\] Start step my_step2\(700\)
 \[CnC 0\] Start step my_step2\(90\)
-\[CnC 0\] Suspend step my_step\(\(10,2\)\) -> input item not ready 0
-\[CnC 0\] Suspend step my_step\(\(10,2\)\) -> input item not ready 0
-\[CnC 0\] Suspend step my_step\(\(200,2\)\) -> input item not ready 0
-\[CnC 0\] Suspend step my_step\(\(200,2\)\) -> input item not ready 0
-\[CnC 0\] Suspend step my_step\(\(30,2\)\) -> input item not ready 0
-\[CnC 0\] Suspend step my_step\(\(30,2\)\) -> input item not ready 0
-\[CnC 0\] Suspend step my_step\(\(300,2\)\) -> input item not ready 0
-\[CnC 0\] Suspend step my_step\(\(40,2\)\) -> input item not ready 0
-\[CnC 0\] Suspend step my_step\(\(40,2\)\) -> input item not ready 0
-\[CnC 0\] Suspend step my_step\(\(60,2\)\) -> input item not ready 0
-\[CnC 0\] Suspend step my_step\(\(60,2\)\) -> input item not ready 0
-\[CnC 0\] Suspend step my_step\(\(600,2\)\) -> input item not ready 0
-\[CnC 0\] Suspend step my_step\(\(700,2\)\) -> input item not ready 0
-\[CnC 0\] Suspend step my_step\(\(700,2\)\) -> input item not ready 0
-\[CnC 0\] Suspend step my_step\(\(90,2\)\) -> input item not ready 0
+\[CnC 0\] Suspend step my_step\(\(10,2\)\)
+\[CnC 0\] Suspend step my_step\(\(200,2\)\)
+\[CnC 0\] Suspend step my_step\(\(30,2\)\)
+\[CnC 0\] Suspend step my_step\(\(300,2\)\)
+\[CnC 0\] Suspend step my_step\(\(40,2\)\)
+\[CnC 0\] Suspend step my_step\(\(60,2\)\)
+\[CnC 0\] Suspend step my_step\(\(600,2\)\)
+\[CnC 0\] Suspend step my_step\(\(700,2\)\)
+\[CnC 0\] Suspend step my_step\(\(90,2\)\)
+\[CnC 0\] step my_step\(\(10,2\)\): Put tag m_tags<\(100,2\)>
+\[CnC 0\] step my_step\(\(30,2\)\): Put tag m_tags<\(300,2\)>
+\[CnC 0\] step my_step\(\(40,2\)\): Put tag m_tags<\(400,2\)>
+\[CnC 0\] step my_step\(\(60,2\)\): Put tag m_tags<\(600,2\)>
+\[CnC 0\] step my_step\(\(8,2\)\): Put tag m_tags<\(80,2\)>
+\[CnC 0\] step my_step\(\(9,2\)\): Put tag m_tags<\(90,2\)>
+\[CnC 0\] step my_step\(\(90,2\)\): Put tag m_tags<\(900,2\)>
 got 91
+my_context::serialize\(\)
+my_context::serialize\(\)
 my_context::serialize\(\)
 number of items: 0
 number of items: 27
