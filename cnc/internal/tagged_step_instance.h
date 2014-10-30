@@ -219,9 +219,9 @@ namespace CnC {
                 if( do_trace ) {
                     Speaker oss;
                     oss << "Suspend step " << traceName << "(";
-                    cnc_format( oss, tag ) << ") -> ";
-                    if( rv != CNC_NeedsSequentialize ) oss << "input item not ready " << (rv == CNC_NeedsExtraWake);
-                    else oss << "needs sequentialized execution";
+                    cnc_format( oss, tag ) << ")";
+                    if( rv == CNC_NeedsExtraWake ) oss << " {needs extra wake}";
+                    else if( rv == CNC_NeedsSequentialize ) oss << ": needs sequentialized execution";
                 }
 
                 if( ! fromRange ) {

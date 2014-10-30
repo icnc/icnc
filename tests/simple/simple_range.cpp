@@ -32,13 +32,14 @@ struct my_context : public CnC::context< my_context >
         : m_steps1( *this, "step1" ),
           m_steps2( *this, "step2" ),
           m_steps3( *this, "step3" ),
-          m_tags( *this ),
+          m_tags( *this, "tags" ),
           m_items( *this )
     {
         m_tags.prescribes( m_steps1, *this );
         m_tags.prescribes( m_steps2, *this );
         m_tags.prescribes( m_steps3, *this );
         CnC::debug::trace( m_steps1 );
+        CnC::debug::trace( m_tags );
         // CnC::debug::trace( m_steps2 );
         // CnC::debug::trace( m_steps3 );
         // CnC::debug::trace( m_items, "items" );

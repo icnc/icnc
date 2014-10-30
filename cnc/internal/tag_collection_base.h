@@ -55,6 +55,7 @@ namespace CnC {
             tag_collection_base( context_base & g, const std::string & name );
             tag_collection_base( context_base & g, const std::string & name, const Tuner & tnr );
             ~tag_collection_base();
+            template< typename T > inline std::ostream & format( std::ostream & os, const char * str, const T & tag, step_instance_base * si ) const;
             /// prescribe a step-collection, represented by a step_launcher
             int addPrescribedCollection( step_launcher_base< Tag, typename Tuner::range_type > * step_launcher );
             virtual void unsafe_reset( bool );
@@ -213,6 +214,21 @@ namespace CnC {
         // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+
+        template< class Tag, class Tuner >
+        template< typename T >     
+        std::ostream & tag_collection_base< Tag, Tuner >::format( std::ostream & oss, const char * str, const T & tag, step_instance_base * si ) const
+        {
+            if( si ) {
+                oss << "step ";
+                si->format( oss ) << ": ";
+            }
+            oss << str << name() << "<";
+            cnc_format( oss, tag ) << ">";
+        }
+
+        // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
         template< class Tag, class Tuner >
         void tag_collection_base< Tag, Tuner >::Put( const Tag & user_tag, const int mask )
         {
@@ -226,8 +242,10 @@ namespace CnC {
             if( _found != _lmask || m_allMask == 0 ) {
                 if ( trace_level() > 0 ) {
                     Speaker oss;
-                    oss << "Put tag " << name() << "<";
-                    cnc_format( oss, user_tag ) << "> mask " << mask << " " << _lmask << " _found " << _found;
+                    format( oss, "Put tag ", user_tag, get_context().current_step_instance() );
+                    if ( trace_level() > 1 ) {
+                        oss << " mask " << mask << " " << _lmask << " _found " << _found;
+                    }
                 }
                 for( typename PrescribedStepCollections_t::const_iterator ci = this->m_prescribedStepCollections.begin();
                      ci != this->m_prescribedStepCollections.end();
@@ -248,8 +266,11 @@ namespace CnC {
                 }
             } else if ( trace_level() > 0 ) {
                 Speaker oss;
-                oss << "Put tag " << name() << "<";
-                cnc_format( oss, user_tag ) << ">  {memoized} mask " << mask << " " << _lmask << " _found " << _found;
+                format( oss, "Put tag ", user_tag, get_context().current_step_instance() );
+                oss << " {memoized}";
+                if ( trace_level() > 1 ) {
+                    oss << " mask " << mask << " " << _lmask << " _found " << _found;
+                }
             }
         }
 
@@ -261,8 +282,7 @@ namespace CnC {
         {
             if ( trace_level() > 0 ) {
                 Speaker oss;
-                oss << "Put range " << name() << "<";
-                cnc_format( oss, r ) << ">";
+                format( oss, "Put range ", r, get_context().current_step_instance() );
             }
 
             // walk the list of prescribed steps, and insert an
