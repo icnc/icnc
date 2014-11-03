@@ -448,6 +448,9 @@ namespace CnC {
         void item_collection_base< T, item_type, Tuner >::get( const T & user_tag, item_type & item )
         {
             step_instance_base * _stepInstance = m_context.current_step_instance();
+#ifndef NDEBUG
+            if( _stepInstance ) _stepInstance->assumeNoPutBeforeGet( " issued an item get after a put!" );
+#endif
             chronometer::get_timer _timer( _stepInstance );
 
             if( _stepInstance ) {
@@ -548,6 +551,9 @@ namespace CnC {
         bool item_collection_base< T, item_type, Tuner >::unsafe_get( const T & user_tag, item_type & item )
         {
             step_instance_base * _si = m_context.current_step_instance();
+#ifndef NDEBUG
+            if( _si ) _si->assumeNoPutBeforeGet( " issued an item unsafe_get after a put!" );
+#endif
             chronometer::get_timer _timer( _si );
 
             typename table_type::accessor a;
@@ -696,6 +702,10 @@ namespace CnC {
         void item_collection_base< T, item_type, Tuner >::put( const T & t, const item_type & i )
         {
             put_or_delete( t, create( i ) );
+#ifndef NDEBUG
+            step_instance_base * _si = m_context.current_step_instance();
+            if( _si ) _si->setHadPut();
+#endif
         }
 
         // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

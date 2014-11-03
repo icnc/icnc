@@ -272,6 +272,10 @@ namespace CnC {
                     oss << " mask " << mask << " " << _lmask << " _found " << _found;
                 }
             }
+#ifndef NDEBUG
+            step_instance_base * _si = get_context().current_step_instance();
+            if( _si ) _si->setHadPut();
+#endif
         }
 
         // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -300,6 +304,10 @@ namespace CnC {
                 // tagged_step_instance< typename Tuner::range_type > * _si = 
                 (void) _stepLauncher->create_range_step_instance( r, get_context() );
             }
+#ifndef NDEBUG
+            step_instance_base * _si = get_context().current_step_instance();
+            if( _si ) _si->setHadPut();
+#endif
         }
 
         // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

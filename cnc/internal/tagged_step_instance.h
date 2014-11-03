@@ -162,7 +162,9 @@ namespace CnC {
             } else {
                 if( do_time ) si->start_timing();
             }
-            
+#ifndef NDEBUG
+            si->resetHadPut();
+#endif
             if( do_trace ) {
                 Speaker oss;
                 oss << "Start step " << traceName << "(";

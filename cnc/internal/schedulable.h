@@ -111,16 +111,23 @@ namespace CnC {
             virtual std::ostream & format( std::ostream & os ) const
             { os << "schedulable"; }
 
+            /// for debug output, memorize step had a put
+            inline void setHadPut();
+            inline void resetHadPut();
+            inline void assumeNoPutBeforeGet( const char * msg ) const;
+                
+
         protected:
             schedulable       * m_succStep;
             scheduler_i       & m_scheduler;
             const int           m_priority;
             tbb::atomic< int >  m_nSuspenders;
             tbb::atomic< bool > m_wasSuspendedSinceReset;  // should be set to false, when execution starts
-            bool                m_time;
+            //            bool                m_time;
             char                m_status;
             bool                m_inPending;
             bool                m_sequentialize;
+            bool                m_hadPut;
             template< class T > friend class tagged_step_instance;
             friend class scheduler_i; // FIXME
         };
@@ -135,10 +142,11 @@ namespace CnC {
               m_priority( p ),
               m_nSuspenders(),
               m_wasSuspendedSinceReset(),
-              m_time( false ),
+              //              m_time( false ),
               m_status( CNC_Unprepared ),
               m_inPending( false ),
-              m_sequentialize( false )
+              m_sequentialize( false ),
+              m_hadPut( false )
               
         {
             m_nSuspenders = 0;
@@ -249,6 +257,32 @@ namespace CnC {
         inline scheduler_i & schedulable::scheduler() const 
         {
             return m_scheduler;
+        }
+            
+        // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        
+        /// for debug output, memorize step had a put
+        inline void schedulable::setHadPut()
+        {
+            m_hadPut = true;
+        }
+
+        // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+        inline void schedulable::resetHadPut()
+        {
+            m_hadPut = false;
+        }
+
+        // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+        inline void schedulable::assumeNoPutBeforeGet( const char * msg ) const
+        {
+            if( m_hadPut ) {
+                Speaker oss( std::cerr );
+                oss << "Warning: ";
+                format( oss ) << msg;
+            }
         }
 
     } // namespace Internal
