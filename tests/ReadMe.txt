@@ -31,7 +31,7 @@ Python
   2 python scripts are used to run and compare
 Compilers, TBB
   Using TBB version 4.3 (or later) doesn't work with g++ versions
-  older than 4.7 (4.7 works fine).
+  older than 4.8 (4.8 works fine).
 
 
 Running the tests
