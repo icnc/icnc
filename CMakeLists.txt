@@ -14,13 +14,15 @@ option(BUILD_LIBS_FOR_MPI  "Build additional libraries for using MPI-communicati
 option(BUILD_LIBS_FOR_ITAC "Build additional libraries for performance analysis with ITAC"  FALSE)
 option(CNC_PRODUCT_BUILD   "Build an \"official\" binary release" FALSE)
 
-
 ################################################################################
 # Project paths
 
 set(CNC_SRC_ROOT ${CMAKE_SOURCE_DIR})
 set(EXECUTABLE_OUTPUT_PATH "bin")
-set(LIBRARY_OUTPUT_PATH "lib/intel64")
+if(LIBRARY_OUTPUT_PATH)
+else()
+  set(LIBRARY_OUTPUT_PATH "lib/intel64")
+endif(LIBRARY_OUTPUT_PATH)
 
 ################################################################################
 # source files for different libs
@@ -151,12 +153,31 @@ endif(BUILD_LIBS_FOR_ITAC)
 
 find_package(Doxygen)
 if(DOXYGEN_FOUND)
-configure_file(${CNC_SRC_ROOT}/Doxyfile.in ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile @ONLY)
-add_custom_target(doc
-	${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
-	WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-	COMMENT "Generating API documentation with Doxygen" VERBATIM
-)
+  configure_file(${CNC_SRC_ROOT}/Doxyfile.in ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile @ONLY)
+  
+  set(DOXY_DEPS
+    ${CNC_SRC_ROOT}/doc/main.dox
+    ${CNC_SRC_ROOT}/cnc/cnc.h
+    ${CNC_SRC_ROOT}/cnc/debug.h
+    ${CNC_SRC_ROOT}/cnc/default_tuner.h
+    ${CNC_SRC_ROOT}/cnc/dist_cnc.h
+    ${CNC_SRC_ROOT}/cnc/join.h
+    ${CNC_SRC_ROOT}/cnc/reduce.h
+    ${CNC_SRC_ROOT}/cnc/itac.h
+    ${CNC_SRC_ROOT}/cnc/serializer.h
+    ${CNC_SRC_ROOT}/cnc/default_partitioner.h
+    ${CNC_SRC_ROOT}/cnc/internal/cnc_tag_hash_compare.h
+    ${CNC_SRC_ROOT}/doc/code.dox
+  )
+  ADD_CUSTOM_COMMAND( OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/doc/html/index.html
+    COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
+    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+    MAIN_DEPENDENCY ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile ${CNC_SRC_ROOT}/Doxyfile.in
+    DEPENDS ${DOXY_DEPS}
+    COMMENT "Generating HTML documentation"
+    )
+  ADD_CUSTOM_TARGET(doc ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/doc/html/index.html)
+  INSTALL(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/doc/html/ DESTINATION doc/api)
 endif(DOXYGEN_FOUND)
 
 
@@ -164,7 +185,8 @@ endif(DOXYGEN_FOUND)
 # Install
 
 if (NOT DEFINED LIB)
-  set(LIB "lib")
+  set(LIB "lib/intel64")
 endif(NOT DEFINED LIB)
 install(TARGETS ${CNC_LIBS} RUNTIME DESTINATION bin/ LIBRARY DESTINATION ${LIB})
 install(DIRECTORY ${CNC_SRC_ROOT}/cnc DESTINATION include FILES_MATCHING PATTERN "*.h")
+install(DIRECTORY ${CNC_SRC_ROOT}/src/dist/socket_comm/test/ DESTINATION misc/distributed/socket FILES_MATCHING PATTERN "*.sh")

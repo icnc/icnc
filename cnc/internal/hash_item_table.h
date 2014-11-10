@@ -46,8 +46,9 @@ namespace CnC {
         template< typename Tag, typename ItemT, typename Coll >
         class hash_item_table
         {
-        private:
+        public:
             typedef ItemT item_type;
+        private:
             typedef cnc_tag_hash_compare< Tag > hash_compare;
             /// the data-structure that a tag actually maps to (item and properties)
             /// no mutex required, all goes through TBB's accessors.

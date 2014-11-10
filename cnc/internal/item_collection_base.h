@@ -179,8 +179,8 @@ namespace CnC {
             /// send get-counts to owners (distCnC)
             void send_getcounts( bool enter_safe );
 
-            item_type * create( const item_type & org ) const;
-            void uncreate( item_type * item ) const;
+            inline item_type * create( const item_type & org ) const;
+            inline void uncreate( item_type * item ) const;
 
             typedef struct _callback {
                 virtual void on_put( const T &, const item_type & ) = 0;
@@ -191,12 +191,12 @@ namespace CnC {
             const Tuner & tuner() const { return m_tuner; }
 
          private:
-             typedef tbb::scalable_allocator< item_type > item_allocator_type;
-
-             /// if owner <0 it will be interpreted as unknown onwer/producer
-             typename table_type::item_and_gc_type delay_step( const T & user_tag, typename table_type::accessor & a, step_instance_base * s = NULL );
-             void update_get_list( step_instance_base * si, const T & user_tag );
-
+            typedef typename Tuner::template item_allocator< item_type >::type item_allocator_type;
+            
+            /// if owner <0 it will be interpreted as unknown onwer/producer
+            typename table_type::item_and_gc_type delay_step( const T & user_tag, typename table_type::accessor & a, step_instance_base * s = NULL );
+            void update_get_list( step_instance_base * si, const T & user_tag );
+            
             void do_reset();
             /// in a distributed context, request item from clones
             inline void put_request( const T & tag, bool probe = false, int rcpnt = UNKNOWN_PID );
@@ -477,7 +477,7 @@ namespace CnC {
                             format( oss, "Get item ", user_tag, NULL, _stepInstance );
                         }
                         
-                        _tmpitem = this->wait_for_put( user_tag, a, _stepInstance ); // will throw( data_not_ready( this, new typed_tag< T >( user_tag ) ) );
+                        _tmpitem = this->wait_for_put( user_tag, a, _stepInstance ); // will data_not_ready
                         if( _tmpitem.first ) continue;
                         CNC_ABORT( "Unexpected code path taken." );
                     }
@@ -678,7 +678,7 @@ namespace CnC {
         // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
         template< class T, class item_type, class Tuner >
-        item_type * item_collection_base< T, item_type, Tuner >::create( const item_type & org ) const
+        inline item_type * item_collection_base< T, item_type, Tuner >::create( const item_type & org ) const
         {
             item_type * _item = m_allocator.allocate( 1 );
             m_allocator.construct( _item, org );
@@ -688,7 +688,7 @@ namespace CnC {
         // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
         template< class T, class item_type, class Tuner >
-        void item_collection_base< T, item_type, Tuner >::uncreate( item_type * item ) const
+        inline void item_collection_base< T, item_type, Tuner >::uncreate( item_type * item ) const
         {
             if( item ) {
                 m_allocator.destroy( item );
@@ -1632,7 +1632,6 @@ namespace CnC {
                     _c_ser.set_mode_cleanup();
                     (*ser) & _owner & _n;
                     for( int i = 0; i < _n; ++i ) {
-                        //                        item_type * _item = new item_type;
                         item_type * _item = create( item_type() );
                         (*ser) & _tag & (*_item);
                         this->put_or_delete( _tag, _item, _owner, true ); // FIXME getcount

@@ -433,6 +433,20 @@ namespace CnC {
     template< template< typename T, typename I, typename A > class TT >
     struct item_tuner : public virtual tuner_base
     {
+        /// \brief Class which manages item creation/uncreation..
+        ///
+        /// item_allocator::type must provide 
+        ///        item_type * create( const item_type & org ) const;
+        ///        void uncreate( item_type * item ) const;
+        ///
+        /// Only C++0x allows template aliasing, need to use an indirection
+        template< typename Item >
+        struct item_allocator
+        {
+            //            typedef CnC::Internal::item_manager_default< Item > type;
+            typedef tbb::scalable_allocator< Item > type;
+        };
+
         /// \brief Defines the type of the internal data store.
         ///
         /// It forwards the functionality of the template parameter template.
