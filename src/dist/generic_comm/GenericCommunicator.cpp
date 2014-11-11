@@ -36,12 +36,11 @@
 #include "itac_internal.h"
 
 #include <cnc/serializer.h>
-#include <cnc/internal/dist/distributor.h>
+#include <cnc/internal/dist/msg_callback.h>
 
 #include <tbb/concurrent_queue.h>
 
 #include <cstring> // memcmp
-#include <cnc/internal/cnc_stddef.h>
 #include <cnc/internal/tbbcompat.h>
 
 #include <iostream>
@@ -589,14 +588,17 @@ namespace CnC
         //                       %
         //%%%%%%%%%%%%%%%%%%%%%%%%
 
-        GenericCommunicator::GenericCommunicator( bool de )
+        GenericCommunicator::GenericCommunicator( msg_callback & cb, bool de )
             : m_channel( 0 ),
+              m_callback( cb ),
               m_sendThread( 0 ),
               m_recvThread( 0 ),
               m_globalIdShift( 0 ),
               m_hasBeenInitialized( false ),
               m_exit0CallOk( true )
-        {}
+        {
+            m_callback.set_communicator( this );
+        }
 
         //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -659,7 +661,7 @@ namespace CnC
             // Start receiver loop:
             CNC_ASSERT( m_recvThread == 0 );
             m_recvThread = new RecvThread( *this ); // needs whole instance, not only the channel
-            if ( ! remote() || distributor::distributed_env() ) {
+            if ( ! remote() || isDistributed() ) {
                 // Host(s) runs the receiver loop in a separate thread.
                 // Prepare receiver thread:
                 m_recvThread->defineThreadName( "RECV" );
@@ -803,11 +805,11 @@ namespace CnC
             // Prepare the serializer for unpacking:
             //BufferAccess::initUnpack( ser );
 
-            // Delegate the message to the distributor:
+            // Delegate the message to the msg_callback:
             /*            int globalSenderId = sender + m_globalIdShift; uncomment this for the local tests */
             {
-                VT_FUNC( "Dist::distributor::recv_msg" );
-                distributor::recv_msg( &ser/*, globalSenderId uncomment this for the local tests */ );
+                VT_FUNC( "Dist::msg_callback::recv_msg" );
+                m_callback.recv_msg( &ser/*, globalSenderId uncomment this for the local tests */ );
             }
         }
 

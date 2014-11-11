@@ -32,9 +32,7 @@
 #ifndef  _CnC_STDDEF_H_
 #define  _CnC_STDDEF_H_
  
-#include <cnc/internal/traceable.h>
 #include <cnc/internal/cnc_api.h>
-#include <cnc/internal/dist/distributor.h>
 #include <tbb/queuing_mutex.h>
 #include <iostream>
 #include <sstream>
@@ -60,13 +58,8 @@ namespace CnC {
         class Speaker : public std::ostringstream 
         {
         public:
-            Speaker( std::ostream & os = std::cout )
-                : m_os( os )
-            {
-                static_cast< std::ostringstream & >( *this ) << "[CnC";
-                if( distributor::active() ) static_cast< std::ostringstream & >( *this ) << " " << distributor::myPid();
-                static_cast< std::ostringstream & >( *this ) << "] ";
-            }
+            Speaker( std::ostream & os = std::cout );
+
             template< typename T > Speaker & operator<<( const T & obj )
             {
                 static_cast< std::ostringstream & >( *this ) << obj;
@@ -77,12 +70,9 @@ namespace CnC {
             {
                 return *this;
             }
-            ~Speaker()
-            {
-                static_cast< std::ostringstream & >( *this ) << std::endl;
-                tbb::queuing_mutex::scoped_lock _lock( ::CnC::Internal::s_tracingMutex );
-                m_os << str() << std::flush;
-            }
+
+            ~Speaker();
+
         private:
             std::ostream & m_os;
         };

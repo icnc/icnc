@@ -28,6 +28,8 @@
 #ifndef _CnC_COMMUNICATOR_H_
 #define _CnC_COMMUNICATOR_H_
 
+#include <cnc/internal/cnc_api.h>
+#include <cnc/internal/traceable.h>
 #include <tbb/scalable_allocator.h>
 //#include <cnc/serializer.h>
 #include <cnc/internal/scalable_vector.h>
@@ -38,12 +40,16 @@ namespace CnC {
 
     namespace Internal {
 
+        class CNC_API msg_callback;
+        typedef void (*communicator_loader_type)(msg_callback &);
+
         /// There might be several communication systems.
         /// Each one must derive from this and implement its interface.
         /// Communicators are supposed to reside in an extra library.
-        /// When the communicator library is loaded, the communicator
-        /// must register itself with the distributor by setting
-        /// distributor::m_communicator
+        /// The communicator library get dynamically loaded, it must provide
+        /// a function extern "C" load_communicator_( msg_callback & d, tracing_mutex_type & )
+        /// in which the communicator must get registered with the msg_callback
+        /// by calling msg_callback.set_communicator(c).
         /// \see CnC::Internal::dist_cnc
         class communicator
         {
@@ -52,7 +58,7 @@ namespace CnC {
 
             /// initialize communication infrastructure
             /// start up communication system to accept incoming messages
-            /// incoming messages are handed over to the distributor
+            /// incoming messages are handed over to the msg_callback
             /// sender/rcvr ids in this network start with min_id
             /// created processes will be identified with ids in the range [min_id, (min_id+N)]
             /// currently there is only one communicator supported

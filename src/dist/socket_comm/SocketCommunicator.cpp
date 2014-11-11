@@ -36,7 +36,7 @@
 #include "Settings.h"
 #include "itac_internal.h"
 
-#include <cnc/internal/dist/distributor.h>
+#include <cnc/internal/dist/msg_callback.h>
 
 #include <cnc/internal/cnc_stddef.h>
 
@@ -44,8 +44,8 @@ namespace CnC
 {
     namespace Internal
     {
-        SocketCommunicator::SocketCommunicator()
-          : GenericCommunicator()
+        SocketCommunicator::SocketCommunicator( msg_callback & cb )
+          : GenericCommunicator( cb )
         {}
 
         //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -115,20 +115,13 @@ namespace CnC
         //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-        /*
-         * Initializer object for setting distributor::m_communicator
+        /**
+         * Initializing function
          */
-        namespace {
+        extern "C" void load_communicator_( msg_callback & cb )
+        {
             // init communicator, there can only be one
-            SocketCommunicator _sock_c;
-            struct initer
-            {
-                initer()
-                {
-                    distributor::m_communicator = &_sock_c;
-                }
-            };
-            initer i;
+            static SocketCommunicator _sock_c( cb );
         }
 
     } // namespace Internal

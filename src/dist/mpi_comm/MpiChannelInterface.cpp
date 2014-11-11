@@ -33,8 +33,6 @@
 #include "MpiChannelInterface.h"
 #include "itac_internal.h"
 #include <iostream>
-#include <cnc/internal/dist/distributor.h>
-#include <cnc/internal/cnc_stddef.h>
 #include <climits>
 #include <iostream>
 
@@ -85,7 +83,6 @@ namespace CnC
                 char * body_data = header_data+headerSize;
                 MPI_Isend( body_data, bodySize, MPI_CHAR, rcverLocalId, SECOND_MSG, m_communicator, &request );
             }
-            //            { Speaker oss; oss << "sendBytes " << headerSize << " " << bodySize; }
 #ifdef PRE_SEND_MSGS
             return request;
 #else
@@ -132,8 +129,6 @@ namespace CnC
             m_ser1->set_mode_unpack();
             MPI_Irecv( m_ser1->get_header(), BufferAccess::capacity( *m_ser1 ), MPI_CHAR, MPI_ANY_SOURCE, FIRST_MSG, m_communicator, &m_request );
             
-            //            { Speaker oss; oss << "recvBytes " << _bodySize; }
-
             return _bodySize != 0 ? m_ser2 : NULL;
         }
 

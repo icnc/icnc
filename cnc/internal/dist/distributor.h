@@ -35,6 +35,7 @@
 #endif
 
 #include <cnc/internal/cnc_api.h>
+#include <cnc/internal/dist/msg_callback.h>
 #include <cnc/internal/dist/communicator.h>
 #include <cnc/internal/dist/factory.h>
 #include <tbb/atomic.h>
@@ -57,7 +58,7 @@ namespace CnC {
         /// The actual communication is done by a communicator, also a static member of distributor.
         /// \see CnC::Internal::dist_cnc
         /// FIXME: combining different communicators is possible, but not implemented.
-        class CNC_API distributor
+        class CNC_API distributor : public msg_callback
         {
         public:
 
@@ -90,7 +91,8 @@ namespace CnC {
             /// The communicator calls this for incoming messages.
             /// Ignore the second argument unless you implement a single-process communicator.
             /// The serializer is freed by the communicator.
-            static void recv_msg( serializer *, int pid = 0 );
+            virtual void recv_msg( serializer *, int pid = 0 );
+            virtual void set_communicator( communicator * c ) { m_communicator = c; }
 
             /// distributable_contexts must get a serializer through the distributor.
             /// If the returned serializer is not handed to send_msg or bcast_msg
@@ -107,10 +109,10 @@ namespace CnC {
             static bool remote() { return active() ? theDistributor->m_communicator->remote() : false; } // FIXME more than one communicator
 
             /// return true if access from a distributed environment is requested/allowed
-            static bool distributed_env() { return active() ? theDistributor->m_distEnv : false; }
+            static bool distributed_env() { return active() ? theDistributor->theDistributor->m_distEnv : false; }
 
             /// initialization must be called in a safe state and only by master thread
-            static void init();
+            static void init( communicator_loader_type loader );
             /// finalization must be called in a safe state and only by master thread
             static void fini();
 
@@ -122,8 +124,6 @@ namespace CnC {
 
             static bool active() { return theDistributor && theDistributor->m_state >= DIST_INITING; }
             static bool initing() { return active() && theDistributor->m_state == DIST_INITING; }
-
-            static void set_communicator( communicator * c ) { theDistributor->m_communicator = c; }
 
             /// \return true if at lesat one message is pending (waiting for being sent)
             static bool has_pending_messages() { return theDistributor && theDistributor->m_communicator->has_pending_messages(); }
@@ -155,14 +155,10 @@ namespace CnC {
             tbb::atomic< int >   m_nMsgsRecvd;
             bool                 m_distEnv;
             static distributor  * theDistributor;
-
-        public:
-            /// FIXME this is a hack: must be public to let communicators register themselves
             static communicator * m_communicator;
 
             template< class C1, class C2, class C3, class C4, class C5 > friend struct dist_init;
         };
-
 
     } // namespace Internal
 } // namespace CnC

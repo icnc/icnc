@@ -30,6 +30,8 @@
 */
 
 #include <cnc/internal/cnc_stddef.h>
+#include <cnc/internal/dist/distributor.h>
+#include <cnc/internal/traceable.h>
 
 namespace CnC {
     namespace Internal {
@@ -44,7 +46,24 @@ namespace CnC {
             }
             abort();
         }
-
+        
+        //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        
+        Speaker::Speaker( std::ostream & os )
+            : m_os( os )
+        {
+            static_cast< std::ostringstream & >( *this ) << "[CnC";
+            if( distributor::active() ) static_cast< std::ostringstream & >( *this ) << " " << distributor::myPid();
+            static_cast< std::ostringstream & >( *this ) << "] ";
+        }
+        
+        Speaker::~Speaker()
+        {
+            static_cast< std::ostringstream & >( *this ) << std::endl;
+            tbb::queuing_mutex::scoped_lock _lock( ::CnC::Internal::s_tracingMutex );
+            m_os << str() << std::flush;
+        }
+        
     } // namespace Internal
 } // namespace CnC
 

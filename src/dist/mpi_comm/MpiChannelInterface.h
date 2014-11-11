@@ -51,7 +51,7 @@ namespace CnC
         /// To support larger messages, we use a special message tag to indicate that
         /// a large message will follow.
         ///
-        /// In all other cases we use non-lbokcing communication.
+        /// In all other cases we use non-blocking communication.
         ///
         /// \see CnC::Internal::GenericCommunicator
         class MpiChannelInterface : public ChannelInterface

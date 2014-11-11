@@ -38,7 +38,7 @@
 #include "Settings.h"
 #include "itac_internal.h"
 #include "../socket_comm/pal_util.h"
-#include <cnc/internal/dist/distributor.h>
+#include <cnc/internal/dist/msg_callback.h>
 #include <iostream>
 #include <cnc/internal/cnc_stddef.h>
 
@@ -46,8 +46,8 @@ namespace CnC
 {
     namespace Internal
     {
-        MpiCommunicator::MpiCommunicator()
-            : GenericCommunicator(),
+        MpiCommunicator::MpiCommunicator( msg_callback & cb )
+            : GenericCommunicator( cb ),
               m_customComm( false )
         {
         }
@@ -198,7 +198,7 @@ namespace CnC
             // Cleanup of mpi specific stuff:
             delete m_channel;
             m_channel = NULL;
-            if( ! ( distributor::distributed_env() || m_customComm ) ) {
+            if( ! ( isDistributed() || m_customComm ) ) {
                 std::cerr << "CnC calling MPI_Finalize" << std::endl;
                 MPI_Finalize();
             }
@@ -208,19 +208,12 @@ namespace CnC
         //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
         /**
-         * Initializer object for setting distributor::m_communicator
+         * Initializing function
          */
-        namespace {
+        extern "C" void load_communicator_( msg_callback & cb )
+        {
             // init communicator, there can only be one
-            MpiCommunicator _mpi_c;
-            struct initer
-            {
-                initer()
-                {
-                    distributor::m_communicator = &_mpi_c;
-                }
-            };
-            initer i;
+            static MpiCommunicator _mpi_c( cb );
         }
 
     } // namespace Internal

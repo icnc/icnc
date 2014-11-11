@@ -25,16 +25,30 @@
  *  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  ********************************************************************************/
 
-/*
-  see traceable.h
-*/
+#ifndef _CNC_MSG_CALLBACK_H_
+#define _CNC_MSG_CALLBACK_H_
 
-#include <cnc/internal/traceable.h>
+#include <cnc/internal/cnc_api.h>
 
 namespace CnC {
-    namespace Internal {
+    
+    class serializer;
 
-        tracing_mutex_type s_tracingMutex;
+    namespace Internal {
         
-    } // namespace Internal
-} // namespace cnc
+        class communicator;
+
+        /// The communicator uses this to provide incoming messages.
+        class CNC_API msg_callback
+        {
+        public:
+            /// Ignore the second argument unless you implement a single-process communicator.
+            /// The serializer is freed by the communicator.
+            virtual void recv_msg( serializer *, int pid = 0 ) = 0;
+
+            virtual void set_communicator( communicator * c ) = 0;
+        };
+    }
+}
+
+#endif // _CNC_MSG_CALLBACK_H_

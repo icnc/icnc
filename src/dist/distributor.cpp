@@ -57,10 +57,12 @@ namespace CnC {
         // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-        void distributor::init()
+        void distributor::init( communicator_loader_type loader )
         {
             theDistributor = new distributor();
             theDistributor->m_state = DIST_INITING;
+            loader( *theDistributor );
+            CNC_ASSERT( theDistributor->m_communicator );
         }
 
         // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

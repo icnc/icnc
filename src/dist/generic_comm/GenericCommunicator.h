@@ -80,7 +80,7 @@ namespace CnC
         class GenericCommunicator : public communicator
         {
         public:
-            GenericCommunicator( bool de = false );
+            GenericCommunicator( msg_callback & distr, bool de = false );
             virtual ~GenericCommunicator() {}
 
             /// The flag argument is an option argument.
@@ -98,6 +98,8 @@ namespace CnC
             virtual bool bcast_msg( serializer * ser, const int * rcvers, int nrecvrs );
 
             virtual bool has_pending_messages();
+
+            bool isDistributed() { return m_distEnv; }
 
         private:
             /// Callback function which will be called from the receiver 
@@ -122,6 +124,8 @@ namespace CnC
             /// Will be allocated by derived classes according to 
             /// the concrete channel (socket, Lrb, etc.)
             ChannelInterface * m_channel;
+
+            msg_callback & m_callback;
 
             /// ==> 2nd central attribute
             /// Handles to send and recv threads.

@@ -32,7 +32,6 @@
 #include "SocketChannelInterface.h"
 #include "itac_internal.h"
 
-#include <cnc/internal/cnc_stddef.h>
 #include <tbb/atomic.h>
 
 #define HERE __FILE__, __LINE__

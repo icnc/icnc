@@ -35,6 +35,8 @@
 namespace CnC {
     namespace Internal {
  
+        typedef tbb::queuing_mutex tracing_mutex_type;
+
         /// derive from this if your new class shall leave traces
         class traceable
         {
@@ -61,7 +63,7 @@ namespace CnC {
             int                m_traceLevel;
         };
 
-        extern CNC_API tbb::queuing_mutex s_tracingMutex;
+        extern CNC_API tracing_mutex_type s_tracingMutex;
 
     } // namespace Internal
 } // namespace cnc

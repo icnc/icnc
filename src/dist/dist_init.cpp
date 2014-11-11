@@ -30,6 +30,7 @@
 */
 
 #include <cnc/internal/cnc_api.h>
+#include <cnc/internal/dist/dist_init.h>
 
 #ifndef _WIN32
 # include <dlfcn.h>
@@ -44,7 +45,7 @@ namespace CnC {
     namespace Internal {
 
         /// open the given dynamic/shared library
-        static bool cnc_load_lib( const char * clientDllName )
+        static communicator_loader_type cnc_load_lib( const char * clientDllName )
         {
             std::cerr << "Loading " << clientDllName << "..." << std::flush;
 #ifdef _WIN32
@@ -66,11 +67,28 @@ namespace CnC {
 #else
                 std::cerr << dlerror() << std::endl;
 #endif
-                return true;
-            } else {
-                std::cerr << "done." << std::endl;
+                return NULL;
             }
-            return false;
+            std::cerr << "...and communicator...";
+            communicator_loader_type loader;
+#ifdef _WIN32
+            loader = (communicator_loader_type) GetProcAddress( clientDllHandle, "load_communicator_" );
+#else              
+            loader = (communicator_loader_type) dlsym( clientDllHandle, "load_communicator_" );
+#endif
+            if ( ! clientDllHandle ) {
+                std::cerr << "\nCould not open client library \'" << clientDllName << "\'\n";
+#ifdef _WIN32
+                std::cerr << "Error code: " << GetLastError() << std::endl;
+                // FIXME: get Windows error string
+#else
+                std::cerr << dlerror() << std::endl;
+#endif
+                return NULL;
+            }
+            std::cerr << "done." << std::endl;
+
+            return loader;
         }
 
         /// generate name of library corresponding to given argument and compile mode
@@ -117,10 +135,10 @@ namespace CnC {
             return lib_name;
         }
 
-        bool CNC_API dist_cnc_load_comm( const char * comm, bool use_itac )
+        communicator_loader_type CNC_API dist_cnc_load_comm( const char * comm, bool use_itac )
         {
             const std::string clientDllName = comm_lib_name( comm, use_itac );
-            if ( clientDllName.empty() ) return true;
+            if ( clientDllName.empty() ) return NULL;
             return cnc_load_lib( clientDllName.c_str() );
         }
 

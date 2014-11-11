@@ -38,16 +38,14 @@
 #include <cnc/internal/dist/distributor.h>
 #include <cnc/internal/cnc_api.h>
 #include <cnc/internal/dist/factory.h>
-#include <cnc/internal/dist/communicator.h>
 #include <cnc/internal/dist/creatable.h>
 #include <cnc/internal/dist/creator.h>
-#include <cnc/internal/cnc_stddef.h>
 
 namespace CnC {
 
     namespace Internal {
 
-        bool CNC_API dist_cnc_load_comm( const char * lib, bool use_itac );
+        communicator_loader_type CNC_API dist_cnc_load_comm( const char * lib, bool use_itac );
 
         /// Distributed CnC is activated through an initialization object, which
         /// must be instantiated right after entering main. Inside the
@@ -126,16 +124,15 @@ namespace CnC {
             dist_init( int flag = 0, bool dist_env = false )
             {
                 const char * dist_cnc_comm = getenv( "DIST_CNC" ); 
-                
-                if( ! Internal::dist_cnc_load_comm( dist_cnc_comm,
+                communicator_loader_type loader = Internal::dist_cnc_load_comm( dist_cnc_comm,
 #ifdef CNC_WITH_ITAC
-                                                    true
+                                                                                true
 #else
-                                                    false
+                                                                                false
 #endif
-                                                    ) ) {
-                    CNC_ASSERT( Internal::distributor::m_communicator );
-                    Internal::distributor::init();
+                                                                                );
+                if( loader ) {
+                    Internal::distributor::init( loader );
                     Internal::factory::subscribe< C1 >();
                     Internal::factory::subscribe< C2 >();
                     Internal::factory::subscribe< C3 >();

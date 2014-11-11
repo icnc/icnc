@@ -48,7 +48,7 @@ namespace CnC
         class SocketCommunicator : public GenericCommunicator
         {
         public:
-            SocketCommunicator();
+            SocketCommunicator( msg_callback & cb );
             ~SocketCommunicator();
 
             virtual int init( int minId, int flag = 0 );

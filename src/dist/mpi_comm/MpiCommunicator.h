@@ -55,7 +55,7 @@ namespace CnC
         class MpiCommunicator : public GenericCommunicator
         {
         public:
-            MpiCommunicator();
+            MpiCommunicator( msg_callback & cb );
             ~MpiCommunicator();
             /// if thecomm != 0 it is interpreted as the MPI_Comm to use
             virtual int init( int minId, int thecomm = 0 );
