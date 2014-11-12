@@ -35,6 +35,7 @@
 #pragma warning (disable: 4251 4275)
 #endif
 
+#include <cstdlib> // getenv
 #include <cnc/internal/dist/distributor.h>
 #include <cnc/internal/cnc_api.h>
 #include <cnc/internal/dist/factory.h>
