@@ -82,6 +82,8 @@ for vs in VSS:
             cmdl = 'cd ' + builddir + '; cmake -DCMAKE_BUILD_TYPE=' + rel + ' -DTBBROOT=' + tbbroot + ' -DCMAKE_INSTALL_PREFIX=' + os.path.join('..', reldir)
             if minbuild == False:
                 cmdl += ' -DBUILD_LIBS_FOR_MPI=TRUE -DBUILD_LIBS_FOR_ITAC=TRUE -DCNC_PRODUCT_BUILD=TRUE'
+            else:
+                cmdl += ' -DCNC_REQUIRED_TBB_VERSION=6101'
             cmdl += ' .. && make -j 16 install'
             exe_cmd(cmdl)
         
