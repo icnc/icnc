@@ -3,11 +3,10 @@ language: cpp
 before_install:
  - sudo add-apt-repository -y ppa:yani/iatsl #newer tbb
  - sudo apt-get update
- - sudo apt-get install libtbb-dev cmake
+ - sudo apt-get install libtbb-dev cmake python
 
 script:
-  - cmake -DCMAKE_CXX_FLAGS="-DCNC_REQUIRED_TBB_VERSION=6101" . &&
-    make -j4 && sudo make install
+  - python make_kit.py -b
 
 compiler:
   - gcc
