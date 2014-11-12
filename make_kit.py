@@ -83,7 +83,7 @@ for vs in VSS:
             if minbuild == False:
                 cmdl += ' -DBUILD_LIBS_FOR_MPI=TRUE -DBUILD_LIBS_FOR_ITAC=TRUE -DCNC_PRODUCT_BUILD=TRUE'
             else:
-                cmdl += ' -DCNC_REQUIRED_TBB_VERSION=6101'
+                cmdl += ' -DCMAKE_CXX_FLAGS="-DCNC_REQUIRED_TBB_VERSION=6101"'
             cmdl += ' .. && make -j 16 install'
             exe_cmd(cmdl)
         
