@@ -6,7 +6,7 @@ before_install:
  - sudo apt-get install libtbb-dev cmake python
 
 script:
-  - python make_kit.py -b
+  - python make_kit.py -m
 
 compiler:
   - gcc

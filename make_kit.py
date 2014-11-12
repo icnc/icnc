@@ -8,20 +8,20 @@ keepbuild = False
 buildonly = False
 
 try:
-  opts, args = getopt.getopt(sys.argv[1:],"bdkh",["buildonly", "devbuild","keep","help"])
+  opts, args = getopt.getopt(sys.argv[1:],"mdkh",["minbuild", "devbuild","keep","help"])
 except getopt.GetoptError:
-  print 'make_kit.py [-d] [-k] [-h]'
+  print 'make_kit.py [-m] [-d] [-k] [-h]'
   sys.exit(2)
 for opt, arg in opts:
   if opt == '-g':
-    print 'make_kit.py [-d] [-k] [-h]'
+    print 'make_kit.py [-m] [-d] [-k] [-h]'
     sys.exit()
   elif opt in ("-d", "--devbuild"):
     devbuild = True
   elif opt in ("-k", "--keep"):
     keepbuild = True
-  elif opt in ("-b", "--buildonly"):
-    keepbuild = True
+  elif opt in ("-m", "--minbuild"):
+    minbuild = True
 
 
 tscons = os.getcwd( )+'/tscons/tscons'
@@ -75,15 +75,17 @@ for vs in VSS:
         for rel in ['Release','Debug']:
             builddir = 'kit.' + rel
             if keepbuild == False:
-                util.rmtree(builddir, True )
+                shutil.rmtree(builddir, True )
             if os.path.isdir(builddir) == False:
                 os.mkdir(builddir)
 
-            exe_cmd('cd ' + builddir + '; cmake -DCMAKE_BUILD_TYPE=' + rel
-                    + ' -DBUILD_LIBS_FOR_MPI=TRUE -DBUILD_LIBS_FOR_ITAC=TRUE -DCNC_PRODUCT_BUILD=TRUE -DTBBROOT=' + tbbroot
-                    + ' -DCMAKE_INSTALL_PREFIX=' + os.path.join('..', reldir) + ' .. && make -j 16 install')
+            cmdl = 'cd ' + builddir + '; cmake -DCMAKE_BUILD_TYPE=' + rel + ' -DTBBROOT=' + tbbroot + ' -DCMAKE_INSTALL_PREFIX=' + os.path.join('..', reldir)
+            if minbuild == False:
+                cmdl += ' -DBUILD_LIBS_FOR_MPI=TRUE -DBUILD_LIBS_FOR_ITAC=TRUE -DCNC_PRODUCT_BUILD=TRUE'
+            cmdl += ' .. && make -j 16 install'
+            exe_cmd(cmdl)
         
-        if buildonly == False:
+        if minbuild == False:
             exe_cmd( 'chmod 644 `find ' + reldir + ' -type f` && chmod 755 `find ' + reldir + ' -name \*sh`' )
             exe_cmd( 'dos2unix -q `find ' + reldir +' -name \*.h` `find ' + reldir +' -name \*sh`') # && dos2unix -q `find ' + reldir +' -name \*txt` && dos2unix -q `find ' + reldir +' -name \*cpp`)
             exe_cmd('cd ' + kitdir + ' && tar cfvj cnc_' + release + '_pkg.tbz cnc')
