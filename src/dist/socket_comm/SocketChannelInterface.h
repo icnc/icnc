@@ -59,7 +59,7 @@ namespace CnC
             ~SocketChannelInterface();
 
             /// Implementation of ChannelInterface methods:
-            virtual int sendBytes( void * buffer, size_type headerSize, size_type bodySize, int rcverLocalId );
+            virtual request_type sendBytes( void * buffer, size_type headerSize, size_type bodySize, int rcverLocalId );
             virtual serializer * waitForAnyClient( int & senderLocalId );
             virtual void recvBodyBytes( void * body, size_type bodySize, int senderLocalId );
 

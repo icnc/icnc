@@ -371,6 +371,7 @@ namespace CnC {
                 CNC_ASSERT( m_root == 0 ); // FIXME wait on clients not supported
                 (*_ser) & PING & m_root;
                 m_context.bcast_msg( _ser );
+                { Speaker oss; oss << "sent PING"; }
             }
         }
 
@@ -476,6 +477,7 @@ namespace CnC {
                     serializer * _ser = m_context.new_serializer( this );
                     (*_ser) & DONE;
                     m_context.bcast_msg( _ser );
+                    { Speaker oss; oss << "bcast DONE"; }
                 }
             } else {
                 wait_all();
@@ -498,6 +500,7 @@ namespace CnC {
                 serializer * _ser = m_context.new_serializer( this );
                 (*_ser) & PONG;
                 m_context.send_msg( _ser, m_root );
+                { Speaker oss; oss << "sent PONG"; }
                 // host will send PING or DONE
                 if( distributor::distributed_env() ) {
                     int _tmp;
@@ -526,7 +529,7 @@ namespace CnC {
             (*ser) & _pingpong;
             switch( _pingpong ) {
             case PING : {
-                //                { Speaker oss; oss << "recvd PING"; }
+                { Speaker oss; oss << "recvd PING"; }
                 // remote procs are told to to wait
                 (*ser) & m_root;
                 CNC_ASSERT( m_root >= 0 );
@@ -539,13 +542,13 @@ namespace CnC {
                 break;
             }
             case PONG : {
-                //                { Speaker oss; oss << "recvd PONG"; }
+                { Speaker oss; oss << "recvd PONG"; }
                 CNC_ASSERT( m_barrier );
                 m_barrier->push( 1 ); // local host "registers" pong
                 break;
             }
             default: {
-                //                { Speaker oss; oss << "recvd DONE"; }
+                { Speaker oss; oss << "recvd DONE"; }
                 CNC_ASSERT( _pingpong == DONE );
                 CNC_ASSERT( distributor::distributed_env() );
                 m_barrier->push( 1 );

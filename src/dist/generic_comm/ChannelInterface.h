@@ -28,6 +28,13 @@
 #ifndef _CNC_COMM_CHANNELINTERFACE_H_
 #define _CNC_COMM_CHANNELINTERFACE_H_
 
+#ifdef PRE_SEND_MSGS
+// works only with MPI
+# include <mpi.h>
+typedef MPI_Request request_type;
+#else
+typedef int request_type;
+#endif
 #include <tbb/spin_mutex.h>
 #include <vector>
 #include <cnc/serializer.h>
@@ -56,12 +63,12 @@ namespace CnC
             /// @param bodySize [IN] size of the body of buffer (after the header)
             /// @param rcverLocalId [IN] local id of the receiver process (0,1,...)
             /// \return if PRE_SEND_MSGS this value is passed to wait in the requests array, ignored otherwise
-            virtual int sendBytes( void * buffer, size_type headerSize, size_type bodySize, int rcverLocalId ) = 0;
+            virtual request_type sendBytes( void * buffer, size_type headerSize, size_type bodySize, int rcverLocalId ) = 0;
 
             /// Wait for send msg to complete
             /// Used in GenericCommunicator if PRE_SEND_MSGS is used
             /// Needed for MPI
-            virtual void wait( int * requests, int cnt ) { CNC_ABORT( "Incomplete implementation of 2-phased sending" )}
+            virtual void wait( request_type * requests, int cnt ) { CNC_ABORT( "Incomplete implementation of 2-phased sending" )}
 
             /// Wait until a message arrives from any client and receive the full message.
             /// Return a serializer that can be used freely until the call to waitforanyclient.

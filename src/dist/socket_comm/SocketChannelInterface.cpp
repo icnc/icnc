@@ -85,7 +85,7 @@ namespace CnC
         
         //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-        int SocketChannelInterface::sendBytes( void * data, size_type headerSize, size_type bodySize, int rcverLocalId )
+        request_type SocketChannelInterface::sendBytes( void * data, size_type headerSize, size_type bodySize, int rcverLocalId )
         {
             VT_FUNC_I( "Dist::Socket::sendBytes" );
 #ifdef WITHOUT_SENDER_THREAD

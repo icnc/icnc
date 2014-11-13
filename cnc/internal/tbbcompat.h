@@ -43,18 +43,22 @@
 #ifndef CNC_REQUIRED_TBB_VERSION
 # define CNC_REQUIRED_TBB_VERSION 7003
 # define CNC_REQUIRED_TBB_VERSION_STRING 4.2 Update 3
+#else
+# ifndef CNC_REQUIRED_TBB_VERSION_STRING
+#  define CNC_REQUIRED_TBB_VERSION_STRING CNC_REQUIRED_TBB_VERSION
+# endif
 #endif
 
 #ifdef CNC_PRODUCT_BUILD
 // if we build a product package, we must use the minimal TBB version that's supported
 # if TBB_INTERFACE_VERSION != CNC_REQUIRED_TBB_VERSION
-#error Need TBB version #CNC_REQUIRED_TBB_VERSION_STRING for product build
+#error Need TBB version CNC_REQUIRED_TBB_VERSION_STRING for product build
 # endif
 #endif
 
 // any build of CnC must use at least the minimal TBB version
 #if TBB_INTERFACE_VERSION < CNC_REQUIRED_TBB_VERSION
-#error Need TBB version #CNC_REQUIRED_TBB_VERSION_STRING or newer
+#error Need TBB version CNC_REQUIRED_TBB_VERSION_STRING or newer
 #endif
 
 // runtime check to make sure we are not running with an older TBB than
