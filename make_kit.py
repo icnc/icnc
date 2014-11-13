@@ -76,7 +76,7 @@ for vs in VSS:
         v = ''
 #        os.makedirs(reldir+'/lib/'+arch)
 
-        for rel in ['Release','Debug']:
+        for rel in BUILDS:
             builddir = 'kit.' + rel
             if keepbuild == False:
                 shutil.rmtree(builddir, True )
