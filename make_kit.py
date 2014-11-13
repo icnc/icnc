@@ -5,20 +5,26 @@ release = "current"
 ARCHS = ['intel64']
 devbuild = False
 keepbuild = False
+minbuild = False
+mpiroot = os.getenv('I_MPI_ROOT', '/usr')
 
 try:
-  opts, args = getopt.getopt(sys.argv[1:],"dkh",["devbuild","keep","help"])
+  opts, args = getopt.getopt(sys.argv[1:],"tdkh",["travis", "devbuild", "keep", "help", "mpi=" ])
 except getopt.GetoptError:
-  print 'make_kit.py [-d] [-k] [-h]'
+  print 'make_kit.py [-t] [-d] [-k] [-h] [--mpi=<mpi>]'
   sys.exit(2)
 for opt, arg in opts:
   if opt == '-g':
-    print 'make_kit.py [-d] [-k] [-h]'
+    print 'make_kit.py [-t] [-d] [-k] [-h] [--mpi=<mpi>]'
     sys.exit()
   elif opt in ("-d", "--devbuild"):
     devbuild = True
   elif opt in ("-k", "--keep"):
     keepbuild = True
+  elif opt in ("-t", "--travis"):
+    minbuild = True
+  elif opt in ("--mpi"):
+    mpiroot = arg
 
 
 tscons = os.getcwd( )+'/tscons/tscons'
@@ -34,6 +40,10 @@ else:
   tbbroot = "/nfs/hd/disks/tpi0/vssad3/proj/CnC/intel/tbb42_20140122oss"
   VSS = ['']
 #  ARCHS += ['mic']
+
+BUILDS = ['Release']
+if minbuild == False:
+  BUILDS += ['Debug']
 
 tbbver = os.path.basename( tbbroot )
 
@@ -69,15 +79,22 @@ for vs in VSS:
         v = ''
 #        os.makedirs(reldir+'/lib/'+arch)
 
-        for rel in ['Release','Debug']:
+        for rel in BUILDS:
             builddir = 'kit.' + rel
             if keepbuild == False:
-              shutil.rmtree(builddir, True )
-              os.mkdir(builddir)
-            exe_cmd('cd ' + builddir + '; cmake -DCMAKE_BUILD_TYPE=' + rel
-                    + ' -DBUILD_LIBS_FOR_MPI=TRUE -DBUILD_LIBS_FOR_ITAC=TRUE -DCNC_PRODUCT_BUILD=TRUE -DTBBROOT=' + tbbroot
-                    + ' -DCMAKE_INSTALL_PREFIX=' + os.path.join('..', reldir) + ' .. && make -j 16 install')
+                shutil.rmtree(builddir, True )
+            if os.path.isdir(builddir) == False:
+                os.mkdir(builddir)
+
+            cmdl = 'cd ' + builddir + '; cmake -DCMAKE_BUILD_TYPE=' + rel + ' -DTBBROOT=' + tbbroot + ' -DCMAKE_INSTALL_PREFIX=' + os.path.join('..', reldir)
+            if minbuild == False:
+                cmdl += ' -DBUILD_LIBS_FOR_ITAC=TRUE -DCNC_PRODUCT_BUILD=TRUE'
+            else:
+                cmdl += ' -DCMAKE_CXX_FLAGS="-DCNC_REQUIRED_TBB_VERSION=6101"'
+            cmdl += ' -DBUILD_LIBS_FOR_MPI=TRUE -DMPIROOT=' + mpiroot + ' .. && make -j 16 install'
+            exe_cmd(cmdl)
         
-        exe_cmd( 'chmod 644 `find ' + reldir + ' -type f` && chmod 755 `find ' + reldir + ' -name \*sh`' )
-        exe_cmd( 'dos2unix -q `find ' + reldir +' -name \*.h` `find ' + reldir +' -name \*sh`') # && dos2unix -q `find ' + reldir +' -name \*txt` && dos2unix -q `find ' + reldir +' -name \*cpp`)
-        exe_cmd('cd ' + kitdir + ' && tar cfvj cnc_' + release + '_pkg.tbz cnc')
+        if minbuild == False:
+            exe_cmd( 'chmod 644 `find ' + reldir + ' -type f` && chmod 755 `find ' + reldir + ' -name \*sh`' )
+            exe_cmd( 'dos2unix -q `find ' + reldir +' -name \*.h` `find ' + reldir +' -name \*sh`') # && dos2unix -q `find ' + reldir +' -name \*txt` && dos2unix -q `find ' + reldir +' -name \*cpp`)
+            exe_cmd('cd ' + kitdir + ' && tar cfvj cnc_' + release + '_pkg.tbz cnc')
