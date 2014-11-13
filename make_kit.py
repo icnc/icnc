@@ -6,7 +6,7 @@ ARCHS = ['intel64']
 devbuild = False
 keepbuild = False
 minbuild = False
-mpiroot = os.environ['I_MPI_ROOT']
+mpiroot = os.getenv('I_MPI_ROOT', '/usr')
 
 try:
   opts, args = getopt.getopt(sys.argv[1:],"tdkh",["travis", "devbuild", "keep", "help", "mpi=" ])
