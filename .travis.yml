@@ -3,10 +3,10 @@ language: cpp
 before_install:
  - sudo add-apt-repository -y ppa:yani/iatsl #newer tbb
  - sudo apt-get update
- - sudo apt-get install libtbb-dev cmake python
+ - sudo apt-get install libtbb-dev cmake python mpich2 libmpich2-dev
 
 script:
-  - python make_kit.py -m
+  - python make_kit.py -m --mpi=/usr
 
 compiler:
   - gcc

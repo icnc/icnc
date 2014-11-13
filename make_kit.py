@@ -6,22 +6,25 @@ ARCHS = ['intel64']
 devbuild = False
 keepbuild = False
 minbuild = False
+mpiroot = os.environ['I_MPI_ROOT']
 
 try:
-  opts, args = getopt.getopt(sys.argv[1:],"mdkh",["minbuild", "devbuild","keep","help"])
+  opts, args = getopt.getopt(sys.argv[1:],"tdkh",["travis", "devbuild", "keep", "help", "mpi=" ])
 except getopt.GetoptError:
-  print 'make_kit.py [-m] [-d] [-k] [-h]'
+  print 'make_kit.py [-t] [-d] [-k] [-h] [--mpi=<mpi>]'
   sys.exit(2)
 for opt, arg in opts:
   if opt == '-g':
-    print 'make_kit.py [-m] [-d] [-k] [-h]'
+    print 'make_kit.py [-t] [-d] [-k] [-h] [--mpi=<mpi>]'
     sys.exit()
   elif opt in ("-d", "--devbuild"):
     devbuild = True
   elif opt in ("-k", "--keep"):
     keepbuild = True
-  elif opt in ("-m", "--minbuild"):
+  elif opt in ("-t", "--travis"):
     minbuild = True
+  elif opt in ("--mpi"):
+    mpiroot = arg
 
 
 tscons = os.getcwd( )+'/tscons/tscons'
@@ -85,10 +88,10 @@ for vs in VSS:
 
             cmdl = 'cd ' + builddir + '; cmake -DCMAKE_BUILD_TYPE=' + rel + ' -DTBBROOT=' + tbbroot + ' -DCMAKE_INSTALL_PREFIX=' + os.path.join('..', reldir)
             if minbuild == False:
-                cmdl += ' -DBUILD_LIBS_FOR_MPI=TRUE -DBUILD_LIBS_FOR_ITAC=TRUE -DCNC_PRODUCT_BUILD=TRUE'
+                cmdl += ' -DBUILD_LIBS_FOR_ITAC=TRUE -DCNC_PRODUCT_BUILD=TRUE'
             else:
                 cmdl += ' -DCMAKE_CXX_FLAGS="-DCNC_REQUIRED_TBB_VERSION=6101"'
-            cmdl += ' .. && make -j 16 install'
+            cmdl += ' -DBUILD_LIBS_FOR_MPI=TRUE -DMPIROOT=' + mpiroot + ' .. && make -j 16 install'
             exe_cmd(cmdl)
         
         if minbuild == False:
