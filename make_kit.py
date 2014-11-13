@@ -40,7 +40,7 @@ else:
 
 BUILDS = ['Release']
 if minbuild == False:
-  BUILDS += 'Debug'
+  BUILDS += ['Debug']
 
 tbbver = os.path.basename( tbbroot )
 
