@@ -6,7 +6,7 @@ before_install:
  - sudo apt-get install libtbb-dev cmake python mpich2 libmpich2-dev
 
 script:
-  - python make_kit.py -m --mpi=/usr
+  - python make_kit.py -t --mpi=/usr
 
 compiler:
   - gcc
