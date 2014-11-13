@@ -13,7 +13,17 @@ The CnC homepage is here: https://icnc.github.io
 
 
 ###Building CnC
-You need cmake to prepare building the CnC libraries from source
+You need cmake to prepare building the CnC libraries from source. A python script is provided for your convenience to build the package:
+```bash
+cd <cnc_src_root>
+python make_kit.py
+```
+It will create a tbz package for you in directory \<cnc_src_root\>/kit.pkg where you also find an "installation" of CnC under \<cnc_src_root\>/kit.pkg/cnc/current
+
+You can specify the MPI root/install-dir with "--mpi=\<mpiroot\>. Also try "python make_kt.py -h" for more options.
+
+####Building CnC using CnC directly
+You can of course drive cmake yourself. It is recommended to avoid in-source builds and to do something like
 ```bash
 cd <cnc_src_root>
 mkdir build
