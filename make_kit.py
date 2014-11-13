@@ -5,7 +5,7 @@ release = "current"
 ARCHS = ['intel64']
 devbuild = False
 keepbuild = False
-buildonly = False
+minbuild = False
 
 try:
   opts, args = getopt.getopt(sys.argv[1:],"mdkh",["minbuild", "devbuild","keep","help"])
@@ -37,6 +37,10 @@ else:
   tbbroot = "/nfs/hd/disks/tpi0/vssad3/proj/CnC/intel/tbb42_20140122oss"
   VSS = ['']
 #  ARCHS += ['mic']
+
+BUILDS = ['Release']
+if minbuild == False:
+  BUILDS += 'Debug'
 
 tbbver = os.path.basename( tbbroot )
 
