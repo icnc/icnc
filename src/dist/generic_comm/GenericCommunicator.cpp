@@ -29,9 +29,9 @@
   see GenericCommunicator.h
 */
 
+#include "ChannelInterface.h"
 #include <../socket_comm/pal_socket.h>
 #include "GenericCommunicator.h"
-#include "ChannelInterface.h"
 #include "ThreadExecuter.h"
 #include "itac_internal.h"
 
@@ -234,7 +234,7 @@ namespace CnC
         class GenericCommunicator::SendThread : public ThreadExecuter
         {
         public:
-            typedef scalable_vector< int > RcverArray;
+            typedef scalable_vector< request_type > RcverArray;
             SendThread( ChannelInterface & channel ) : m_channel( channel ) {}
 
             /// ThreadExecuter interface:
@@ -252,9 +252,11 @@ namespace CnC
 
         private:
             /// The following methods are called on the sender thread only:
-            int send( serializer * ser, int rcverLocalId );
+            request_type send( serializer * ser, int rcverLocalId );
             void bcast( serializer * ser );
+#ifndef PRE_SEND_MSGS
             void bcast( serializer * ser, const RcverArray & rcverArr );
+#endif
             void sendTerminationRequest( int rcverLocalId, volatile bool * indicator );
             struct SendItem;
             void cleanupSerializer( serializer *& ser ) { delete ser; ser = 0; }
@@ -270,15 +272,25 @@ namespace CnC
             struct SendItem {
                 serializer * m_ser;
                 int m_rcverLocalId;
+#ifdef PRE_SEND_MSGS
+                request_type m_req;
+#endif
                 volatile bool * m_indicator; // if nonzero, this will be set to "true" if the
                                              // communication has been finished successfully
                 RcverArray * m_rcverArr; // for bcast
                 
                 SendItem( serializer * ser = 0, int rcverLocalId = 0,
-                          volatile bool * indicator = 0,
-                          RcverArray * rcverArr = 0 )
+                          volatile bool * indicator = 0, RcverArray * rcverArr = 0
+#ifdef PRE_SEND_MSGS
+                          , request_type req = MPI_REQUEST_NULL
+#endif
+                          )
                     : m_ser( ser ), m_rcverLocalId( rcverLocalId ),
-                      m_indicator( indicator ), m_rcverArr( rcverArr ) {}
+                      m_indicator( indicator ), m_rcverArr( rcverArr )
+#ifdef PRE_SEND_MSGS
+                    , m_req( req )
+#endif
+                {}
             };
             tbb::concurrent_bounded_queue< SendItem > m_sendQueue;
         };
@@ -313,12 +325,11 @@ namespace CnC
                     if ( item.m_ser && item.m_rcverLocalId != -1 ) {
                         CNC_ASSERT( item.m_rcverArr == 0 );
 #ifdef PRE_SEND_MSGS
-                        m_channel.wait( &item.m_rcverLocalId, 1 );
+                        m_channel.wait( &item.m_req, 1 );
 #else
                         send( item.m_ser, item.m_rcverLocalId );
 #endif
-                    }
-                    else if ( item.m_ser != 0 ) {
+                    } else if ( item.m_ser != 0 ) {
                         CNC_ASSERT( item.m_rcverLocalId == -1 );
                         if ( item.m_rcverArr == 0 ) {
                             bcast( item.m_ser );
@@ -365,9 +376,11 @@ namespace CnC
             cleanupSerializer( ser );
 #else
 # ifdef PRE_SEND_MSGS
-            rcverLocalId = send( ser, rcverLocalId );
-# endif
+            request_type req = send( ser, rcverLocalId );
+            m_sendQueue.push( SendItem( ser, rcverLocalId, NULL, NULL, req ) );
+#else
             m_sendQueue.push( SendItem( ser, rcverLocalId ) );
+# endif
             // nonzero ser and rcver id >= 0 indicate Send
 #endif
         }
@@ -496,7 +509,7 @@ namespace CnC
 
         //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-        int GenericCommunicator::SendThread::send( serializer * ser, int rcverLocalId )
+        request_type GenericCommunicator::SendThread::send( serializer * ser, int rcverLocalId )
         {
             CNC_ASSERT( 0 <= rcverLocalId && rcverLocalId < m_channel.numProcs() );
             CNC_ASSERT( ser && m_channel.isActive( rcverLocalId ) );
@@ -510,9 +523,11 @@ namespace CnC
             size_type _bsz = ser->get_body_size();
             CNC_ASSERT( _bsz > 0 );
             // we send header and body at once:
-            int ret = m_channel.sendBytes( ser->get_header(), ser->get_header_size(), _bsz, rcverLocalId );
+            request_type ret = m_channel.sendBytes( ser->get_header(), ser->get_header_size(), _bsz, rcverLocalId );
             CNC_ASSERT( _bsz == ser->get_body_size() );
+#ifndef PRE_SEND_MSGS
             CNC_ASSERT( ret != -1 );
+#endif
             return ret;
         }
 
@@ -528,7 +543,6 @@ namespace CnC
             for ( int rcver = 0; rcver < maxNumRecv; ++rcver ) {
                 // skip inactive clients (especailly myself):
                 if ( ! m_channel.isActive( rcver ) ) continue;
-                
                 // Send message to this receiver:
                 send( ser, rcver );
                 CNC_ASSERT( _bsz == ser->get_body_size() );
@@ -537,6 +551,7 @@ namespace CnC
 
         //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+#ifndef PRE_SEND_MSGS
         void GenericCommunicator::SendThread::bcast( serializer * ser, const RcverArray & rcverArr )
         {
             CNC_ASSERT( ser );
@@ -553,6 +568,7 @@ namespace CnC
                 CNC_ASSERT( _bsz == ser->get_body_size() );
             }
         }
+#endif
 
         //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -623,7 +639,7 @@ namespace CnC
 
         //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-        int GenericCommunicator::init( int minId, int /*flag*/ )
+        int GenericCommunicator::init( int minId, long /*flag*/ )
         {
             VT_FUNC_I( "Dist::GenComm::init" );
 

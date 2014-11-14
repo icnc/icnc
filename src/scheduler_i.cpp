@@ -371,6 +371,7 @@ namespace CnC {
                 CNC_ASSERT( m_root == 0 ); // FIXME wait on clients not supported
                 (*_ser) & PING & m_root;
                 m_context.bcast_msg( _ser );
+                //                { Speaker oss; oss << "sent PING"; }
             }
         }
 
@@ -476,6 +477,7 @@ namespace CnC {
                     serializer * _ser = m_context.new_serializer( this );
                     (*_ser) & DONE;
                     m_context.bcast_msg( _ser );
+                    //                    { Speaker oss; oss << "bcast DONE"; }
                 }
             } else {
                 wait_all();
@@ -498,6 +500,7 @@ namespace CnC {
                 serializer * _ser = m_context.new_serializer( this );
                 (*_ser) & PONG;
                 m_context.send_msg( _ser, m_root );
+                //                { Speaker oss; oss << "sent PONG"; }
                 // host will send PING or DONE
                 if( distributor::distributed_env() ) {
                     int _tmp;

@@ -30,6 +30,7 @@
 */
 
 #include <mpi.h>
+#include <cassert>
 
 #include "MpiCommunicator.h"
 #include "MpiHostInitializer.h"   // does the init work (for the host)
@@ -62,9 +63,12 @@ namespace CnC
 
         //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-        int MpiCommunicator::init( int minId, int thecomm )
+        int MpiCommunicator::init( int minId, long thecomm_ )
         {
             VT_FUNC_I( "MpiCommunicator::init" );
+
+            assert( sizeof(int) >= sizeof(MPI_Comm) );
+            MPI_Comm thecomm = (MPI_Comm)thecomm_;
 
             // turn wait mode on for intel mpi if possible
             // this should greatly improve performance for intel mpi
@@ -83,6 +87,7 @@ namespace CnC
             } else if( thecomm == 0 ) {
                 CNC_ABORT( "Process has already been initialized" );
             }
+
 
             MPI_Comm myComm = MPI_COMM_WORLD;
             int rank;

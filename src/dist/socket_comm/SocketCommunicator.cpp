@@ -57,7 +57,7 @@ namespace CnC
 
         //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-        int SocketCommunicator::init( int minId, int flag )
+        int SocketCommunicator::init( int minId, long flag )
         {
             VT_FUNC_I( "Dist::Socket::init" );
 

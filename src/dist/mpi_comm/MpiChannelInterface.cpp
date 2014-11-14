@@ -30,6 +30,8 @@
 */
 
 #include <mpi.h>
+#include <cassert>
+
 #include "MpiChannelInterface.h"
 #include "itac_internal.h"
 #include <iostream>
@@ -64,7 +66,7 @@ namespace CnC
 
         //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-        int MpiChannelInterface::sendBytes( void * data, size_type headerSize, size_type bodySize, int rcverLocalId )
+        request_type MpiChannelInterface::sendBytes( void * data, size_type headerSize, size_type bodySize, int rcverLocalId )
         {
             VT_FUNC_I( "MPI::sendBytes" );
             CNC_ASSERT( 0 <= rcverLocalId && rcverLocalId < numProcs() );
@@ -93,7 +95,7 @@ namespace CnC
 
         //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-        void MpiChannelInterface::wait( int * requests, int cnt )
+        void MpiChannelInterface::wait( request_type * requests, int cnt )
         {
             VT_FUNC_I( "MPI::wait" );
             MPI_Waitall( cnt, requests, MPI_STATUSES_IGNORE );

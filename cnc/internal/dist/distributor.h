@@ -117,7 +117,7 @@ namespace CnC {
             static void fini();
 
             /// start distributed system
-            static void start( int flag = 0, bool dist_env = false );
+            static void start( long flag = 0, bool dist_env = false );
 
             /// stop distributed system
             static void stop();

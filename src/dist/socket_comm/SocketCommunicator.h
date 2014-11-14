@@ -51,7 +51,7 @@ namespace CnC
             SocketCommunicator( msg_callback & cb );
             ~SocketCommunicator();
 
-            virtual int init( int minId, int flag = 0 );
+            virtual int init( int minId, long flag = 0 );
             virtual void fini();
         };
     }

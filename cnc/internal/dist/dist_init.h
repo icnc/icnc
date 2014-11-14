@@ -122,7 +122,7 @@ namespace CnC {
         template< class C1, class C2, class C3, class C4, class C5 >
         struct dist_init
         {
-            dist_init( int flag = 0, bool dist_env = false )
+            dist_init( long flag = 0, bool dist_env = false )
             {
                 const char * dist_cnc_comm = getenv( "DIST_CNC" ); 
                 communicator_loader_type loader = Internal::dist_cnc_load_comm( dist_cnc_comm,

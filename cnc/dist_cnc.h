@@ -556,10 +556,10 @@ namespace CnC {
         dist_cnc_init() : Internal::dist_init< C1, C2, C3, C4, C5 >() {}
         /// \param dist_env enable SPMD-style access to contexts
         /// \param flag MPI_Comm to be used (MPI only)
-        dist_cnc_init( bool dist_env, int flag = 0  ) : Internal::dist_init< C1, C2, C3, C4, C5 >( flag, dist_env ) {}
+        dist_cnc_init( bool dist_env, long flag = 0  ) : Internal::dist_init< C1, C2, C3, C4, C5 >( flag, dist_env ) {}
         /// \param dist_env enable SPMD-style access to contexts
         /// \param flag MPI_Comm to be used (MPI only)
-        dist_cnc_init( int flag, bool dist_env = false ) : Internal::dist_init< C1, C2, C3, C4, C5 >( flag, dist_env ) {}
+        dist_cnc_init( long flag, bool dist_env = false ) : Internal::dist_init< C1, C2, C3, C4, C5 >( flag, dist_env ) {}
     };
 
 } // namespace CnC

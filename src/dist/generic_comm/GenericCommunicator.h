@@ -86,7 +86,7 @@ namespace CnC
             /// The flag argument is an option argument.
             /// It is not used here, it is specific to the actual communicator.
             /// For example, the MPI communicator interprets it as a MPI_Comm.
-            virtual int init( int minId, int flag = 0 );
+            virtual int init( int minId, long flag = 0 );
             virtual void fini();
 
             virtual int myPid();
