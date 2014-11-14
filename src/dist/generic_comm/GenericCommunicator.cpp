@@ -639,7 +639,7 @@ namespace CnC
 
         //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-        int GenericCommunicator::init( int minId, int /*flag*/ )
+        int GenericCommunicator::init( int minId, long /*flag*/ )
         {
             VT_FUNC_I( "Dist::GenComm::init" );
 

@@ -7,15 +7,16 @@ devbuild = False
 keepbuild = False
 minbuild = False
 mpiroot = os.getenv('I_MPI_ROOT', '/usr')
+verbose = False
 
 try:
-  opts, args = getopt.getopt(sys.argv[1:],"tdkh",["travis", "devbuild", "keep", "help", "mpi=" ])
+  opts, args = getopt.getopt(sys.argv[1:],"tdkhv",["travis", "devbuild", "keep", "help", "verbose", "mpi=" ])
 except getopt.GetoptError:
-  print 'make_kit.py [-t] [-d] [-k] [-h] [--mpi=<mpi>]'
+  print 'make_kit.py [-t] [-d] [-k] [-h] [-v] [--mpi=<mpi>]'
   sys.exit(2)
 for opt, arg in opts:
   if opt == '-g':
-    print 'make_kit.py [-t] [-d] [-k] [-h] [--mpi=<mpi>]'
+    print 'make_kit.py [-t] [-d] [-k] [-h] [-v] [--mpi=<mpi>]'
     sys.exit()
   elif opt in ("-d", "--devbuild"):
     devbuild = True
@@ -25,6 +26,8 @@ for opt, arg in opts:
     minbuild = True
   elif opt in ("--mpi"):
     mpiroot = arg
+  elif opt in ("-v", "--verbose"):
+    verbose = True
 
 
 tscons = os.getcwd( )+'/tscons/tscons'
@@ -91,6 +94,8 @@ for vs in VSS:
                 cmdl += ' -DBUILD_LIBS_FOR_ITAC=TRUE -DCNC_PRODUCT_BUILD=TRUE'
             else:
                 cmdl += ' -DCMAKE_CXX_FLAGS="-DCNC_REQUIRED_TBB_VERSION=6101"'
+            if verbose == True:
+                cmdl += ' -DCMAKE_VERBOSE_MAKEFILE=TRUE'
             cmdl += ' -DBUILD_LIBS_FOR_MPI=TRUE -DMPIROOT=' + mpiroot + ' .. && make -j 16 install'
             exe_cmd(cmdl)
         

@@ -78,7 +78,7 @@ namespace CnC {
         // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
         /// start distributed system
-        void distributor::start( int flag, bool dist_env )
+        void distributor::start( long flag, bool dist_env )
         {
             CNC_ASSERT( m_communicator );
             theDistributor->m_nextGId = 0;

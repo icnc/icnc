@@ -63,12 +63,12 @@ namespace CnC
 
         //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-        int MpiCommunicator::init( int minId, int thecomm_ )
+        int MpiCommunicator::init( int minId, long thecomm_ )
         {
             VT_FUNC_I( "MpiCommunicator::init" );
 
             assert( sizeof(int) >= sizeof(MPI_Comm) );
-            MPI_Comm thecomm = reinterpret_cast< MPI_Comm >( thecomm_ );
+            MPI_Comm thecomm = (MPI_Comm)thecomm_;
 
             // turn wait mode on for intel mpi if possible
             // this should greatly improve performance for intel mpi

@@ -63,7 +63,7 @@ namespace CnC {
             /// created processes will be identified with ids in the range [min_id, (min_id+N)]
             /// currently there is only one communicator supported
             /// \return number of sender/rcvrs in this network (N)
-            virtual int init( int min_id, int flag = 0 ) = 0;
+            virtual int init( int min_id, long flag = 0 ) = 0;
 
             /// shut down communication network
             virtual void fini() = 0;
