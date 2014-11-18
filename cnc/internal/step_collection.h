@@ -46,7 +46,8 @@ namespace CnC {
     step_collection< UserStep, Tuner >::step_collection( context< Derived > & ctxt )
         : Internal::traceable( std::string() ),
           m_userStep( UserStep() ),
-          m_tuner( Internal::get_default_tuner< Tuner >() )
+          m_tuner( Internal::get_default_tuner< Tuner >() ),
+          m_context( ctxt )
     {
         // FIXME register with context
     }
@@ -58,7 +59,8 @@ namespace CnC {
     step_collection< UserStep, Tuner >::step_collection( context< Derived > & ctxt, const std::string & name )
         : Internal::traceable( name ),
           m_userStep( UserStep() ),
-          m_tuner( Internal::get_default_tuner< Tuner >() )
+          m_tuner( Internal::get_default_tuner< Tuner >() ),
+          m_context( ctxt )
     {
         // FIXME register with context
     }
@@ -69,7 +71,8 @@ namespace CnC {
     step_collection< UserStep, Tuner >::step_collection( context< Derived > & ctxt, const std::string & name, const step_type & userStep )
         : Internal::traceable( name ),
           m_userStep( userStep ),
-          m_tuner( Internal::get_default_tuner< Tuner >() )
+          m_tuner( Internal::get_default_tuner< Tuner >() ),
+          m_context( ctxt )
     {
         // FIXME register with context
     }
@@ -81,7 +84,8 @@ namespace CnC {
     step_collection< UserStep, Tuner >::step_collection( context< Derived > & ctxt, const tuner_type & tnr, const std::string & name )
         : Internal::traceable( name ),
           m_userStep( UserStep() ),
-          m_tuner( tnr )
+          m_tuner( tnr ),
+          m_context( ctxt )
     {
         // FIXME register with context
     }
@@ -94,9 +98,18 @@ namespace CnC {
                                                          const step_type & userStep, const tuner_type & tnr )
         : Internal::traceable( name ),
           m_userStep( userStep ),
-          m_tuner( tnr )
+          m_tuner( tnr ),
+          m_context( ctxt )
     {
         // FIXME register with context
+    }
+
+    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+    template< typename UserStep, typename Tuner >
+    step_collection< UserStep, Tuner >::~step_collection()
+    {
+        m_context.reset_distributables( true );
     }
 
     // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

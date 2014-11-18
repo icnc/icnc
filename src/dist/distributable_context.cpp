@@ -244,9 +244,9 @@ namespace CnC {
         // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-        void distributable_context::reset_distributables()
+        void distributable_context::reset_distributables( bool local_only )
         {
-            bool _dist = distributor::numProcs() > 1 && subscribed();
+            bool _dist = !local_only && distributor::numProcs() > 1 && subscribed();
             mutex_type::scoped_lock _lock( m_mutex );
             for( distributable_container::iterator i = m_distributables.begin(); i != m_distributables.end(); ++i ) {
                 if( *i ) (*i)->unsafe_reset( _dist );

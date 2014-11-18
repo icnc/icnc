@@ -97,7 +97,7 @@ namespace CnC {
             virtual void set_tracing( int level );
 
             /// reset all its distributables
-            void reset_distributables();
+            void reset_distributables( bool local_only = false );
             /// clean up all its distributables (GC etc.)
             void cleanup_distributables( bool bcast );
             /// must be implemented by child class to spawn cleanup as service task

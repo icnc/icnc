@@ -93,6 +93,8 @@ namespace CnC {
         template< typename Derived >
         step_collection( context< Derived > & ctxt, const std::string & name, const step_type & userStep );
         
+        ~step_collection();
+
         /// Declare this step-collecation as consumer of given item-collection
         template< typename DataTag, typename Item, typename ITuner >
         void consumes( CnC::item_collection< DataTag, Item, ITuner > & );
@@ -107,7 +109,8 @@ namespace CnC {
 
     private:
         const step_type     m_userStep;
-        const tuner_type  & m_tuner;
+        const tuner_type   & m_tuner;
+        Internal::distributable_context & m_context;
         template< class Tag, class Step, class Arg, class TTuner, class STuner > friend class Internal::step_launcher;
     };
 
@@ -143,6 +146,8 @@ namespace CnC {
         tag_collection( context< Derived > & ctxt, const std::string & name = std::string() );
         template< class Derived >
         tag_collection( context< Derived > & ctxt, const Tuner & tnr );
+
+        ~tag_collection();
 
         /// \brief Declare the prescription relationship between the tag collection
         /// and a step collection.
@@ -584,6 +589,9 @@ namespace CnC {
         template< typename Tag, bool check_deps, typename Hasher, typename Equality > friend class ::CnC::cancel_tuner;
         template< class T > friend class ::CnC::Internal::creator;
         template< class Index, class Functor, class Tuner, typename Increment > friend class ::CnC::Internal::pfor_context;
+        template< typename Tag, typename Tuner > friend class tag_collection;
+        template< typename Step, typename Tuner > friend class step_collection;
+        template< typename Tag, typename Item, typename Tuner > friend class item_collection;
     };
 
     /// \brief Execute f( i ) for every i in {first <= i=first+step*x < last and 0 <= x}.
