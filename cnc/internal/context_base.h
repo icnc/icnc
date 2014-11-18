@@ -133,7 +133,9 @@ namespace CnC {
 
         inline void context_base::unblock_for_put()
         {
-            m_envIsWaiting.push( 1 ); 
+            const int _tmp(1);
+            // FIXME TBB4.3 seg-faults if we call put(1) directly, need a temporary
+            m_envIsWaiting.push( _tmp ); 
         }
         
     } // namespace Internal
