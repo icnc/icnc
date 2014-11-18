@@ -10,13 +10,13 @@ mpiroot = os.getenv('I_MPI_ROOT', '/usr')
 verbose = False
 
 try:
-  opts, args = getopt.getopt(sys.argv[1:],"tdkhv",["travis", "devbuild", "keep", "help", "verbose", "mpi=" ])
+  opts, args = getopt.getopt(sys.argv[1:],"r:tdkhv",["release=", "travis", "devbuild", "keep", "help", "verbose", "mpi=" ])
 except getopt.GetoptError:
-  print 'make_kit.py [-t] [-d] [-k] [-h] [-v] [--mpi=<mpi>]'
+  print 'make_kit.py [-r=<rel>] [-t] [-d] [-k] [-h] [-v] [--mpi=<mpi>]'
   sys.exit(2)
 for opt, arg in opts:
   if opt == '-g':
-    print 'make_kit.py [-t] [-d] [-k] [-h] [-v] [--mpi=<mpi>]'
+    print 'make_kit.py [-r=<rel>] [-t] [-d] [-k] [-h] [-v] [--mpi=<mpi>]'
     sys.exit()
   elif opt in ("-d", "--devbuild"):
     devbuild = True
@@ -26,13 +26,14 @@ for opt, arg in opts:
     minbuild = True
   elif opt in ("--mpi"):
     mpiroot = arg
+  elif opt in ("-r", "--release"):
+    release = arg
   elif opt in ("-v", "--verbose"):
     verbose = True
 
 
 tscons = os.getcwd( )+'/tscons/tscons'
 pf = platform.system()
-
 
 if pf == 'Windows':
   tbbroot = "C:\\tbb42_20140122oss" #C:\\tbb41_20121003oss"
@@ -102,4 +103,5 @@ for vs in VSS:
         if minbuild == False:
             exe_cmd( 'chmod 644 `find ' + reldir + ' -type f` && chmod 755 `find ' + reldir + ' -name \*sh`' )
             exe_cmd( 'dos2unix -q `find ' + reldir +' -name \*.h` `find ' + reldir +' -name \*sh`') # && dos2unix -q `find ' + reldir +' -name \*txt` && dos2unix -q `find ' + reldir +' -name \*cpp`)
-            exe_cmd('cd ' + kitdir + ' && tar cfvj cnc_' + release + '_pkg.tbz cnc')
+            pkgdir = os.path.join('cnc', release)
+            exe_cmd('cd ' + kitdir + ' && tar cfvj cnc_' + release + '_pkg.tbz ' + pkgdir + ' && zip -rP cnc cnc_' + release + '_pkg.zip ' + pkgdir)
