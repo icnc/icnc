@@ -148,6 +148,7 @@ namespace CnC {
     template< typename Tag, typename Item, typename Tuner >
     item_collection< Tag, Item, Tuner >::~item_collection()
     {
+        m_itemCollection.get_context().reset_distributables( true );
     }
 
     // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
