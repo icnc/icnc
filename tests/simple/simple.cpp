@@ -209,7 +209,7 @@ struct fnctr
         {
             std::ostringstream o;
             //            o << "fctr< " << m_tag << " >( " << i << " )\n";
-            o << m_tag << i << std::endl;
+            o << m_tag << " " << i << std::endl;
             tbb::queuing_mutex::scoped_lock _lock( ::CnC::Internal::s_tracingMutex );
             std::cout << o.str() << std::flush;
         }
