@@ -7,6 +7,7 @@ before_install:
 
 script:
   - python make_kit.py -t --mpi=/usr
+  - export CNCROOT=`pwd`/kit.pkg/cnc/current && cd tests && mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release .. && make -j 2 && make test
 
 compiler:
   - gcc
