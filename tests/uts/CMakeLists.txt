@@ -7,4 +7,8 @@ add_cnc_test(
   uts.ref
   ""
 )
-set_target_properties(distuts uts PROPERTIES COMPILE_FLAGS "-DBRG_RNG")
+set_target_properties(uts PROPERTIES COMPILE_FLAGS "-DBRG_RNG")
+
+if(${RUN_DIST})
+  set_target_properties(distuts PROPERTIES COMPILE_FLAGS "-DBRG_RNG")
+endif()

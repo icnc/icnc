@@ -7,6 +7,7 @@ enable_testing()
 ################################################################################
 # options
 
+option(RUN_DIST "run tests on distributed memory" TRUE)
 set(CNCROOT $ENV{CNCROOT}     CACHE PATH "path to CnC")
 
 ## TODO option(USE_ITAC "Compile/link with ITAC" FALSE)
@@ -99,7 +100,7 @@ function( add_cnc_test
   add_executable(${tname} ${src})
   target_link_libraries(${tname} ${NEEDED_LIBS})
   add_compare_test(${tname} ${tname} ${args} /tmp/${tname}.out /tmp/${tname}.out ${ref} "txt" "shared")
-  if(${ARGC} GREATER 4)
+  if(${RUN_DIST} AND ${ARGC} GREATER 4)
     list(LENGTH ARGN len)
     if(${len} GREATER 0)
       list(GET ARGN 0 dist)
