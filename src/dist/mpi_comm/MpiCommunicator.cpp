@@ -67,7 +67,7 @@ namespace CnC
         {
             VT_FUNC_I( "MpiCommunicator::init" );
 
-            assert( sizeof(int) >= sizeof(MPI_Comm) );
+            assert( sizeof(thecomm_) >= sizeof(MPI_Comm) );
             MPI_Comm thecomm = (MPI_Comm)thecomm_;
 
             // turn wait mode on for intel mpi if possible

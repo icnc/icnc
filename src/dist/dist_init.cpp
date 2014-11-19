@@ -57,7 +57,8 @@ namespace CnC {
             lib.insert( 0, "lib" );
             lib.append( ".so" );
 
-            void * clientDllHandle = dlopen( lib.c_str(), RTLD_LAZY );
+            // TODO grrr OpenMPI requires RTLD_GLOBAL...
+            void * clientDllHandle = dlopen( lib.c_str(), RTLD_LAZY|RTLD_GLOBAL );
 #endif
             if ( ! clientDllHandle ) {
                 std::cerr << "\nCould not open client library \'" << clientDllName << "\'\n";
