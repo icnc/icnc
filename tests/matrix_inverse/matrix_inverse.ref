@@ -11,7 +11,7 @@ Invert serially
 Serial Total Time: [e\-\d\.]+ sec
 Steps created\( \d+ \)
 Steps requeued\( \d+ \) resumed\( \d+ \)
-Steps scheduled\( \d+ \) inflight\( 0, 0 \)
+Steps scheduled\( \d+ \) inflight\(
 dim\(22\) size\(1980\)
 resident memory MB [\de\+\.]+ +increment MB [\-\d\.]+
 resident memory MB [\de\+\.]+ +increment MB [\-\d\.]+

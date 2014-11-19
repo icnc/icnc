@@ -107,6 +107,7 @@ add_sample(uts/uts-1.1)
 add_sample(heat_equation/heat_equation)
 add_sample(hidden_graph/hidden_graph)
 add_sample(db/mysql_simple)
+add_sample(raytracer/raytracer)
 # example codes from eight patterns document
 add_sample(reduce_rows/reduce_rows)
 add_sample(producer_consumer/producer_consumer)

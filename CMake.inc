@@ -79,7 +79,16 @@ if(CMAKE_BUILD_TYPE STREQUAL Debug)
 else()
   set(MPI_LIB optimized ${MPI_LIB_OPT} CACHE INTERNAL "use for mpi-dependent links")
 endif()
-
+# extra libs required by openmpi
+foreach(mpilib mpi_cxx mca_common_sm open-rte)
+  find_library(MPI_LIB_${mpilib} NO_DEFAULT_PATH HINTS ${MPI_INC_DIR}/../lib ${MPIROOT}/lib NAMES ${mpilib})
+  if(MPI_LIB_${mpilib})
+    message("aeaea " ${MPI_LIB_${mpilib}})
+    set(MPI_LIB ${MPI_LIB} optimized ${MPI_LIB_${mpilib}} debug ${MPI_LIB_${mpilib}})
+    message("aeaea " ${MPI_LIB})
+  endif(MPI_LIB_${mpilib})
+  unset(MPI_LIB_${mpilib} CACHE)
+endforeach(mpilib)
 
 ################################################################################
 # ITAC stuff
