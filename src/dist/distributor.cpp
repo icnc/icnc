@@ -57,11 +57,12 @@ namespace CnC {
         // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-        void distributor::init( communicator_loader_type loader )
+        void distributor::init( communicator_loader_type loader, bool dist_env )
         {
             theDistributor = new distributor();
             theDistributor->m_state = DIST_INITING;
-            loader( *theDistributor );
+            theDistributor->m_distEnv = dist_env;
+            loader( *theDistributor, dist_env );
             CNC_ASSERT( theDistributor->m_communicator );
         }
 
@@ -78,13 +79,12 @@ namespace CnC {
         // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
         /// start distributed system
-        void distributor::start( long flag, bool dist_env )
+        void distributor::start( long flag )
         {
             CNC_ASSERT( m_communicator );
             theDistributor->m_nextGId = 0;
             theDistributor->m_nMsgsRecvd = 0;
             theDistributor->m_state = DIST_ON;
-            theDistributor->m_distEnv = dist_env;
             theDistributor->m_communicator->init( 0, flag );
         } // FIXME more than one communicator
 
@@ -326,7 +326,7 @@ namespace CnC {
                 theDistributor->m_sync.pop( _tmp );
             }
             int _res = theDistributor->m_nMsgsRecvd.fetch_and_store( 0 ); //_ret;
-            //std::cerr << "\t." << _res << std::endl << std::flush;
+            //            std::cerr << "\t." << _res << std::endl << std::flush;
             //            std::cerr << ".\n" << std::flush;
             return _res;// - (2*_n + 1);
         }

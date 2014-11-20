@@ -35,6 +35,7 @@
 #pragma warning (disable: 4251 4275)
 #endif
 
+#include <iostream>
 #include <cstdlib> // getenv
 #include <cnc/internal/dist/distributor.h>
 #include <cnc/internal/cnc_api.h>
@@ -133,13 +134,13 @@ namespace CnC {
 #endif
                                                                                 );
                 if( loader ) {
-                    Internal::distributor::init( loader );
+                    Internal::distributor::init( loader, dist_env );
                     Internal::factory::subscribe< C1 >();
                     Internal::factory::subscribe< C2 >();
                     Internal::factory::subscribe< C3 >();
                     Internal::factory::subscribe< C4 >();
                     Internal::factory::subscribe< C5 >();
-                    Internal::distributor::start( flag, dist_env );
+                    Internal::distributor::start( flag );
                 }
             }
 
@@ -147,10 +148,6 @@ namespace CnC {
             {
                 if( distributor::active() ) {
                     distributor::stop();
-                    // if( distributor::myPid() == 0 ) {
-                    //     distributor::stop();
-                    // }
-                    //                    Internal::distributor::fini();
                 }
             }
             

@@ -1,5 +1,27 @@
-\[CnC ?0?\] Get item \[77\] -> 1521847110
-\[CnC ?0?\] Get item \[78\] -> 1950682034
-\[CnC ?1?\] Get item \[79\] -> 1950682035
-\[CnC ?1?\] Put item \[78\] -> 1950682034 with get-count 6
-\[CnC ?1?\] Put item \[79\] -> 1950682035 with get-count 6
+\[CnC 0\] Put item \[10\] = 214388174 with get-count 0 {from remote}
+\[CnC 0\] Put item \[13\] = 214417462 with get-count 0 {from remote}
+\[CnC 0\] Put item \[29\] = 214476054 with get-count 0 {from remote}
+\[CnC 0\] Put item \[30\] = 214505346 with get-count 0 {from remote}
+\[CnC 0\] Put item \[61\] = 1575588353 with get-count 0 {from remote}
+\[CnC 0\] Put item \[8\] = 214388172 with get-count 6 {from remote}
+\[CnC 0\] Put item \[9\] = 214388173 with get-count 0 {from remote}
+\[CnC 0\] Put item \[9\] = 214388173 with get-count 0 {from remote}
+\[CnC 0\] Put item \[9\] = 214388173 with get-count 0 {from remote}
+\[CnC 0\] Put item \[9\] = 214388173 with get-count 0 {from remote}
+\[CnC 0\] step \(0\): Put item \[0\] = 121 with get-count 5
+\[CnC 0\] step \(0\): Put item \[0\] = 121 with get-count 5
+\[CnC 0\] step \(1\): Get item \[0\] = 121
+\[CnC 0\] step \(1\): Get item \[0\] = 121
+\[CnC 0\] step \(100\): Get item \[16\] = 214417465
+\[CnC 0\] step \(167\): Get item \[27\] = 214476052
+\[CnC 0\] step \(320\): Get item \[53\] = 718035653
+\[CnC 0\] step \(342\): Get item \[57\] = 1146812002
+\[CnC 0\] step \(404\): Get item \[67\] = 2004364708
+\[CnC 1\] step \(251\): Get item \[41\] = -139517043
+\[CnC 1\] step \(254\): Get item \[42\] = 289259299
+\[CnC 1\] step \(266\): Get item \[44\] = 289259301
+\[CnC 1\] step \(431\): Get item \[71\] = 2004364712
+\[CnC 1\] step \(476\): Get item \[79\] = 1950682035
+\[CnC 1\] step \(95\): Get item \[15\] = 214417464
+\[CnC 1\] step \(95\): Get item \[15\] = 214417464
+done
