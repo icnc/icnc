@@ -112,12 +112,12 @@ namespace CnC {
             static bool distributed_env() { return active() ? theDistributor->theDistributor->m_distEnv : false; }
 
             /// initialization must be called in a safe state and only by master thread
-            static void init( communicator_loader_type loader );
+            static void init( communicator_loader_type loader, bool dist_env = false );
             /// finalization must be called in a safe state and only by master thread
             static void fini();
 
             /// start distributed system
-            static void start( long flag = 0, bool dist_env = false );
+            static void start( long flag = 0 );
 
             /// stop distributed system
             static void stop();

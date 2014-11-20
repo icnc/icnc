@@ -41,13 +41,13 @@ namespace CnC {
     namespace Internal {
 
         class CNC_API msg_callback;
-        typedef void (*communicator_loader_type)(msg_callback &);
+        typedef void (*communicator_loader_type)(msg_callback &, bool);
 
         /// There might be several communication systems.
         /// Each one must derive from this and implement its interface.
         /// Communicators are supposed to reside in an extra library.
         /// The communicator library get dynamically loaded, it must provide
-        /// a function extern "C" load_communicator_( msg_callback & d, tracing_mutex_type & )
+        /// a function extern "C" load_communicator_( msg_callback & d, bool dist_env )
         /// in which the communicator must get registered with the msg_callback
         /// by calling msg_callback.set_communicator(c).
         /// \see CnC::Internal::dist_cnc

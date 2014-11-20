@@ -80,7 +80,7 @@ namespace CnC {
               m_pendingSteps(),
               m_seqSteps(),
               m_mutex(),
-              m_root( distributor::myPid() ), //distributor::distributed_env() ?  : distributor::myPid() ),
+              m_root( 0 ), // distributor::myPid() ), //distributor::distributed_env() ?  : distributor::myPid() ),
               m_userStepsInFlight(),
               m_activeGraphs(),
               m_bypass( getenv( "CNC_SCHEDULER_BYPASS" ) ?  (atoi( getenv( "CNC_SCHEDULER_BYPASS" ) )!=0) : false )
@@ -478,6 +478,8 @@ namespace CnC {
                     (*_ser) & DONE;
                     m_context.bcast_msg( _ser );
                     //                    { Speaker oss; oss << "bcast DONE"; }
+                } else {
+                    //                    { Speaker oss; oss << "not sending bcast DONE distenv=" << distributor::distributed_env() << " root=" << m_root; }
                 }
             } else {
                 wait_all();
@@ -512,7 +514,9 @@ namespace CnC {
                 // local host wait for all pongs to arrive
                 int n = distributor::numProcs() - 1;
                 int _tmp;
+                //                { Speaker oss; oss << "waiting for PONGs"; }
                 for( int i = 0; i < n; ++i ) m_barrier->pop( _tmp );
+                //                { Speaker oss; oss << "done waiting for PONGs"; }
                 return false;
             }
         }

@@ -118,7 +118,7 @@ namespace CnC
         /**
          * Initializing function
          */
-        extern "C" void load_communicator_( msg_callback & cb )
+        extern "C" void load_communicator_( msg_callback & cb, bool )
         {
             // init communicator, there can only be one
             static SocketCommunicator _sock_c( cb );

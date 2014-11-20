@@ -49,6 +49,8 @@
 
 struct my_context;
 
+int rank = 0;
+
 // our simple step
 struct MyStep
 {
@@ -114,7 +116,7 @@ void cnc_phase( MPI_Comm mc, bool dist_env )
 
     std::cout << "Let's go\n";
     // now let's get MPI rank etc.
-    int rank = 0, numranks = 0;
+    int numranks = 0;
     MPI_Comm_rank(mc,&rank);
     MPI_Comm_size(mc,&numranks);
 
@@ -151,7 +153,7 @@ void cnc_phase( MPI_Comm mc, bool dist_env )
 
 int main( int argc, char *argv[] )
 {
-    int  numranks, rank; 
+    int  numranks; 
     int p;
     MPI_Init_thread( 0, NULL, MPI_THREAD_MULTIPLE, &p );
     if( p != MPI_THREAD_MULTIPLE ) std::cerr << "Warning: not MPI_THREAD_MULTIPLE (" << MPI_THREAD_MULTIPLE << "), but " << p << std::endl;

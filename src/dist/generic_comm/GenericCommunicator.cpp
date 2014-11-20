@@ -611,7 +611,8 @@ namespace CnC
               m_recvThread( 0 ),
               m_globalIdShift( 0 ),
               m_hasBeenInitialized( false ),
-              m_exit0CallOk( true )
+              m_exit0CallOk( true ),
+              m_distEnv( de )
         {
             m_callback.set_communicator( this );
         }

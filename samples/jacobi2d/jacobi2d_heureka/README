@@ -1,0 +1,20 @@
+Team Rice Owls
+Shams Imam & Nick Vrvilo
+
+Jacobi2D Stencil
+
+==================================
+
+This program demonstrates using the new cancellation functionality added in
+Intel CnC v0.9 to allow computation to end as soon as an answer is found.
+
+In traditional versions of Jacobi2D on CnC, there are a set number of
+iterations run in hopes of reaching a threshold in the computation.
+Using this "eureka" functionality, we can instead cancel all the extra
+computation as soon as we find an iteration has a good-enough result.
+
+By default the "eureka" option is not used. Compile with USE_CNC_CANCEL
+to turn on "eureka" mode and cancel extra computation:
+    make CPPFLAGS=-DUSE_CNC_CANCEL
+
+The code is not yet prepared for running on distributed memory.

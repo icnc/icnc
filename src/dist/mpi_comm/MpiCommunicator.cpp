@@ -47,8 +47,8 @@ namespace CnC
 {
     namespace Internal
     {
-        MpiCommunicator::MpiCommunicator( msg_callback & cb )
-            : GenericCommunicator( cb ),
+        MpiCommunicator::MpiCommunicator( msg_callback & cb, bool dist_env )
+            : GenericCommunicator( cb, dist_env ),
               m_customComm( false )
         {
         }
@@ -204,7 +204,6 @@ namespace CnC
             delete m_channel;
             m_channel = NULL;
             if( ! ( isDistributed() || m_customComm ) ) {
-                std::cerr << "CnC calling MPI_Finalize" << std::endl;
                 MPI_Finalize();
             }
         }
@@ -215,10 +214,10 @@ namespace CnC
         /**
          * Initializing function
          */
-        extern "C" void load_communicator_( msg_callback & cb )
+        extern "C" void load_communicator_( msg_callback & cb, bool dist_env )
         {
             // init communicator, there can only be one
-            static MpiCommunicator _mpi_c( cb );
+            static MpiCommunicator _mpi_c( cb, dist_env );
         }
 
     } // namespace Internal

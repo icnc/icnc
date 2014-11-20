@@ -108,6 +108,7 @@ add_sample(heat_equation/heat_equation)
 add_sample(hidden_graph/hidden_graph)
 add_sample(db/mysql_simple)
 add_sample(raytracer/raytracer)
+add_sample(jacobi2d/jacobi2d_heureka)
 # example codes from eight patterns document
 add_sample(reduce_rows/reduce_rows)
 add_sample(producer_consumer/producer_consumer)
