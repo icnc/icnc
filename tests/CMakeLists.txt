@@ -25,10 +25,10 @@ include( "../CMake.inc" )
 
 include_directories("${CNCROOT}/include")
 set(CMAKE_PREFIX_PATH "${CNCROOT}/lib/intel64")
-find_library(CNC_LIB NAMES "cnc" "cnc_${CNC_DLL_SFX}")
+find_library(CNC_LIB NAMES "cnc" "cnc${CNC_DLL_SFX}")
 
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
-  find_library(CNC_LIB_DBG NAMES "cnc${CNC_DBG_SFX}" "cnc${CNC_DBG_SFX}_${CNC_DLL_SFX}")
+  find_library(CNC_LIB_DBG NAMES "cnc${CNC_DBG_SFX}" "cnc${CNC_DBG_SFX}${CNC_DLL_SFX}")
 else()
   set(CNC_LIB_DBG ${CNC_LIB})
 endif()
