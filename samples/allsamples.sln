@@ -1,0 +1,97 @@
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cholesky", "cholesky\cholesky\cholesky.vcxproj", "{BFB50F0D-16AD-4F55-B59A-0B6137CD346C}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "fib", "fib\fib\fib.vcxproj", "{7F5B520F-9E67-4778-9264-37FD110AFE84}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "fib_getcount", "fib\fib_getcount\fib_getcount.vcxproj", "{6151FC42-AE21-4D77-8CD0-F220E74A3B97}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "fib_memoize", "fib\fib_memoize\fib_memoize.vcxproj", "{86CD6E42-9AC8-4C3C-9EC1-E91920B8EAE2}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "fib_preschedule", "fib\fib_preschedule\fib_preschedule.vcxproj", "{53C58568-3B2B-4DCA-B83A-BFF86B22C52A}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "fib_range", "fib\fib_range\fib_range.vcxproj", "{4AA5084E-20EF-4A2C-8817-72607D80AC30}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "fib_stats", "fib\fib_stats\fib_stats.vcxproj", "{8B19EC89-B330-46B4-9AA8-D07E67584D83}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "fib_trace", "fib\fib_trace\fib_trace.vcxproj", "{C876983F-4531-4594-943D-5EF7A88666A3}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "fib_tuner", "fib\fib_tuner\fib_tuner.vcxproj", "{AA422A61-7786-4EEF-A2CE-1E452511AF4D}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "fib_tutorial", "fib\fib_tutorial\fib_tutorial.vcxproj", "{17A1952A-E6AD-41DF-99CE-AB6CB9B19C32}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "floyd_1d_tiled", "floyd_warshall\floyd_1d_tiled\floyd_1d_tiled.vcxproj", "{14E136DB-8D22-4467-A9E4-9D776501643E}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "floyd_2d_tiled", "floyd_warshall\floyd_2d_tiled\floyd_2d_tiled.vcxproj", "{BB43D4F6-CE54-465F-9AFB-6E934CBD1266}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "floyd_3d_tiled", "floyd_warshall\floyd_3d_tiled\floyd_3d_tiled.vcxproj", "{40828B4A-DA4A-49AF-BA42-6B6F063A74BE}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "mandelbrot", "mandelbrot\mandelbrot\mandelbrot.vcxproj", "{3E7CC6D8-878F-4068-8892-1BD4BFD4D6DD}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "mandelbrot_serial", "mandelbrot\mandelbrot_serial\mandelbrot_serial.vcxproj", "{C73A4D4C-A97B-412C-A574-2BFD2631BEFA}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "mandelbrot_vector", "mandelbrot\mandelbrot_vector\mandelbrot_vector.vcxproj", "{5F8BD296-26FB-4D5F-AA2C-78671C701798}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FaceDetection", "FaceDetection\FaceDetection\FaceDetection.vcxproj", "{B185EC71-A543-43D3-8833-04736B22A04B}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "blackscholes", "blackscholes\blackscholes\blackscholes.vcxproj", "{B8D3E54D-A80C-4153-BFE8-F13D7B07AD9E}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "uts-1.1", "uts\uts-1.1\uts-1.1.vcxproj", "{34129673-2B3F-4887-96F4-643B858C3427}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "heat_equation", "heat_equation\heat_equation\heat_equation.vcxproj", "{7199F42E-2744-4A13-8008-6A891615DF56}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "matrix_inverse", "matrix_inverse\matrix_inverse\matrix_inverse.vcxproj", "{501683E2-40E0-4F9C-BE0C-901CADFC7CC5}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "matrix_inverse_unsafeget", "matrix_inverse\matrix_inverse_unsafeget\matrix_inverse_unsafeget.vcxproj", "{844EDED3-3A5B-46AC-9147-78ABB7B1AE23}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "primes", "primes\primes\primes.vcxproj", "{0FD56A0B-B573-4F07-BEB7-2C7BDC78F3B5}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "primes_parfor", "primes\primes_parfor\primes_parfor.vcxproj", "{B6359433-0719-4170-B400-1552E4A44A20}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "primes_range", "primes\primes_range\primes_range.vcxproj", "{10797D9B-2A83-4CB4-973E-4835C59DAAF0}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "primes_serial", "primes\primes_serial\primes_serial.vcxproj", "{AB20C5F0-9BDF-4383-ADA0-9CD2271CF949}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "rtm_stencil_halo", "rtm_stencil\rtm_stencil_halo\rtm_stencil_halo.vcxproj", "{4282CB5F-224C-47F3-8A01-280BF29413A4}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "rtm_stencil_tiled", "rtm_stencil\rtm_stencil_tiled\rtm_stencil_tiled.vcxproj", "{DE8D36C5-AB35-421C-A841-2D866D8E75F6}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "nqueens", "nqueens\nqueens\nqueens.vcxproj", "{DF0CBCF3-6C2B-446B-AD1F-DCD08DEF799A}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "search_in_sorted_tree", "search_in_sorted_tree\search_in_sorted_tree\search_in_sorted_tree.vcxproj", "{336FE685-3128-4888-B8BD-3CFE7A077F8C}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "divide_conquer", "eight_patterns\divide_conquer\divide_conquer\divide_conquer.vcxproj", "{3DA6045D-9FC2-4B6D-86B3-6D6A8D132127}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gen_new_iter_space", "eight_patterns\gen_new_iter_space\gen_new_iter_space\gen_new_iter_space.vcxproj", "{659F4CB7-FDBB-45F7-B163-FA7524A85265}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "partition_string", "eight_patterns\partition_string\partition_string\partition_string.vcxproj", "{BE0C9112-6FBE-4D5B-9404-B1D5E5159210}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "producer_consumer", "eight_patterns\producer_consumer\producer_consumer\producer_consumer.vcxproj", "{A58B1DCA-134E-4A11-969E-9FB247902D4F}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "red_rows_until_pred", "eight_patterns\red_rows_until_pred\red_rows_until_pred\red_rows_until_pred.vcxproj", "{1DBF2582-58D7-41D2-A93C-2B62CCA13EF0}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "mysql_simple", "db\mysql_simple\mysql_simple.vcxproj", "{D567D427-F4CA-42DD-BB24-998BC6F52600}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "reduce_2d", "reduce_2d\reduce_2d\reduce_2d.vcxproj", "{2BC47036-D1F8-4607-927A-5D6B27E15DCD}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "reduce_rows", "eight_patterns\reduce_rows\reduce_rows\reduce_rows.vcxproj", "{C4A129F4-4E07-4ADD-9B3F-1EED151FAE3D}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "dedup", "dedup\dedup\dedup.vcxproj", "{A48EFC12-B030-4211-A6CD-B945DFBECA13}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "count_all_words", "count_all_words\count_all_words\count_all_words.vcxproj", "{951F025D-21EE-40FA-951B-EB43074E12D0}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "count_words", "count_words\count_words\count_words.vcxproj", "{007A0B8C-AEEA-4F38-B263-233DB8757FB3}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "mapreduce", "count_all_words\mapreduce\mapreduce.vcxproj", "{B3063E20-16CC-4FDD-AA88-FA3DFC7A8203}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hidden_graph", "hidden_graph\hidden_graph\hidden_graph.vcxproj", "{C9AE3B5F-FA90-4928-A9B9-AC5A84172FCB}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "raytracer", "raytracer\raytracer\raytracer.vcxproj", "{C9AE3B5F-FA91-4928-A9B9-AC5A84172FCB}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "jacobi2d_heureka", "jacobi2d\jacobi2d_heureka\jacobi2d_heureka.vcxproj", "{C9AE3B5F-FA92-4928-A9B9-AC5A84172FCB}"
+EndProject
+Global
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
