@@ -97,7 +97,13 @@ if nodbg == False:
 
 def exe_cmd( cmd ):
   print cmd
-  subprocess.call( cmd )
+  if isinstance(cmd, str):
+      retv = os.system(cmd)
+  else:
+      retv = subprocess.call( cmd )
+  if not retv == 0:
+      print("error code: " + retv)
+      exit(444)
 
 ##############################################################
 # check if our source tree is clean
@@ -175,13 +181,28 @@ if installer == True:
     if pf == 'Windows':
       print('no installer built')
     else:
-        exe_cmd(['chmod', '644', '`find', reldir, '-type', 'f`'])
-        exe_cmd(['chmod', '755', '`find', reldir, '-name', '\*sh`'])
-        exe_cmd(['dos2unix', '-q', '`find', reldir, '-name', '\*.h`'])
-        exe_cmd(['dos2unix', '-q', '`find', reldir, '-name', '\*sh`', '`find', reldir, '-name', '\*txt`'])
-        exe_cmd(['dos2unix', '-q', '`find', reldir, '-name', '\*cpp`'])
-        pkgdir = os.path.join('cnc', release)
+        pwd = os.getcwd()
+        docdir = os.path.join(reldir, 'doc')
+        pagesdir = 'icnc.github.io'
+        os.chdir('..')
+        if os.path.isdir(pagesdir) == False:
+            exe_cmd(("git clone --depth=1 https://github.com/icnc/"+pagesdir).split())
+        else:
+            os.chdir(pagesdir)
+            exe_cmd(['git', 'pull'])
+            os.chdir('..')
+        os.chdir(pwd)
+        orgdir = os.path.join('..', pagesdir)
+        shutil.copy(os.path.join(orgdir, 'LICENSE'), reldir)
+        shutil.copy(os.path.join(orgdir, 'README.md'), os.path.join(reldir, 'README')) 
+        for doc in ['FAQ.html', 'Release_Notes.html', 'Getting_Started.html', 'CnC_eight_patterns.pdf']:
+            shutil.copy(os.path.join(orgdir, doc), docdir)
+        exe_cmd('chmod 644 `find ' + reldir + ' -type f`')
+        exe_cmd('chmod 755 `find ' + reldir + ' -name \*sh`')
+        exe_cmd('dos2unix -q `find ' + reldir + ' -name \*.h`')
+        exe_cmd('dos2unix -q `find ' + reldir + ' -name \*sh` `find ' + reldir + ' -name \*txt`')
+        exe_cmd('dos2unix -q `find ' + reldir + ' -name \*cpp`')
         os.chdir(kitdir)
-        exe_cmd(['tar', 'cfvj', 'cnc_' + release + '_pkg.tbz', pkgdir])
-        exe_cmd(['zip', '-rP', 'cnc', 'cnc_' + release + '_pkg.zip', pkgdir])
+        exe_cmd(['tar', 'cfvj', 'cnc_' + release + '_pkg.tbz', os.path.join('cnc', release)])
+        exe_cmd(['zip', '-rP', 'cnc', 'cnc_' + release + '_pkg.zip', os.path.join('cnc', release)])
         os.chdir('..')
