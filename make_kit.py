@@ -53,6 +53,7 @@ if devbuild == True:
     release = "current"
     
 if travis == True:
+    release = "current"
     nodbg = True
     mpiroot = '/usr'
     itacroot = 'NONE'
