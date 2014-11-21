@@ -178,25 +178,26 @@ for vs in VSS:
 ##############################################################
 # now sanitize files and create installer
 if installer == True:
-    if pf == 'Windows':
-      print('no installer built')
+    pwd = os.getcwd()
+    docdir = os.path.join(reldir, 'doc')
+    pagesdir = 'icnc.github.io'
+    os.chdir('..')
+    if os.path.isdir(pagesdir) == False:
+        exe_cmd(("git clone --depth=1 https://github.com/icnc/"+pagesdir).split())
     else:
-        pwd = os.getcwd()
-        docdir = os.path.join(reldir, 'doc')
-        pagesdir = 'icnc.github.io'
+        os.chdir(pagesdir)
+        exe_cmd(['git', 'pull'])
         os.chdir('..')
-        if os.path.isdir(pagesdir) == False:
-            exe_cmd(("git clone --depth=1 https://github.com/icnc/"+pagesdir).split())
-        else:
-            os.chdir(pagesdir)
-            exe_cmd(['git', 'pull'])
-            os.chdir('..')
-        os.chdir(pwd)
-        orgdir = os.path.join('..', pagesdir)
-        shutil.copy(os.path.join(orgdir, 'LICENSE'), reldir)
-        shutil.copy(os.path.join(orgdir, 'README.md'), os.path.join(reldir, 'README')) 
-        for doc in ['FAQ.html', 'Release_Notes.html', 'Getting_Started.html', 'CnC_eight_patterns.pdf']:
-            shutil.copy(os.path.join(orgdir, doc), docdir)
+    os.chdir(pwd)
+    orgdir = os.path.join('..', pagesdir)
+    shutil.copy(os.path.join(orgdir, 'LICENSE'), reldir)
+    shutil.copy(os.path.join(orgdir, 'README.md'), os.path.join(reldir, 'README')) 
+    for doc in ['FAQ.html', 'Release_Notes.html', 'Getting_Started.html', 'CnC_eight_patterns.pdf']:
+        shutil.copy(os.path.join(orgdir, doc), docdir)
+
+    if pf == 'Windows':
+        print('no installer built')
+    else:
         exe_cmd('chmod 644 `find ' + reldir + ' -type f`')
         exe_cmd('chmod 755 `find ' + reldir + ' -name \*sh`')
         exe_cmd('dos2unix -q `find ' + reldir + ' -name \*.h`')
