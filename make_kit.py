@@ -54,7 +54,7 @@ if devbuild == True:
     
 if travis == True:
     nodbg = True
-    mpiroot = 'NONE'
+    mpiroot = '/usr'
     itacroot = 'NONE'
     
 pf = platform.system()
@@ -127,7 +127,7 @@ else:
   cmake_args_core += ['-DBUILD_LIBS_FOR_ITAC=FALSE']
   
 if travis == True or devbuild == True:
-  cmake_args_core += ['-DCMAKE_CXX_FLAGS="-DCNC_REQUIRED_TBB_VERSION=6101"']
+  cmake_args_core += ['-DCMAKE_CXX_FLAGS=-DCNC_REQUIRED_TBB_VERSION=6101']
 
 if product == True:
   cmake_args_core += ['-DCNC_PRODUCT_BUILD=TRUE']
@@ -149,24 +149,24 @@ for vs in VSS:
 
       print('Building ' + vs + ' ' + arch + ' ' + rel)
       
-      builddir = 'kit.' + rel + '.' + vs
+      builddir = 'kit.' + rel
+      if not vs == '':
+          builddir += '.' + vs
       if keepbuild == False:
           shutil.rmtree(builddir, True )
       if os.path.isdir(builddir) == False:
           os.mkdir(builddir)
 
-      cmake_args = cmake_args_core + ['-DCMAKE_BUILD_TYPE=' + rel]
+      cmake_args = ['-DCMAKE_BUILD_TYPE=' + rel] + cmake_args_core
       
-
+      os.chdir(builddir)
       if pf == 'Windows':
-          os.chdir(builddir)
           exe_cmd( ['c:/Program Files (x86)/Microsoft Visual Studio ' + vs + '.0/VC/vcvarsall.bat', 'x64',
                   '&&', 'cmake', '-G', 'NMake Makefiles'] + cmake_args + ['&&', 'nmake', 'install'] )
-          os.chdir('..')
       else:
-          cmdl = ['cd', buildir,
-                  '&&', 'cmake'] + cmake_args + ['&&', 'make', '-j', '16', 'install']
-          exe_cmd(cmdl)
+          exe_cmd(['cmake'] + cmake_args)
+          exe_cmd(['make', '-j', '16', 'install'])
+      os.chdir('..')
 
 ##############################################################
 # now sanitize files and create installer
@@ -174,11 +174,13 @@ if installer == True:
     if pf == 'Windows':
       print('no installer built')
     else:
-        exe_cmd( ['chmod', '644', '`find', reldir, '-type', 'f`',
-                  '&&', 'chmod', '755', '`find', reldir, '-name', '\*sh`'])
-        exe_cmd( ['dos2unix', '-q', '`find', reldir, '-name', '\*.h`',
-                  '&&', 'dos2unix', '-q', '`find', reldir, '-name', '\*sh`', '`find', reldir, '-name', '\*txt`',
-                  '&&', 'dos2unix', '-q', '`find', reldir, '-name', '\*cpp`'] )
+        exe_cmd(['chmod', '644', '`find', reldir, '-type', 'f`'])
+        exe_cmd(['chmod', '755', '`find', reldir, '-name', '\*sh`'])
+        exe_cmd(['dos2unix', '-q', '`find', reldir, '-name', '\*.h`'])
+        exe_cmd(['dos2unix', '-q', '`find', reldir, '-name', '\*sh`', '`find', reldir, '-name', '\*txt`'])
+        exe_cmd(['dos2unix', '-q', '`find', reldir, '-name', '\*cpp`'])
         pkgdir = os.path.join('cnc', release)
-        exe_cmd( ['cd ', kitdir, '&&', 'tar', 'cfvj', 'cnc_' + release + '_pkg.tbz', pkgdir, 
-                  '&&', 'zip', '-rP', 'cnc', 'cnc_' + release + '_pkg.zip', pkgdir] )
+        os.chdir(kitdir)
+        exe_cmd(['tar', 'cfvj', 'cnc_' + release + '_pkg.tbz', pkgdir])
+        exe_cmd(['zip', '-rP', 'cnc', 'cnc_' + release + '_pkg.zip', pkgdir])
+        os.chdir('..')
