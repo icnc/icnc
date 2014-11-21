@@ -51,7 +51,7 @@ namespace CnC {
             virtual void compute_on( int target ) { CNC_ABORT( "A service task cannot be passed on to another process." ); }
             // we need this for proper error messages
             virtual std::ostream & format( std::ostream & os ) const
-            { os << "service task";}
+            { return os << "service task";}
         private:
             F   m_func;
             Arg m_arg;

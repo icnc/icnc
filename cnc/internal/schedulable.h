@@ -109,7 +109,7 @@ namespace CnC {
 
             // we need this for proper error messages
             virtual std::ostream & format( std::ostream & os ) const
-            { os << "schedulable"; }
+            { return os << "schedulable"; }
 
             /// for debug output, memorize step had a put
             inline void setHadPut();

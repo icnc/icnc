@@ -55,7 +55,7 @@ namespace CnC {
         /// A Speaker is a shallow wrapper that makes writing to a stream thread-safe. 
         /// A Speaker gets initialized with the output stream and flushes
         /// the stream only when it gets deleted. This allows locking to a minimum.
-        class Speaker : public std::ostringstream 
+        class CNC_API Speaker : public std::ostringstream 
         {
         public:
             Speaker( std::ostream & os = std::cout );

@@ -1,69 +1,105 @@
 import sys, os, imp, platform, shutil, subprocess, getopt
 
-release = "1.1.000"
-release = "current"
-ARCHS = ['intel64']
-devbuild = False
-keepbuild = False
-minbuild = False
-mpiroot = os.getenv('I_MPI_ROOT', '/usr')
-verbose = False
+release = "1.1.000"  # official next/current release version
+ARCHS = ['intel64']  # dropped support for ia32
+devbuild = False     # by default, we don't accept changes in source tree
+keepbuild = False    # by default, we clean up build dirs before install/compile
+verbose = False      # by default builds are not verbose
+installer = False    # by default we don't create an installer
+nodbg = False        # by default we build release and debug libs
+tbbroot = os.getenv('TBBROOT', '/usr') # by default we read TBBROOT for TBB installation path
+mpiroot = os.getenv('I_MPI_ROOT', '/usr') # by default we read I_MPI_ROOT for MPI installation path
+itacroot = os.getenv('VT_ROOT', 'NONE') # by default we read VT_ROOT for ITAC installation path or disable ITAC
+vs = '12'            # by default we use VS 12 (windows), to build more than one do something like '12 11'
+
+travis = False       # travis mode: only release libs and no packaging
+product = False      # product mode: right TBB, all libs, installer
 
 try:
-  opts, args = getopt.getopt(sys.argv[1:],"r:tdkhv",["release=", "travis", "devbuild", "keep", "help", "verbose", "mpi=" ])
+  opts, args = getopt.getopt(sys.argv[1:],"r:tdkhvip",["release=", "travis", "devbuild", "keep", "help", "verbose", "installer", "product", "mpi=", "itac=", "nodebug", "msvs=" ])
 except getopt.GetoptError:
-  print 'make_kit.py [-r=<rel>] [-t] [-d] [-k] [-h] [-v] [--mpi=<mpi>]'
+  print 'make_kit.py [-r=<rel>] [-t] [-d] [-k] [-h] [-v] [-i] [-p] [--nodebug] [--product] [--tbb=<tbbroot>] [--mpi=<mpiroot>] [--itac=<itacroot>] [--msvs=<vs versions>]'
   sys.exit(2)
 for opt, arg in opts:
-  if opt == '-g':
-    print 'make_kit.py [-r=<rel>] [-t] [-d] [-k] [-h] [-v] [--mpi=<mpi>]'
-    sys.exit()
+  if opt in ("-h", "--help"):
+    print 'make_kit.py [-r=<rel>] [-t] [-d] [-k] [-h] [-v] [-i] [-p] [--nodebug] [--product] [--tbb=<tbbroot>] [--mpi=<mpi>] [--itac=<itacroot>] [--msvs=<vs versions>]'
+    sys.exit(3)
   elif opt in ("-d", "--devbuild"):
     devbuild = True
   elif opt in ("-k", "--keep"):
     keepbuild = True
   elif opt in ("-t", "--travis"):
-    minbuild = True
+    travis = True
+  elif opt in ("--tbb"):
+    tbbroot = arg
   elif opt in ("--mpi"):
     mpiroot = arg
+  elif opt in ("--itac"):
+    itacroot = arg
+  elif opt in ("--msvs"):
+    vs = arg
+  elif opt in ("--nodebug"):
+    nodbg = True
   elif opt in ("-r", "--release"):
     release = arg
   elif opt in ("-v", "--verbose"):
     verbose = True
+  elif opt in ("-p", "--product"):
+    product = True
+  elif opt in ("-i", "--installer"):
+    installer = True
 
-
-tscons = os.getcwd( )+'/tscons/tscons'
+if devbuild == True:
+    release = "current"
+    
+if travis == True:
+    nodbg = True
+    mpiroot = 'NONE'
+    itacroot = 'NONE'
+    
 pf = platform.system()
 
+if product == True:
+    nodbg = False
+    installer = True
+    devbuild = False
+    travis = False
+    if pf == 'Windows':
+        tbbroot = "C:\\tbb42_20140122oss" #C:\\tbb41_20121003oss"
+        vs = '12 11'
+    else:
+        tbbroot = "/nfs/hd/disks/tpi0/vssad3/proj/CnC/intel/tbb42_20140122oss"
+        #  ARCHS += ['mic']
+    if itacroot == 'NONE' or mpiroot == 'NONE':
+        print('Need itacroot and mpiroot for product build')
+        sys.exit(44)
+      
+# dir where the kit gets installed into
+kitdir = 'kit.pkg'
+# the specific release gets installed into here
+reldir = os.path.join(kitdir, 'cnc', release)
+
+##############################################################
+##############################################################
+# End of config section
+##############################################################
+##############################################################
+
 if pf == 'Windows':
-  tbbroot = "C:\\tbb42_20140122oss" #C:\\tbb41_20121003oss"
-  ARCHS += ['ia32']
-  VSS = ['12', '11', '10'] #['9', '11', '10']
+    VSS = vs.split()
 else:
-  #  tbbroot = "/nfs/hd/disks/tpi0/vssad3/proj/CnC/intel/tbb41_20121003oss"
-  tbbroot = "/nfs/hd/disks/tpi0/vssad3/proj/CnC/intel/tbb42_20140122oss"
-  VSS = ['']
-#  ARCHS += ['mic']
+    VSS = ['']
 
 BUILDS = ['Release']
-if minbuild == False:
-  BUILDS += ['Debug']
-
-tbbver = os.path.basename( tbbroot )
-
-buildenv = { 'Windows': 'TBB=' + tbbroot + ' toolchain=msvc ',
-             'Linux': 'TBB=' + tbbroot,
-             }
+if nodbg == False:
+    BUILDS += ['Debug']
 
 def exe_cmd( cmd ):
   print cmd
-  if os.system( cmd ):
-    print('failed executing command')
-    sys.exit(4)
-  
-kitdir = 'kit.pkg'
-reldir = os.path.join(kitdir, 'cnc', release)
+  subprocess.call( cmd )
 
+##############################################################
+# check if our source tree is clean
 output = subprocess.check_output(["git", "status", "-uall", "--porcelain", "cnc", "samples"])
 output += subprocess.check_output(["git", "status", "-uno", "--porcelain", "src"])
 if output:
@@ -71,37 +107,78 @@ if output:
   if devbuild == False:
     print(output)
     sys.exit(43)
-
+    
+##############################################################
+# clean existing builds if requested
 if keepbuild == False:
   shutil.rmtree(kitdir, True)
 
+##############################################################
+# cmake command line: the args which are shared on all platforms
+cmake_args_core = ['-DTBBROOT=' + tbbroot, '-DCMAKE_INSTALL_PREFIX=' + os.path.join('..', reldir)]
+if not mpiroot == 'NONE':
+  cmake_args_core += ['-DBUILD_LIBS_FOR_MPI=TRUE', '-DMPIROOT='+mpiroot]
+else:
+  cmake_args_core += ['-DBUILD_LIBS_FOR_MPI=FALSE']
+  
+if not itacroot == 'NONE':
+  cmake_args_core += ['-DBUILD_LIBS_FOR_ITAC=TRUE', '-DITACROOT='+itacroot]
+else:
+  cmake_args_core += ['-DBUILD_LIBS_FOR_ITAC=FALSE']
+  
+if travis == True or devbuild == True:
+  cmake_args_core += ['-DCMAKE_CXX_FLAGS="-DCNC_REQUIRED_TBB_VERSION=6101"']
+
+if product == True:
+  cmake_args_core += ['-DCNC_PRODUCT_BUILD=TRUE']
+else:
+  cmake_args_core += ['-DCNC_PRODUCT_BUILD=FALSE']
+  
+if verbose == True:
+  cmake_args_core += ['-DCMAKE_VERBOSE_MAKEFILE=TRUE']
+else:
+  cmake_args_core += ['-DCMAKE_VERBOSE_MAKEFILE=FALSE']
+  
+cmake_args_core += ['..']
+
+##############################################################
+# build all libs and install headers and examples etc into reldir
 for vs in VSS:
   for arch in ARCHS:
+    for rel in BUILDS:
+
+      print('Building ' + vs + ' ' + arch + ' ' + rel)
+      
+      builddir = 'kit.' + rel + '.' + vs
+      if keepbuild == False:
+          shutil.rmtree(builddir, True )
+      if os.path.isdir(builddir) == False:
+          os.mkdir(builddir)
+
+      cmake_args = cmake_args_core + ['-DCMAKE_BUILD_TYPE=' + rel]
+      
+
+      if pf == 'Windows':
+          os.chdir(builddir)
+          exe_cmd( ['c:/Program Files (x86)/Microsoft Visual Studio ' + vs + '.0/VC/vcvarsall.bat', 'x64',
+                  '&&', 'cmake', '-G', 'NMake Makefiles'] + cmake_args + ['&&', 'nmake', 'install'] )
+          os.chdir('..')
+      else:
+          cmdl = ['cd', buildir,
+                  '&&', 'cmake'] + cmake_args + ['&&', 'make', '-j', '16', 'install']
+          exe_cmd(cmdl)
+
+##############################################################
+# now sanitize files and create installer
+if installer == True:
     if pf == 'Windows':
-        v = 'msvcver=' + vs
+      print('no installer built')
     else:
-        v = ''
-#        os.makedirs(reldir+'/lib/'+arch)
-
-        for rel in BUILDS:
-            builddir = 'kit.' + rel
-            if keepbuild == False:
-                shutil.rmtree(builddir, True )
-            if os.path.isdir(builddir) == False:
-                os.mkdir(builddir)
-
-            cmdl = 'cd ' + builddir + '; cmake -DCMAKE_BUILD_TYPE=' + rel + ' -DTBBROOT=' + tbbroot + ' -DCMAKE_INSTALL_PREFIX=' + os.path.join('..', reldir)
-            if minbuild == False:
-                cmdl += ' -DBUILD_LIBS_FOR_ITAC=TRUE -DCNC_PRODUCT_BUILD=TRUE'
-            else:
-                cmdl += ' -DCMAKE_CXX_FLAGS="-DCNC_REQUIRED_TBB_VERSION=6101"'
-            if verbose == True:
-                cmdl += ' -DCMAKE_VERBOSE_MAKEFILE=TRUE'
-            cmdl += ' -DBUILD_LIBS_FOR_MPI=TRUE -DMPIROOT=' + mpiroot + ' .. && make -j 16 install'
-            exe_cmd(cmdl)
-        
-        if minbuild == False:
-            exe_cmd( 'chmod 644 `find ' + reldir + ' -type f` && chmod 755 `find ' + reldir + ' -name \*sh`' )
-            exe_cmd( 'dos2unix -q `find ' + reldir +' -name \*.h` `find ' + reldir +' -name \*sh`') # && dos2unix -q `find ' + reldir +' -name \*txt` && dos2unix -q `find ' + reldir +' -name \*cpp`)
-            pkgdir = os.path.join('cnc', release)
-            exe_cmd('cd ' + kitdir + ' && tar cfvj cnc_' + release + '_pkg.tbz ' + pkgdir + ' && zip -rP cnc cnc_' + release + '_pkg.zip ' + pkgdir)
+        exe_cmd( ['chmod', '644', '`find', reldir, '-type', 'f`',
+                  '&&', 'chmod', '755', '`find', reldir, '-name', '\*sh`'])
+        exe_cmd( ['dos2unix', '-q', '`find', reldir, '-name', '\*.h`',
+                  '&&', 'dos2unix', '-q', '`find', reldir, '-name', '\*sh`', '`find', reldir, '-name', '\*txt`',
+                  '&&', 'dos2unix', '-q', '`find', reldir, '-name', '\*cpp`'] )
+        pkgdir = os.path.join('cnc', release)
+        exe_cmd( ['cd ', kitdir, '&&', 'tar', 'cfvj', 'cnc_' + release + '_pkg.tbz', pkgdir, 
+                  '&&', 'zip', '-rP', 'cnc', 'cnc_' + release + '_pkg.zip', pkgdir] )

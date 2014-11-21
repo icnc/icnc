@@ -94,7 +94,8 @@ if(CMAKE_SYSTEM_NAME STREQUAL Windows)
 else()
 endif(CMAKE_SYSTEM_NAME STREQUAL Windows)
 
-set(CMAKE_DEBUG_POSTFIX "_debug")
+set(CMAKE_DEBUG_POSTFIX "_debug${CNC_DLL_SFX}")
+set(CMAKE_RELEASE_POSTFIX "${CNC_DLL_SFX}")
 
 
 ################################################################################
@@ -131,7 +132,8 @@ if(BUILD_LIBS_FOR_ITAC)
   add_library(cnc_socket_itac SHARED ${CNC_SOCKET_SOURCES} )
   set(CNC_ITAC_FLAGS "${CNC_ITAC_FLAGS} -DINTERNAL_ITAC")
   set_target_properties(cnc_socket_itac PROPERTIES COMPILE_FLAGS "${CNC_ITAC_FLAGS}")
-  set_target_properties(cnc_socket_itac PROPERTIES INCLUDE_DIRECTORIES "${ITACROOT}/include")
+  include_directories(${ITACROOT}/include)
+  #set_target_properties(cnc_socket_itac PROPERTIES INCLUDE_DIRECTORIES ${INCLUDE_DIRECTORIES} "${ITACROOT}/include")
   set_itac_link_flags(cnc_socket_itac)
   target_link_libraries(cnc_socket_itac cnc ${CNC_ADD_LIBS} ${ITACCS_LIB})
   if(BUILD_LIBS_FOR_MPI)
@@ -139,7 +141,7 @@ if(BUILD_LIBS_FOR_ITAC)
     add_library(cnc_mpi_itac SHARED ${CNC_MPI_SOURCES} )
     set_target_properties(cnc_mpi_itac PROPERTIES COMPILE_FLAGS "${CNC_MPI_FLAGS} ${CNC_ITAC_FLAGS}")
     # doesn't seem to work:  set_target_properties(cnc_mpi_itac PROPERTIES INCLUDE_DIRECTORIES "${MPIROOT}/${MPIARCH}/include" INCLUDE_DIRECTORIES "${ITACROOT}/include")
-    include_directories("${MPIROOT}/${MPIARCH}/include" "${ITACROOT}/include")
+    include_directories("${MPIROOT}/${MPIARCH}/include") # "${ITACROOT}/include")
     set_itac_link_flags(cnc_mpi_itac)
     target_link_libraries(cnc_mpi_itac cnc ${CNC_ADD_LIBS} ${MPI_LIB} ${ITAC_LIB})
   endif(BUILD_LIBS_FOR_MPI)
@@ -187,6 +189,43 @@ endif(DOXYGEN_FOUND)
 if (NOT DEFINED LIB)
   set(LIB "lib/intel64")
 endif(NOT DEFINED LIB)
-install(TARGETS ${CNC_LIBS} RUNTIME DESTINATION bin/ LIBRARY DESTINATION ${LIB})
+install(TARGETS ${CNC_LIBS} LIBRARY DESTINATION ${LIB} RUNTIME DESTINATION bin/intel64)
+install(TARGETS cnc ARCHIVE DESTINATION ${LIB})
 install(DIRECTORY ${CNC_SRC_ROOT}/cnc DESTINATION include FILES_MATCHING PATTERN "*.h")
-install(DIRECTORY ${CNC_SRC_ROOT}/src/dist/socket_comm/test/ DESTINATION misc/distributed/socket FILES_MATCHING PATTERN "*.sh")
+install(DIRECTORY ${CNC_SRC_ROOT}/src/dist/socket_comm/test/ DESTINATION misc/distributed/socket FILES_MATCHING REGEX ".*(sh|bat)$")
+foreach(smpl fib
+             primes
+	     mandelbrot
+	     rtm_stencil
+	     blackscholes
+	     cholesky
+	     matrix_inverse
+	     FaceDetection
+	     floyd_warshall
+	     nqueens
+	     dedup
+	     uts
+	     reduce_2d
+	     count_words
+	     count_all_words
+	     db
+	     hidden_graph
+	     mpicnc
+	     heat_equation
+	     search_in_sorted_tree
+	     raytracer
+	     jacobi2d)
+    install(DIRECTORY ${CNC_SRC_ROOT}/samples/${smpl} DESTINATION samples/)
+    install(FILES samples/Makefile DESTINATION samples/${smpl}/)
+endforeach(smpl)
+# example codes from eight patterns document
+foreach(smpl reduce_rows
+	     producer_consumer
+	     partition_string
+	     divide_conquer
+	     red_rows_until_pred
+	     gen_new_iter_space)
+    install(DIRECTORY ${CNC_SRC_ROOT}/samples/${smpl} DESTINATION samples/eight_patterns/)
+    install(FILES samples/Makefile DESTINATION samples/eight_patterns/${smpl}/)
+endforeach(smpl)
+install(FILES samples/CMakeLists.txt samples/Makefile samples/allsamples.sln DESTINATION samples/)
