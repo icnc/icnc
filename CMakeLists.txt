@@ -194,7 +194,7 @@ if(CMAKE_SYSTEM_NAME STREQUAL Windows)
   install(TARGETS cnc ARCHIVE DESTINATION ${LIB})
 endif()
 install(DIRECTORY ${CNC_SRC_ROOT}/cnc DESTINATION include FILES_MATCHING PATTERN "*.h")
-install(DIRECTORY ${CNC_SRC_ROOT}/src/dist/socket_comm/test/ DESTINATION misc/distributed/socket FILES_MATCHING REGEX ".*(sh|bat)$")
+install(DIRECTORY ${CNC_SRC_ROOT}/src/dist/socket_comm/test/ DESTINATION misc/distributed/socket FILE_PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_WRITE GROUP_READ FILES_MATCHING REGEX ".*(sh|bat)$")
 foreach(smpl fib
              primes
 	     mandelbrot
