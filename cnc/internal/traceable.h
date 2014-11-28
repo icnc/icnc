@@ -43,13 +43,18 @@ namespace CnC {
         public:
             traceable( const std::string & name, int level = 0 )
                 : m_traceName( name ), m_traceLevel( level ) {}
+            traceable( )
+                : m_traceName( "traceable" ), m_traceLevel( 0 ) {}
             virtual ~traceable() {}
 
             /// \return level of tracing, 0 == no tracing
             int trace_level() const { return m_traceLevel & 0xffff; }
             /// \return name to be used for tracing
             const std::string & name() const { return m_traceName; }
-            /// set tracing name and level
+            /// set tracing level
+            virtual void set_name( const std::string & name )
+            { m_traceName = name; }
+            /// set tracing level
             virtual void set_tracing( int level )
             { m_traceLevel = level; }
             /// set tracing name and level
@@ -59,8 +64,8 @@ namespace CnC {
             { return (m_traceLevel & 0x10000) != 0; }
 
         private:
-            const std::string  m_traceName;
-            int                m_traceLevel;
+            std::string  m_traceName;
+            int          m_traceLevel;
         };
 
         extern CNC_API tracing_mutex_type s_tracingMutex;

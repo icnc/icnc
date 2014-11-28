@@ -2,6 +2,7 @@
 
 add_cnc_test(simple simple.cpp " " simple.ref "dist")
 add_cnc_test(simplest simplest.cpp " " ../no.ref "")
+add_cnc_test(tagstep tagstep.cpp " " ../no.ref "")
 add_cnc_test(empty empty.cpp " " ../no.ref)
 add_cnc_test(unsafe_chain unsafe_chain.cpp " " unsafe_chain.ref)
 add_cnc_test(cancel cancel.cpp " " cancel.ref "dist")

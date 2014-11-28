@@ -1,53 +1,34 @@
-import sys, os, imp, platform, shutil, subprocess, getopt
+import sys, os, imp, platform, shutil, subprocess, argparse
 
-release = "1.1.000"  # official next/current release version
+argParser = argparse.ArgumentParser(prog="make_kit.py", description="Build CnC runtime and API kit")
+argParser.add_argument('-r', '--release', default="current", help="release number")
+argParser.add_argument('-t', '--travis', action='store_true', default=False, help="Run in Travis mode (implies --nodebug --itac='' --mpi=/usr)")
+argParser.add_argument('-p', '--product', action='store_true', default=False, help="Build a release/product package (implies -i and not -d -t --nodebug)")
+argParser.add_argument('-d', '--devbuild', action='store_true', default=False, help="Build from an unclean development branch (implies -r=current)")
+argParser.add_argument('-k', '--keep', action='store_true', default=False, help="Keep existing (partial) builds")
+argParser.add_argument('-v', '--verbose', action='store_true', default=False, help="Verbose builds")
+argParser.add_argument('-i', '--installer', action='store_true', default=False, help="Build an installer")
+argParser.add_argument('--nodebug', action='store_true', default=False, help="Don't build debug libs")
+argParser.add_argument('--tbb', default=os.getenv('TBBROOT', '/usr'), help="TBB root directory")
+argParser.add_argument('--mpi', default=os.getenv('I_MPI_ROOT', '/usr'), help="MPI root directory")
+argParser.add_argument('--itac', default=os.getenv('VT_ROOT', 'NONE'), help="ITAC root directory")
+argParser.add_argument('--msvs', default='12', help="Version(s) of MS Visual Studio to use/build for (MS Windows only)")
+args = argParser.parse_args()
+
+release = args.release  
+travis = args.travis
+product = args.product
+devbuild = args.devbuild
+keepbuild = args.keep   
+verbose = args.verbose  
+installer = args.installer
+nodbg = args.nodebug      
+tbbroot = args.tbb
+mpiroot = args.mpi
+itacroot = args.itac
+vs = args.msvs
+
 ARCHS = ['intel64']  # dropped support for ia32
-devbuild = False     # by default, we don't accept changes in source tree
-keepbuild = False    # by default, we clean up build dirs before install/compile
-verbose = False      # by default builds are not verbose
-installer = False    # by default we don't create an installer
-nodbg = False        # by default we build release and debug libs
-tbbroot = os.getenv('TBBROOT', '/usr') # by default we read TBBROOT for TBB installation path
-mpiroot = os.getenv('I_MPI_ROOT', '/usr') # by default we read I_MPI_ROOT for MPI installation path
-itacroot = os.getenv('VT_ROOT', 'NONE') # by default we read VT_ROOT for ITAC installation path or disable ITAC
-vs = '12'            # by default we use VS 12 (windows), to build more than one do something like '12 11'
-
-travis = False       # travis mode: only release libs and no packaging
-product = False      # product mode: right TBB, all libs, installer
-
-try:
-  opts, args = getopt.getopt(sys.argv[1:],"r:tdkhvip",["release=", "travis", "devbuild", "keep", "help", "verbose", "installer", "product", "mpi=", "itac=", "nodebug", "msvs=" ])
-except getopt.GetoptError:
-  print 'make_kit.py [-r=<rel>] [-t] [-d] [-k] [-h] [-v] [-i] [-p] [--nodebug] [--product] [--tbb=<tbbroot>] [--mpi=<mpiroot>] [--itac=<itacroot>] [--msvs=<vs versions>]'
-  sys.exit(2)
-for opt, arg in opts:
-  if opt in ("-h", "--help"):
-    print 'make_kit.py [-r=<rel>] [-t] [-d] [-k] [-h] [-v] [-i] [-p] [--nodebug] [--product] [--tbb=<tbbroot>] [--mpi=<mpi>] [--itac=<itacroot>] [--msvs=<vs versions>]'
-    sys.exit(3)
-  elif opt in ("-d", "--devbuild"):
-    devbuild = True
-  elif opt in ("-k", "--keep"):
-    keepbuild = True
-  elif opt in ("-t", "--travis"):
-    travis = True
-  elif opt in ("--tbb"):
-    tbbroot = arg
-  elif opt in ("--mpi"):
-    mpiroot = arg
-  elif opt in ("--itac"):
-    itacroot = arg
-  elif opt in ("--msvs"):
-    vs = arg
-  elif opt in ("--nodebug"):
-    nodbg = True
-  elif opt in ("-r", "--release"):
-    release = arg
-  elif opt in ("-v", "--verbose"):
-    verbose = True
-  elif opt in ("-p", "--product"):
-    product = True
-  elif opt in ("-i", "--installer"):
-    installer = True
 
 if devbuild == True:
     release = "current"

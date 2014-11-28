@@ -362,6 +362,7 @@ namespace CnC {
               m_numgc( 0 )
 #endif
         {
+            traceable::set_name( name );
             m_tuner.init_table( tagItemTable );
         }
 
@@ -391,6 +392,7 @@ namespace CnC {
               m_numgc( 0 )
 #endif
         {
+            traceable::set_name( name );
             m_tuner.init_table( tagItemTable );
         }
 

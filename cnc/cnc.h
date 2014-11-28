@@ -67,7 +67,7 @@ namespace CnC {
     /// can be part of consumer/producer relationships with item-collections.
     /// Additionally, it can be the controller in control-dependencies (e.g. produce tags).
     template< typename UserStep, typename Tuner = step_tuner<> >
-    class step_collection : public Internal::traceable
+    class step_collection : public virtual Internal::traceable
     {
     public:
         /// the type of the step as provided by the user
@@ -103,7 +103,7 @@ namespace CnC {
         template< typename DataTag, typename Item, typename ITuner >
         void produces( CnC::item_collection< DataTag, Item, ITuner > & );
 
-        /// Declare this step-collecation as controller of given tag-collection
+        /// Declare this step-collection as controller of given tag-collection
         template< typename ControlTag, typename TTuner >
         void controls( CnC::tag_collection< ControlTag, TTuner > & );
 

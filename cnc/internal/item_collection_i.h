@@ -39,7 +39,7 @@ namespace CnC {
         class context_base;
 
         /// Type unaware, internal interface to item_collection.
-        class CNC_API item_collection_i : public distributable
+        class CNC_API item_collection_i : public virtual distributable
         {
         public:
             item_collection_i( context_base & g, const std::string & name );

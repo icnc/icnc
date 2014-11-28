@@ -62,6 +62,7 @@ namespace CnC {
           m_tuner( Internal::get_default_tuner< Tuner >() ),
           m_context( ctxt )
     {
+        traceable::set_name( name );
         // FIXME register with context
     }
     // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -74,6 +75,7 @@ namespace CnC {
           m_tuner( Internal::get_default_tuner< Tuner >() ),
           m_context( ctxt )
     {
+        traceable::set_name( name );
         // FIXME register with context
     }
 
@@ -87,6 +89,7 @@ namespace CnC {
           m_tuner( tnr ),
           m_context( ctxt )
     {
+        traceable::set_name( name );
         // FIXME register with context
     }
 
@@ -101,6 +104,7 @@ namespace CnC {
           m_tuner( tnr ),
           m_context( ctxt )
     {
+        traceable::set_name( name );
         // FIXME register with context
     }
 

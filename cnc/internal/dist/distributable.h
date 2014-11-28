@@ -43,10 +43,11 @@ namespace CnC {
         /// data across processes.
         /// \see creatable for objects which need explicit creation on a remote client
         /// \see CnC::Internal::dist_cnc
-        class distributable : public traceable
+        class distributable : public virtual traceable
         {
         public:
             distributable( const std::string & name, int level = 0 ) : traceable( name, level ), m_gid( -1 ) {}
+            distributable() : traceable( "distributable", 0 ), m_gid( -1 ) {}
             virtual ~distributable() {}
 
             /// de-serialize message from serializer and consume it

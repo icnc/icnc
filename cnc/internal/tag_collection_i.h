@@ -38,7 +38,7 @@ namespace CnC {
         
         /// Everything we can in a tag-collection without knowing the tag-type.
         /// FIXME: Probably we should merge this with tag_collection_base at some point.
-        class CNC_API tag_collection_i : public distributable
+        class CNC_API tag_collection_i : public virtual distributable
         {
         public:
             tag_collection_i( context_base &, const std::string & name );
