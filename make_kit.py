@@ -1,18 +1,20 @@
 import sys, os, imp, platform, shutil, subprocess, argparse
 
 argParser = argparse.ArgumentParser(prog="make_kit.py", description="Build CnC runtime and API kit")
-argParser.add_argument('-r', '--release', default="current", help="release number")
-argParser.add_argument('-t', '--travis', action='store_true', default=False, help="Run in Travis mode (implies --nodebug --itac='' --mpi=/usr)")
-argParser.add_argument('-p', '--product', action='store_true', default=False, help="Build a release/product package (implies -i and not -d -t --nodebug)")
-argParser.add_argument('-d', '--devbuild', action='store_true', default=False, help="Build from an unclean development branch (implies -r=current)")
-argParser.add_argument('-k', '--keep', action='store_true', default=False, help="Keep existing (partial) builds")
-argParser.add_argument('-v', '--verbose', action='store_true', default=False, help="Verbose builds")
-argParser.add_argument('-i', '--installer', action='store_true', default=False, help="Build an installer")
-argParser.add_argument('--nodebug', action='store_true', default=False, help="Don't build debug libs")
-argParser.add_argument('--tbb', default=os.getenv('TBBROOT', '/usr'), help="TBB root directory")
-argParser.add_argument('--mpi', default=os.getenv('I_MPI_ROOT', '/usr'), help="MPI root directory")
-argParser.add_argument('--itac', default=os.getenv('VT_ROOT', 'NONE'), help="ITAC root directory")
-argParser.add_argument('--msvs', default='12', help="Version(s) of MS Visual Studio to use/build for (MS Windows only)")
+argParser.add_argument('-r', '--release',   default="current", help="release number")
+argParser.add_argument('-t', '--travis',    default=False, action='store_true',      help="Run in Travis mode (implies --nodebug --itac='' --mpi=/usr)")
+argParser.add_argument('-p', '--product',   default=False, action='store_true',      help="Build a release/product package (implies -i --mic and not -d -t --nodebug)")
+argParser.add_argument('-d', '--devbuild',  default=False, action='store_true',      help="Build from an unclean development branch (implies -r=current)")
+argParser.add_argument('-k', '--keep',      default=False, action='store_true',      help="Keep existing (partial) builds")
+argParser.add_argument('-v', '--verbose',   default=False, action='store_true',      help="Verbose builds")
+argParser.add_argument('-i', '--installer', default=False, action='store_true',      help="Build an installer")
+argParser.add_argument('--phi',             default=False, action='store_true',      help="Build libs for Xeon(R) Phi")
+argParser.add_argument('--nodebug',         default=False, action='store_true',      help="Don't build debug libs")
+argParser.add_argument('--tbb',             default=os.getenv('TBBROOT', '/usr'),    help="TBB root directory")
+argParser.add_argument('--mpi',             default=os.getenv('I_MPI_ROOT', '/usr'), help="MPI root directory")
+argParser.add_argument('--itac',            default=os.getenv('VT_ROOT', 'NONE'),    help="ITAC root directory")
+argParser.add_argument('--msvs',            default='12',                            help="Version(s) of MS Visual Studio to use/build for (MS Windows only)")
+argParser.add_argument('--zip',             default=False, action='store_true',      help="also create password protected zip archive (requires -i)")
 args = argParser.parse_args()
 
 release = args.release  
@@ -27,6 +29,7 @@ tbbroot = args.tbb
 mpiroot = args.mpi
 itacroot = args.itac
 vs = args.msvs
+phi = args.phi
 
 ARCHS = ['intel64']  # dropped support for ia32
 
@@ -46,6 +49,7 @@ if product == True:
     installer = True
     devbuild = False
     travis = False
+    phi = True
     if pf == 'Windows':
         tbbroot = "C:\\tbb42_20140122oss" #C:\\tbb41_20121003oss"
         vs = '12 11'
@@ -83,7 +87,7 @@ def exe_cmd( cmd ):
   else:
       retv = subprocess.call( cmd )
   if not retv == 0:
-      print("error code: " + retv)
+      print("error code: " + str(retv))
       exit(444)
 
 ##############################################################
@@ -159,6 +163,7 @@ for vs in VSS:
 ##############################################################
 # now sanitize files and create installer
 if installer == True:
+    tbbver = os.path.basename( tbbroot )
     pwd = os.getcwd()
     docdir = os.path.join(reldir, 'doc')
     pagesdir = 'icnc.github.io'
@@ -184,7 +189,41 @@ if installer == True:
         exe_cmd('dos2unix -q `find ' + reldir + ' -name \*.h`')
         exe_cmd('dos2unix -q `find ' + reldir + ' -name \*sh` `find ' + reldir + ' -name \*txt`')
         exe_cmd('dos2unix -q `find ' + reldir + ' -name \*cpp`')
-        os.chdir(kitdir)
-        exe_cmd(['tar', 'cfvj', 'cnc_' + release + '_pkg.tbz', os.path.join('cnc', release)])
-        exe_cmd(['zip', '-rP', 'cnc', 'cnc_' + release + '_pkg.zip', os.path.join('cnc', release)])
+        cncdir = os.path.join(kitdir, 'cnc/')
+        os.chdir(reldir)
+        exe_cmd('tar cfj - * | gpg --batch -c --passphrase "I accept the EULA" > ../cnc_b_' + release + '_install.files')
+        os.chdir(pwd)
+        shutil.copy(os.path.join('pkg', 'install.sh'), cncdir)
+        exe_cmd(['sed', '-i', 's/$TBBVER/' + tbbver + '/g ; s/$CNCVER/' + release + '/g', os.path.join(cncdir, 'install.sh')])
+        shutil.copy('LICENSE', cncdir)
+        shutil.copy(os.path.join('pkg', 'INSTALL.txt'), cncdir)
+        os.chdir(cncdir)
+        if keepbuild == False:
+          shutil.rmtree(tbbver, True )
+        if os.path.isdir(tbbver) == False:
+          os.mkdir(tbbver)
+        if os.path.isdir(os.path.join(tbbver, 'bin')) == False:
+          os.mkdir(os.path.join(tbbver, 'bin'))
+        if os.path.isdir(os.path.join(tbbver, 'lib')) == False:
+          os.mkdir(os.path.join(tbbver, 'lib'))
+        exe_cmd(['cp', '-r', os.path.join(tbbroot, 'include'), tbbver + '/'])
+        exe_cmd(['cp', '-r', os.path.join(tbbroot, 'lib/intel64'), os.path.join(tbbver, 'lib/')])
+        if phi:
+          exe_cmd(['cp', '-r', os.path.join(tbbroot, '/lib/mic'), os.path.join(tbbver, 'lib/')])
+        exe_cmd('cp ' + os.path.join(tbbroot, 'bin/tbbvars.*h') + ' ' + os.path.join(tbbver, 'bin/'))
+        exe_cmd(['cp', os.path.join(tbbroot, 'README'), os.path.join(tbbroot, 'CHANGES'), os.path.join(tbbroot, 'COPYING'), tbbver + '/'])
+        exe_cmd(['tar', 'cfj', tbbver + '_cnc_files.tbz', tbbver + '/'])
         os.chdir('..')
+        exe_cmd(['tar', 'cfvz', 'l_cnc_b_' + release + '.tgz',
+                 os.path.join('cnc', 'install.sh'),
+                 os.path.join('cnc', 'INSTALL.txt'),
+                 os.path.join('cnc', 'LICENSE'),
+                 os.path.join('cnc', 'cnc_b_' + release + '_install.files'),
+                 os.path.join('cnc', tbbver + '_cnc_files.tbz')])
+        if args.zip:
+            exe_cmd(['zip', '-rP', 'cnc', 'l_cnc_b_' + release + '.zip',
+                     os.path.join('cnc', 'install.sh'),
+                     os.path.join('cnc', 'INSTALL.txt'),
+                     os.path.join('cnc', 'LICENSE'),
+                     os.path.join('cnc', 'cnc_b_' + release + '_install.files'),
+                     os.path.join('cnc', tbbver + '_cnc_files.tbz')])

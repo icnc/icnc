@@ -13,4 +13,4 @@ compiler:
   - gcc
 
 after_failure:
-  - cat tests/build/Testing/Temporary/LastTest.log
+  - cd && cat tests/build/Testing/Temporary/LastTest.log
