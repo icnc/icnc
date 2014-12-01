@@ -32,9 +32,6 @@ vs = args.msvs
 phi = args.phi
 
 ARCHS = ['intel64']  # dropped support for ia32
-
-if devbuild == True:
-    release = "current"
     
 if travis == True:
     release = "current"
@@ -50,6 +47,7 @@ if product == True:
     devbuild = False
     travis = False
     phi = True
+    release = '1.0.100' # hm, need to update this automatically?
     if pf == 'Windows':
         tbbroot = "C:\\tbb42_20140122oss" #C:\\tbb41_20121003oss"
         vs = '12 11'
@@ -168,12 +166,12 @@ if installer == True:
     docdir = os.path.join(reldir, 'doc')
     pagesdir = 'icnc.github.io'
     os.chdir('..')
-    if os.path.isdir(pagesdir) == False:
-        exe_cmd(("git clone --depth=1 https://github.com/icnc/"+pagesdir).split())
-    else:
-        os.chdir(pagesdir)
-        exe_cmd(['git', 'pull'])
-        os.chdir('..')
+    # if os.path.isdir(pagesdir) == False:
+    #     exe_cmd(("git clone --depth=1 https://github.com/icnc/"+pagesdir).split())
+    # else:
+    #     os.chdir(pagesdir)
+    #     exe_cmd(['git', 'pull'])
+    #     os.chdir('..')
     os.chdir(pwd)
     orgdir = os.path.join('..', pagesdir)
     shutil.copy(os.path.join(orgdir, 'LICENSE'), reldir)
@@ -182,7 +180,30 @@ if installer == True:
         shutil.copy(os.path.join(orgdir, doc), docdir)
 
     if pf == 'Windows':
-        print('no installer built')
+        for withTBB in [True, False]:
+            aip = 'cnc_installer_' + arch + '.aip'
+            shutil.copy(os.path.join('pkg', aip), kitdir)
+            shutil.copy(os.path.join('pkg', 'LICENSE.rtf'), kitdir)
+            pkgstub = 'cnc_b_' + release + '_' + arch + ('_'+tbbver if withTBB == True else '')
+            tbbenv = ''
+            if withTBB == True:
+                tbbenv = ( 'AddFolder ' + os.path.join('APPDIR', tbbver) + ' ' + os.path.join(tbbroot, 'include') + '\n'
+                           'AddFolder ' + os.path.join('APPDIR', tbbver, 'lib') + ' ' + os.path.join(tbbroot, 'lib', arch ) + '\n'
+                           'AddFolder ' + os.path.join('APPDIR', tbbver, 'bin') + ' ' + os.path.join(tbbroot, 'bin', arch ) + '\n'
+                           'AddFile ' + os.path.join('APPDIR', tbbver, 'bin') + ' ' + os.path.join(tbbroot, 'bin', 'tbbvars.bat') + '\n'
+                           'AddFile ' + os.path.join('APPDIR', tbbver) + ' ' + os.path.join(tbbroot, 'README') + '\n'
+                           'AddFile ' + os.path.join('APPDIR', tbbver) + ' ' + os.path.join(tbbroot, 'COPYING') + '\n'
+                           'AddFile ' + os.path.join('APPDIR', tbbver) + ' ' + os.path.join(tbbroot, 'CHANGES') + '\n'
+                           'NewEnvironment -name TBBROOT -value [APPDIR]\\' + tbbver + (' -install_operation CreateUpdate -behavior Replace\n' if withTBB == True else '\n') )
+            aic = os.path.join(kitdir, pkgstub + '.aic')
+            inf = open( os.path.join('pkg', 'edit_aip.aic.tmpl'))
+            l = inf.read();
+            inf.close()
+            outf = open( aic, 'w' )
+            outf.write( l.format( KITDIR=kitdir, CNCVER=release, ARCH=arch, PKGNAME=os.path.abspath(os.path.join(kitdir, 'w_'+pkgstub+'.msi')), TBBENV=tbbenv ) )
+            outf.close()
+            exe_cmd( os.path.normpath( r'"C:/Program Files (x86)/Caphyon/Advanced Installer 11.2/bin/x86/AdvancedInstaller.com"')
+                     + ' /execute ' + os.path.join(kitdir, aip) + ' ' + aic )
     else:
         exe_cmd('chmod 644 `find ' + reldir + ' -type f`')
         exe_cmd('chmod 755 `find ' + reldir + ' -name \*sh`')

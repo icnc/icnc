@@ -1,0 +1,15 @@
+;aic
+SetVersion {CNCVER}
+SetPackageName {PKGNAME}
+AddFolder APPDIR\bin {KITDIR}\cnc\{CNCVER}\bin\{ARCH}
+AddFolder APPDIR {KITDIR}\cnc\{CNCVER}\doc
+AddFolder APPDIR {KITDIR}\cnc\{CNCVER}\include
+AddFolder APPDIR\lib {KITDIR}\cnc\{CNCVER}\lib\{ARCH}
+AddFolder APPDIR {KITDIR}\cnc\{CNCVER}\misc
+AddFolder APPDIR {KITDIR}\cnc\{CNCVER}\samples
+AddFile APPDIR {KITDIR}\cnc\{CNCVER}\LICENSE
+AddFile APPDIR {KITDIR}\cnc\{CNCVER}\README
+NewEnvironment -name Path -value [APPDIR]\bin\{ARCH} -install_operation CreateUpdate -system_variable -behavior Prepend
+{TBBENV}
+Save
+Rebuild
