@@ -35,7 +35,7 @@ clear
 echo "Installing Intel(R) Concurrent Collections for C++ requires you to accept the following license agreement."
 echo "Press 'enter' to view the EULA."
 read _l_
-less EULA.txt
+less LICENSE
 
 echo "Type 'accept' if a accept the license agrement."
 read answer

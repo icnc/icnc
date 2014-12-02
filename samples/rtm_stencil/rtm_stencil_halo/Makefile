@@ -11,7 +11,7 @@ $(info More information is available in 'Getting Started > Running the samples')
 $(error CNCROOT is not set)
 endif
 
-CXX=icpc -I/usr/include/x86_64-linux-gnu/c++/4.7
+#CXX=icpc -I/usr/include/x86_64-linux-gnu/c++/4.7
 OPT := -pthread $(OPTS) -std=c++0x
 # -DUSE_BSIZEX=80 -DUSE_BSIZEY=80 -DUSE_BSIZEZ=80
 #-DDUMP 
