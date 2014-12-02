@@ -57,6 +57,12 @@ endif(CMAKE_SYSTEM_NAME STREQUAL Windows)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_CNC_TESTING_")
 
+if(CMAKE_SYSTEM_NAME STREQUAL Windows)
+SET (test_env "PATH=${CNCROOT}/bin/intel64\;${TBBROOT}/bin/intel64/${TBB_DLL_PFX}")#\;$ENV{PATH}")
+else()
+SET (test_env "LD_LIBRARY_PATH=${CNCROOT}/bin/intel64\:${TBBROOT}/bin/intel64/${TBB_DLL_PFX}\:$ENV{LD_LIBRARY_PATH}")
+endif()
+
 # add a cnc test: run the test and compare output against reference
 # use this only if you can't use add_cnc_test
 # uses run_compare.cmake
@@ -75,6 +81,7 @@ function( add_compare_test
   add_test( NAME ${tname}
     COMMAND ${CMAKE_COMMAND}
     -Dtest_cmd=${exe}
+    -Dtest_env="${test_env}"
     -Dtest_args:string=${args}
     -Doutput_blessed=${CMAKE_CURRENT_LIST_DIR}/${reffile}
     -Doutput_test=${outfile}
@@ -99,7 +106,7 @@ function( add_cnc_test
   separate_arguments(src)
   add_executable(${tname} ${src})
   target_link_libraries(${tname} ${NEEDED_LIBS})
-  add_compare_test(${tname} ${tname} ${args} /tmp/${tname}.out /tmp/${tname}.out ${ref} "txt" "shared")
+  add_compare_test(${tname} ${tname} ${args} ${CMAKE_CURRENT_BINARY_DIR}/${tname}.out ${CMAKE_CURRENT_BINARY_DIR}/${tname}.out ${ref} "txt" "shared")
   if(${RUN_DIST} AND ${ARGC} GREATER 4)
     list(LENGTH ARGN len)
     if(${len} GREATER 0)
@@ -110,9 +117,9 @@ function( add_cnc_test
     add_executable(dist${tname} ${src})
     set_target_properties(dist${tname} PROPERTIES COMPILE_FLAGS "-D_DIST_")
     target_link_libraries(dist${tname} ${NEEDED_LIBS})
-    add_compare_test(mpi_${tname} dist${tname} ${args} /tmp/mpi_${tname}.out /tmp/mpi_${tname}.out ${dist}${ref} "txt" "MPI")
-    add_compare_test(sockets_${tname} dist${tname} ${args} /tmp/sockets_${tname}.out /tmp/sockets_${tname}.out ${dist}${ref} "txt" "SOCKETS")
-#TODO    add_compare_test(shmem_${tname} dist${tname} ${args} /tmp/shmem_${tname}.out /tmp/shmem_${tname}.out ${ref} "txt" "SHMEM")
+    add_compare_test(mpi_${tname} dist${tname} ${args} ${CMAKE_CURRENT_BINARY_DIR}/mpi_${tname}.out ${CMAKE_CURRENT_BINARY_DIR}/mpi_${tname}.out ${dist}${ref} "txt" "MPI")
+    add_compare_test(sockets_${tname} dist${tname} ${args} ${CMAKE_CURRENT_BINARY_DIR}/sockets_${tname}.out ${CMAKE_CURRENT_BINARY_DIR}/sockets_${tname}.out ${dist}${ref} "txt" "SOCKETS")
+#TODO    add_compare_test(shmem_${tname} dist${tname} ${args} shmem_${tname}.out shmem_${tname}.out ${ref} "txt" "SHMEM")
   endif()
 endfunction()
 

@@ -226,7 +226,7 @@ namespace CnC {
                 si->format( oss ) << ": ";
             }
             oss << str << name() << "<";
-            cnc_format( oss, tag ) << ">";
+            return cnc_format( oss, tag ) << ">";
         }
 
         // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

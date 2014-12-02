@@ -31,13 +31,23 @@ if(NOT compare_mode)
    message( FATAL_ERROR "Variable compare_mode not defined" )
 endif(NOT compare_mode)
 
+if( NOT test_env )
+   message( FATAL_ERROR "Variable test_env not defined" )
+endif( NOT test_env )
+
 # convert the space-separated string to a list
 separate_arguments( test_args )
 
-message("python ${CMAKE_CURRENT_LIST_DIR}/run.py ${CMAKE_CURRENT_BINARY_DIR}/${test_cmd} ${dist_mode} ${output_test} ${test_args}")
+#get_filename_component(test_outdir ${CMAKE_CURRENT_BINARY_DIR}/${test_cmd} DIRECTORY )
+#if(${output_test} STREQUAL ${compare_file})
+#  set(compare_file ${CMAKE_CURRENT_BINARY_DIR}/${compare_file})
+#endif()
+#set(output_test ${CMAKE_CURRENT_BINARY_DIR}/${output_test})
+
+message("python ${CMAKE_CURRENT_LIST_DIR}/run.py ${CMAKE_CURRENT_BINARY_DIR}/${test_cmd} ${dist_mode} ${output_test} ${test_env} ${test_args}")
 
 execute_process(
-   COMMAND python ${CMAKE_CURRENT_LIST_DIR}/run.py ${CMAKE_CURRENT_BINARY_DIR}/${test_cmd} ${dist_mode} ${output_test} ${test_args} RESULT_VARIABLE hadd_error
+   COMMAND python ${CMAKE_CURRENT_LIST_DIR}/run.py ${CMAKE_CURRENT_BINARY_DIR}/${test_cmd} ${dist_mode} ${output_test} "${test_env}" ${test_args} RESULT_VARIABLE hadd_error
 )
 
 if(had_error)

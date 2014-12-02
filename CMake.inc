@@ -51,7 +51,7 @@ set(CMAKE_DEBUG_POSTFIX "_debug")
 
 ################################################################################
 # TBB deps
-
+message("${TBBROOT}/lib/intel64/${TBB_DLL_PFX}")
 set(CMAKE_PREFIX_PATH "${TBBROOT}/lib/intel64/gcc4.4" "${TBBROOT}/lib/intel64/cc4.1.0_libc2.4_kernel2.6.16.21" "${TBBROOT}/lib/intel64/${TBB_DLL_PFX}")
 find_library(TBB_LIB tbb)
 find_library(TBBMALLOC_LIB tbbmalloc)
