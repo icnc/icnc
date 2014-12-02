@@ -108,7 +108,7 @@ namespace Jacobi2D {
         const bool debug;
 
         // Context constructor
-        Jacobi2DCtx(int i, int ds, int bs, int nb, double ep, bool dbg)
+        Jacobi2DCtx(int i=0, int ds=0, int bs=0, int nb=0, double ep=0, bool dbg=0)
             : CnC::context<Jacobi2DCtx>(),
               // init tuners
               m_iter_tuner(*this),

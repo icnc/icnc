@@ -406,7 +406,7 @@ namespace CnC {
                 si->format( oss ) << ": ";
             }
             oss << str << name() <<  "[";
-            cnc_format( oss, tag ) << "]";
+            return cnc_format( oss, tag ) << "]";
         }
 
         template< class T, class item_type, class Tuner >
@@ -416,6 +416,7 @@ namespace CnC {
             oss << " = ";
             if( item ) cnc_format( oss, *item );
             else oss << "not ready";
+            return oss;
         }
 
         // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

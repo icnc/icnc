@@ -26,6 +26,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #include "jacobi2D.h"
+#include <limits>
 
 using namespace Jacobi2D;
 
@@ -48,7 +49,7 @@ double get(
     } else if (i >= dest.startRow && i < dest.endRow && j >= dest.endCol) {
         return tileGet(&right, i, j);
     }
-    assert(!"unreachable"); return NAN;
+    assert(!"unreachable"); return std::numeric_limits<double>::quiet_NaN();
 }
 
 void jacobiIterationKernel(

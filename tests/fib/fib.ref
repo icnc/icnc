@@ -134,7 +134,7 @@ CnC recursive \(23\): 28657
 \[CnC\] End step fib\(8\)
 \[CnC\] End step fib\(9\)
 \[CnC\] Get item fibs\[23\] = 28657
-\[CnC\] Put tag tags<23> mask -1 3 _found 0
+\[CnC\] Put tag tags<23>
 \[CnC\] Start step ctrl\(0\)
 \[CnC\] Start step ctrl\(1\)
 \[CnC\] Start step ctrl\(10\)
@@ -183,50 +183,50 @@ CnC recursive \(23\): 28657
 \[CnC\] Start step fib\(7\)
 \[CnC\] Start step fib\(8\)
 \[CnC\] Start step fib\(9\)
-\[CnC\] step ctrl\(10\): Put tag tags<8> mask -1 3 _found -1
-\[CnC\] step ctrl\(10\): Put tag tags<9> mask -1 3 _found -1
-\[CnC\] step ctrl\(11\): Put tag tags<10> mask -1 3 _found 0
-\[CnC\] step ctrl\(11\): Put tag tags<9> mask -1 3 _found 0
-\[CnC\] step ctrl\(12\): Put tag tags<10> mask -1 3 _found -1
-\[CnC\] step ctrl\(12\): Put tag tags<11> mask -1 3 _found -1
-\[CnC\] step ctrl\(13\): Put tag tags<11> mask -1 3 _found 0
-\[CnC\] step ctrl\(13\): Put tag tags<12> mask -1 3 _found 0
-\[CnC\] step ctrl\(14\): Put tag tags<12> mask -1 3 _found -1
-\[CnC\] step ctrl\(14\): Put tag tags<13> mask -1 3 _found -1
-\[CnC\] step ctrl\(15\): Put tag tags<13> mask -1 3 _found 0
-\[CnC\] step ctrl\(15\): Put tag tags<14> mask -1 3 _found 0
-\[CnC\] step ctrl\(16\): Put tag tags<14> mask -1 3 _found -1
-\[CnC\] step ctrl\(16\): Put tag tags<15> mask -1 3 _found -1
-\[CnC\] step ctrl\(17\): Put tag tags<15> mask -1 3 _found 0
-\[CnC\] step ctrl\(17\): Put tag tags<16> mask -1 3 _found 0
-\[CnC\] step ctrl\(18\): Put tag tags<16> mask -1 3 _found -1
-\[CnC\] step ctrl\(18\): Put tag tags<17> mask -1 3 _found -1
-\[CnC\] step ctrl\(19\): Put tag tags<17> mask -1 3 _found 0
-\[CnC\] step ctrl\(19\): Put tag tags<18> mask -1 3 _found 0
-\[CnC\] step ctrl\(2\): Put tag tags<0> mask -1 3 _found 0
-\[CnC\] step ctrl\(2\): Put tag tags<1> mask -1 3 _found -1
-\[CnC\] step ctrl\(20\): Put tag tags<18> mask -1 3 _found -1
-\[CnC\] step ctrl\(20\): Put tag tags<19> mask -1 3 _found -1
-\[CnC\] step ctrl\(21\): Put tag tags<19> mask -1 3 _found 0
-\[CnC\] step ctrl\(21\): Put tag tags<20> mask -1 3 _found 0
-\[CnC\] step ctrl\(22\): Put tag tags<20> mask -1 3 _found -1
-\[CnC\] step ctrl\(22\): Put tag tags<21> mask -1 3 _found -1
-\[CnC\] step ctrl\(23\): Put tag tags<21> mask -1 3 _found 0
-\[CnC\] step ctrl\(23\): Put tag tags<22> mask -1 3 _found 0
-\[CnC\] step ctrl\(3\): Put tag tags<1> mask -1 3 _found 0
-\[CnC\] step ctrl\(3\): Put tag tags<2> mask -1 3 _found 0
-\[CnC\] step ctrl\(4\): Put tag tags<2> mask -1 3 _found -1
-\[CnC\] step ctrl\(4\): Put tag tags<3> mask -1 3 _found -1
-\[CnC\] step ctrl\(5\): Put tag tags<3> mask -1 3 _found 0
-\[CnC\] step ctrl\(5\): Put tag tags<4> mask -1 3 _found 0
-\[CnC\] step ctrl\(6\): Put tag tags<4> mask -1 3 _found -1
-\[CnC\] step ctrl\(6\): Put tag tags<5> mask -1 3 _found -1
-\[CnC\] step ctrl\(7\): Put tag tags<5> mask -1 3 _found 0
-\[CnC\] step ctrl\(7\): Put tag tags<6> mask -1 3 _found 0
-\[CnC\] step ctrl\(8\): Put tag tags<6> mask -1 3 _found -1
-\[CnC\] step ctrl\(8\): Put tag tags<7> mask -1 3 _found -1
-\[CnC\] step ctrl\(9\): Put tag tags<7> mask -1 3 _found 0
-\[CnC\] step ctrl\(9\): Put tag tags<8> mask -1 3 _found 0
+\[CnC\] step ctrl\(10\): Put tag tags<8>
+\[CnC\] step ctrl\(10\): Put tag tags<9>
+\[CnC\] step ctrl\(11\): Put tag tags<10>
+\[CnC\] step ctrl\(11\): Put tag tags<9>
+\[CnC\] step ctrl\(12\): Put tag tags<10>
+\[CnC\] step ctrl\(12\): Put tag tags<11>
+\[CnC\] step ctrl\(13\): Put tag tags<11>
+\[CnC\] step ctrl\(13\): Put tag tags<12>
+\[CnC\] step ctrl\(14\): Put tag tags<12>
+\[CnC\] step ctrl\(14\): Put tag tags<13>
+\[CnC\] step ctrl\(15\): Put tag tags<13>
+\[CnC\] step ctrl\(15\): Put tag tags<14>
+\[CnC\] step ctrl\(16\): Put tag tags<14>
+\[CnC\] step ctrl\(16\): Put tag tags<15>
+\[CnC\] step ctrl\(17\): Put tag tags<15>
+\[CnC\] step ctrl\(17\): Put tag tags<16>
+\[CnC\] step ctrl\(18\): Put tag tags<16>
+\[CnC\] step ctrl\(18\): Put tag tags<17>
+\[CnC\] step ctrl\(19\): Put tag tags<17>
+\[CnC\] step ctrl\(19\): Put tag tags<18>
+\[CnC\] step ctrl\(2\): Put tag tags<0>
+\[CnC\] step ctrl\(2\): Put tag tags<1>
+\[CnC\] step ctrl\(20\): Put tag tags<18>
+\[CnC\] step ctrl\(20\): Put tag tags<19>
+\[CnC\] step ctrl\(21\): Put tag tags<19>
+\[CnC\] step ctrl\(21\): Put tag tags<20>
+\[CnC\] step ctrl\(22\): Put tag tags<20>
+\[CnC\] step ctrl\(22\): Put tag tags<21>
+\[CnC\] step ctrl\(23\): Put tag tags<21>
+\[CnC\] step ctrl\(23\): Put tag tags<22>
+\[CnC\] step ctrl\(3\): Put tag tags<1>
+\[CnC\] step ctrl\(3\): Put tag tags<2>
+\[CnC\] step ctrl\(4\): Put tag tags<2>
+\[CnC\] step ctrl\(4\): Put tag tags<3>
+\[CnC\] step ctrl\(5\): Put tag tags<3>
+\[CnC\] step ctrl\(5\): Put tag tags<4>
+\[CnC\] step ctrl\(6\): Put tag tags<4>
+\[CnC\] step ctrl\(6\): Put tag tags<5>
+\[CnC\] step ctrl\(7\): Put tag tags<5>
+\[CnC\] step ctrl\(7\): Put tag tags<6>
+\[CnC\] step ctrl\(8\): Put tag tags<6>
+\[CnC\] step ctrl\(8\): Put tag tags<7>
+\[CnC\] step ctrl\(9\): Put tag tags<7>
+\[CnC\] step ctrl\(9\): Put tag tags<8>
 \[CnC\] step fib\(0\): Put item fibs\[0\] = 0 with get-count 1
 \[CnC\] step fib\(1\): Put item fibs\[1\] = 1 with get-count 2
 \[CnC\] step fib\(10\): Itemfibs\[8\] now has a get-count of 0
