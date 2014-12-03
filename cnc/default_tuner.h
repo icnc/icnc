@@ -42,6 +42,7 @@
 #include <cnc/internal/item_properties.h>
 #include <cnc/internal/item_properties.h>
 #include <cnc/internal/dist/distributor.h>
+#include <cnc/internal/tbbcompat.h>
 #include <tbb/atomic.h>
 #include <tbb/concurrent_unordered_set.h>
 //#include <tbb/concurrent_hash_map.h>

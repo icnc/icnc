@@ -35,6 +35,7 @@
 #include <cnc/internal/step_launcher.h>
 #include <cnc/internal/scheduler_i.h>
 
+#include <cnc/internal/tbbcompat.h>
 #include <tbb/scalable_allocator.h>
 #include <tbb/atomic.h>
 

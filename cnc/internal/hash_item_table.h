@@ -28,8 +28,8 @@
 #ifndef _CnC_HASH_ITEM_TABLE_H_
 #define _CnC_HASH_ITEM_TABLE_H_
 
+#include <cnc/internal/tbbcompat.h>
 #include <tbb/concurrent_hash_map.h>
-//#include <tbb/spin_mutex.h>
 #include <cnc/internal/item_properties.h>
 #include <cnc/internal/cnc_stddef.h>
 #include <cnc/internal/cnc_tag_hash_compare.h>
@@ -44,7 +44,7 @@ namespace CnC {
         /// find/insert methods.
         /// \see CnC::Internal::vec_item_table
         template< typename Tag, typename ItemT, typename Coll >
-        class hash_item_table
+        class hash_item_table : CnC::Internal::no_copy
         {
         public:
             typedef ItemT item_type;

@@ -38,6 +38,7 @@
 #include <cnc/internal/dist/msg_callback.h>
 #include <cnc/internal/dist/communicator.h>
 #include <cnc/internal/dist/factory.h>
+#include <cnc/internal/tbbcompat.h>
 #include <tbb/atomic.h>
 #include <tbb/concurrent_hash_map.h>
 #include <tbb/concurrent_queue.h>

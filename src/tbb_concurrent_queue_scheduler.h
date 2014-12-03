@@ -29,10 +29,10 @@
 #define _TBB_CONCURRENT_QUEUE_SCHEDULER_H_
 
 #include <cnc/internal/scheduler_i.h>
+#include <cnc/internal/tbbcompat.h>
 #include <tbb/concurrent_queue.h>
 #include <tbb/tbb_thread.h>
 #include <cnc/internal/tls.h>
-#include <cnc/internal/tbbcompat.h>
 #include <tbb/concurrent_priority_queue.h>
 
 namespace CnC {

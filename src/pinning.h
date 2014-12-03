@@ -33,6 +33,7 @@
 #include <pthread.h>
 #include <sched.h>
 #endif
+#include <cnc/internal/tbbcompat.h>
 #include <tbb/task_scheduler_observer.h>
 #include <tbb/atomic.h>
 

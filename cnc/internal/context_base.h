@@ -31,11 +31,11 @@
 #include <cnc/internal/cnc_api.h>
 #include <cnc/internal/dist/distributable_context.h>
 #include <cnc/internal/traceable.h>
+#include <cnc/internal/tbbcompat.h>
 #include <tbb/atomic.h>
 #include <tbb/concurrent_queue.h>
 #include <tbb/tbb_thread.h>
 #include <cnc/internal/cnc_stddef.h>
-#include <cnc/internal/tbbcompat.h>
 
 namespace CnC {
     namespace Internal {

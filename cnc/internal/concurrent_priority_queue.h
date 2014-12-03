@@ -32,9 +32,10 @@
 
 #include <iostream>
 
-#include "tbb/queuing_mutex.h"
-#include "tbb/atomic.h"
-#include "tbb/concurrent_vector.h"
+#include <cnc/internal/tbbcompat.h>
+#include <tbb/queuing_mutex.h>
+#include <tbb/atomic.h>
+#include <tbb/concurrent_vector.h>
 
 namespace CnC {
     namespace Internal {

@@ -33,6 +33,7 @@
 #include <cnc/internal/scheduler_i.h>
 #include <cnc/internal/context_base.h>
 #include <cnc/internal/no_tag_table.h>
+#include <cnc/internal/tbbcompat.h>
 #include <tbb/concurrent_vector.h>
 #include <sstream>
 

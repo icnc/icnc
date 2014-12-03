@@ -32,6 +32,7 @@
 #include <cnc/internal/schedulable.h>
 #include <cnc/internal/context_base.h>
 #include <cnc/internal/item_collection_i.h>
+#include <cnc/internal/tbbcompat.h>
 #include <tbb/concurrent_priority_queue.h>
 #include <tbb/atomic.h>
 #include <tbb/task_scheduler_init.h>

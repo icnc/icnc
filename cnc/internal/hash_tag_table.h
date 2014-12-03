@@ -28,6 +28,7 @@
 #ifndef _HASH_TAG_TABLE_INCLUDED_
 #define _HASH_TAG_TABLE_INCLUDED_
 
+#include <cnc/internal/tbbcompat.h>
 #include <tbb/concurrent_unordered_map.h>
 #include <cnc/internal/cnc_tag_hash_compare.h>
 

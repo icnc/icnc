@@ -41,6 +41,7 @@
 #include "simplest_scheduler.h"
 #include "tbb_concurrent_queue_scheduler.h"
 #include <cnc/internal/cnc_stddef.h>
+#include <cnc/internal/tbbcompat.h>
 #include "tbb/task_scheduler_init.h"
 
 namespace CnC {

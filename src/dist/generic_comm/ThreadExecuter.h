@@ -28,6 +28,7 @@
 #ifndef _CNC_COMM_THREADEXECUTER_H_
 #define _CNC_COMM_THREADEXECUTER_H_
 
+#include <cnc/internal/tbbcompat.h>
 #include <tbb/tbb_thread.h>
 #include <string>
 

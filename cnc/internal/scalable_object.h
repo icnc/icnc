@@ -30,6 +30,7 @@
 
 #include <new>
 
+#include <cnc/internal/tbbcompat.h>
 #include <tbb/scalable_allocator.h>
 #include <cnc/internal/cnc_api.h>
 

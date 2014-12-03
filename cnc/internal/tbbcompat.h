@@ -32,6 +32,10 @@
 #ifndef  _CnC_TBBCOMPAT_H_
 #define  _CnC_TBBCOMPAT_H_
 
+// #ifndef TBB_DEPRECATED_MUTEX_COPYING
+// # define TBB_DEPRECATED_MUTEX_COPYING 1
+// #endif
+
 #include <tbb/tbb_stddef.h>
 //#include <cnc/internal/cnc_stddef.h>
 

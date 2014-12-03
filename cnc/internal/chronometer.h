@@ -40,6 +40,7 @@ typedef unsigned __int64 uint64_t;
 # include <stdint.h>
 #endif // _WIN32||_WIN64
 
+#include <cnc/internal/tbbcompat.h>
 #include <tbb/atomic.h>
 #include <tbb/tick_count.h>
 #include <cnc/internal/schedulable.h>

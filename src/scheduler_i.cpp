@@ -39,6 +39,7 @@
 #include <cnc/internal/suspend_group.h>
 #include <cnc/internal/statistics.h>
 #include <cnc/serializer.h>
+#include <cnc/internal/tbbcompat.h>
 #include <tbb/task.h>
 #include <tbb/compat/thread>
 #include <tbb/enumerable_thread_specific.h>
@@ -362,7 +363,10 @@ namespace CnC {
         /// however, the real wait() can only be issued by the owner/creator (currently only the host)
         void scheduler_i::init_wait( bool send )
         {
-            CNC_ASSERT( subscribed() && distributor::active() && m_context.distributed() );
+            std::cerr << subscribed() << " " << distributor::active() << " " << m_context.distributed() << std::endl;
+            CNC_ASSERT( subscribed() );
+            CNC_ASSERT( distributor::active() );
+            CNC_ASSERT( m_context.distributed() );
 
             // remote procs do nothing here, caller of calling wait() must be recv_msg
             if( send ) {

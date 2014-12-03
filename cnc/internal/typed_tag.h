@@ -36,6 +36,7 @@ typedef unsigned __int32 uint32_t;
 
 #include <iostream>
 
+#include <cnc/internal/tbbcompat.h>
 #include <tbb/scalable_allocator.h>
 #include <cnc/internal/tag_base.h>
 #include <cnc/internal/format.h>

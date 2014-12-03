@@ -28,6 +28,7 @@
 #ifndef _CnC_VEC_ITEM_TABLE_H_
 #define _CnC_VEC_ITEM_TABLE_H_
 
+#include <cnc/internal/tbbcompat.h>
 #include <cnc/internal/item_properties.h>
 #include <tbb/spin_mutex.h>
 #include <tbb/atomic.h>
@@ -46,7 +47,7 @@ namespace CnC {
         /// other properties are safe because we always hold the lock/accessor when returning from put_item.
         /// \see CnC::Internal::hash_item_table
         template< typename Tag, typename ItemT, typename Coll >
-        class vec_item_table
+        class vec_item_table : CnC::Internal::no_copy
         {
         private:
             typedef ItemT item_type;
@@ -57,6 +58,7 @@ namespace CnC {
             {
                 data_t() : m_item(), m_prop( ), m_mutex() { m_item = NULL;}
                 data_t( ItemT * i, const item_properties & p ) : m_item(), m_prop( p ), m_mutex() { m_item = i;}
+                data_t( const data_t & dt ) : m_item( dt.m_item ), m_prop( dt.m_prop ), m_mutex() {} // mutices are not copyable
                 ~data_t() { erase(); }
                 void erase()
                 {
@@ -65,6 +67,8 @@ namespace CnC {
                 tbb::atomic< const ItemT * > m_item; /// atomic var allows lock-free access in certain cases
                 item_properties              m_prop; /// the getcount in here is an atomic var!
                 mutex_t                      m_mutex;
+            private:
+                void operator=( const data_t & dt ); // { m_item = dt.m_item; m_prop = dt.m_prop; } // mutices are not assignable
             };
 
             /// the internally used table type

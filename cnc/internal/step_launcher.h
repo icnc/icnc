@@ -33,6 +33,7 @@
 #include <cnc/internal/step_launcher_base.h>
 #include <cnc/default_tuner.h>
 #include <cnc/itac.h>
+#include <cnc/internal/tbbcompat.h>
 #include <tbb/atomic.h>
 #include <sstream>
 

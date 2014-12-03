@@ -37,6 +37,7 @@
 #include <map>
 #include <cstdlib> // atol
 
+#include <cnc/internal/tbbcompat.h>
 #include <tbb/spin_mutex.h>
 #include <map>
 #include <cstring> // strcmp

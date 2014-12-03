@@ -33,6 +33,7 @@
 #define  _CnC_STDDEF_H_
  
 #include <cnc/internal/cnc_api.h>
+#include <cnc/internal/tbbcompat.h>
 #include <tbb/queuing_mutex.h>
 #include <iostream>
 #include <sstream>
@@ -50,6 +51,20 @@ namespace CnC {
     typedef unsigned long long size_type;
 
     namespace Internal {
+
+
+        /// Base class for types that should not be copied or assigned.
+        class no_copy
+        {
+        private:
+            // Disallow assignment
+            void operator=( const no_copy& );
+            // Disallow copy construction
+            no_copy( const no_copy& );
+        public:
+            // Allow default construction
+            no_copy() {}
+        };
 
         /// Use this whenever printing something.
         /// A Speaker is a shallow wrapper that makes writing to a stream thread-safe. 

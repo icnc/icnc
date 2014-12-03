@@ -60,7 +60,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_CNC_TESTING_")
 if(CMAKE_SYSTEM_NAME STREQUAL Windows)
 SET (test_env "PATH=${CNCROOT}/bin/intel64\;${TBBROOT}/bin/intel64/${TBB_DLL_PFX}")#\;$ENV{PATH}")
 else()
-SET (test_env "LD_LIBRARY_PATH=${CNCROOT}/bin/intel64\:${TBBROOT}/bin/intel64/${TBB_DLL_PFX}\:$ENV{LD_LIBRARY_PATH}")
+SET (test_env "LD_LIBRARY_PATH=${CNCROOT}/bin/intel64:${TBBROOT}/bin/intel64/${TBB_DLL_PFX}:$ENV{LD_LIBRARY_PATH}")
 endif()
 
 # add a cnc test: run the test and compare output against reference

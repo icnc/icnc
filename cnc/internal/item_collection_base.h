@@ -28,6 +28,7 @@
 #ifndef _CnC_ITEM_COLLECTION_BASE_H_
 #define _CnC_ITEM_COLLECTION_BASE_H_
 
+#include <cnc/internal/tbbcompat.h>
 #include <tbb/task.h>
 #include <cnc/internal/item_properties.h>
 #include <cnc/internal/item_collection_i.h>
@@ -38,7 +39,6 @@
 #include <cnc/internal/scalable_vector.h>
 #include <cnc/internal/cnc_stddef.h>
 #include <cnc/internal/suspend_group.h>
-#include <cnc/internal/tbbcompat.h>
 #include <cnc/internal/service_task.h>
 #include <cnc/serializer.h>
 #include <cnc/default_tuner.h>
@@ -147,7 +147,7 @@ namespace CnC {
         /// The same is true for the erase requests.
         /// Sending decrement counts is of course not a bcast, just a message to the owner.
         template< class T, class item_type, class Tuner >
-        class item_collection_base : public item_collection_i
+        class item_collection_base : public item_collection_i, CnC::Internal::no_copy
         {
         private:
             enum { UNKNOWN_PID = 0x80000000 };

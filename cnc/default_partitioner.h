@@ -32,6 +32,7 @@
 #ifndef _DEFAULT_PARTITIONER_H_
 #define _DEFAULT_PARTITIONER_H_
 
+#include <cnc/internal/tbbcompat.h>
 #include <tbb/task_scheduler_init.h>
 #include <cstdlib>
 

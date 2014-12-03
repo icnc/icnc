@@ -28,6 +28,7 @@
 #ifndef  _CnC_STATSISTICS_H_
 #define  _CnC_STATSISTICS_H_
 
+#include <cnc/internal/tbbcompat.h>
 #include "tbb/atomic.h"
 #include <cnc/internal/cnc_api.h>
 #include <ostream>

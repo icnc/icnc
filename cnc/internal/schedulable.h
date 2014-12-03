@@ -29,6 +29,7 @@
 #define  _CnC_SCHEDULABLE_H_
 
 #include <string>
+#include <cnc/internal/tbbcompat.h>
 #include <tbb/atomic.h>
 #include <cnc/internal/cnc_stddef.h>
 

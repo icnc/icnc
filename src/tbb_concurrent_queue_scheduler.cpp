@@ -34,6 +34,7 @@
 #include <cnc/internal/schedulable.h>
 #include <cnc/internal/context_base.h>
 #include <cnc/internal/statistics.h>
+#include <cnc/internal/tbbcompat.h>
 #include <tbb/atomic.h>
 #include <tbb/tbb_thread.h>
 #include <tbb/queuing_rw_mutex.h>

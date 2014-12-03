@@ -35,6 +35,7 @@
 #include <sstream>
 #include <list>
 
+#include <cnc/internal/tbbcompat.h>
 #include <tbb/queuing_rw_mutex.h>
 
 #include <cnc/internal/schedulable.h>
@@ -52,7 +53,7 @@ namespace CnC {
         /// the base class for every step-instance.
         /// We have no tag here, so we handle things that are tag-independent, like timing
         /// and a global id.
-        class CNC_API step_instance_base : public schedulable, public scalable_object
+        class CNC_API step_instance_base : public schedulable, public scalable_object, CnC::Internal::no_copy
         {
         public:
             // Normal constructor

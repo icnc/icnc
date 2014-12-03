@@ -162,6 +162,7 @@ inline std::ostream & cnc_format( std::ostream & o, const std::string & t )
     }
 //}
 
+#include <cnc/internal/tbbcompat.h>
 #include <tbb/blocked_range.h>
 
     template< class T >

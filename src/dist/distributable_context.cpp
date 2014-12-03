@@ -35,8 +35,8 @@
 #include <cnc/internal/dist/distributable.h>
 #include <cnc/internal/cnc_stddef.h>
 #include <cnc/internal/statistics.h>
-#include <tbb/aligned_space.h>
 #include <cnc/internal/tbbcompat.h>
+#include <tbb/aligned_space.h>
 
 namespace CnC {
     namespace Internal {

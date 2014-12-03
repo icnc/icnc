@@ -30,6 +30,7 @@
 
 #include <cnc/internal/dist/communicator.h> // implements this interface
 #include <vector>
+#include <cnc/internal/tbbcompat.h>
 #include <tbb/concurrent_queue.h>
 
 namespace CnC

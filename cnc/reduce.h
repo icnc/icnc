@@ -33,6 +33,7 @@
 #define _CnC_REDUCE_H_
 
 #include <cnc/internal/cnc_stddef.h>
+#include <cnc/internal/tbbcompat.h>
 #include <tbb/concurrent_unordered_map.h>
 #include <tbb/combinable.h>
 #include <tbb/atomic.h>
@@ -165,7 +166,7 @@ namespace CnC
     // operations implemented with atomic variables which guide each reduction through its states
     // We implement our own bcast/gather tree individually for each owner (as its root)
     template< typename ITag, typename IType, typename ITuner, typename CType, typename CTuner, typename OTag, typename OTuner, typename ReduceOp, typename Select >
-    class reduction : public CnC::graph
+    class reduction : public CnC::graph//, CnC::Internal::no_copy
     {
     public:
         typedef CnC::item_collection< ITag, IType, ITuner > icoll_type;
@@ -200,6 +201,9 @@ namespace CnC
             tbb::atomic< int > status;
             red_tls();
             red_tls( const IType & v );
+            red_tls( const red_tls & rt );
+        private:
+            void operator=( const red_tls & rt );
         };
         typedef tbb::concurrent_unordered_map< OTag, red_tls > tls_map_type;
 
@@ -292,7 +296,23 @@ namespace CnC
         nValues = -1;
         owner = -1;
 #endif
-    } 
+    }
+
+    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+    template< typename ITag, typename IType, typename ITuner, typename CType, typename CTuner, typename OTag, typename OTuner, typename ReduceOp, typename Select >
+    reduction< ITag, IType, ITuner, CType, CTuner, OTag, OTuner, ReduceOp, Select >::red_tls::red_tls( const red_tls & rt )
+        : val( rt.val ),
+          nreduced( rt.nreduced ),
+          n( rt.n ),
+          mtx(),
+#ifdef _DIST_CNC_
+          nCounts( rt.nCounts ),
+          nValues( rt.nValues ),
+          owner( rt.owner ),
+#endif
+          status( rt.status )
+    {} 
 
     // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

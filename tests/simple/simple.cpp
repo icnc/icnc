@@ -12,13 +12,16 @@
 #include <tbb/parallel_for.h>
 #include <tbb/tbb_thread.h>
 #include <tbb/blocked_range.h>
+#include <cassert>
+
+// Let's include the CnC stuff after TBB
+// so we check that the CnC code doesn't rely on preprocesor settings that itself sets to configure TBB
 #ifdef _DIST_
 # include <cnc/dist_cnc.h>
 #else
 # include <cnc/cnc.h>
 #endif
 #include <cnc/debug.h>
-#include <cassert>
 
 #define SLEEP( _x ) tbb::this_tbb_thread::sleep( tbb::tick_count::interval_t( _x ) )
 

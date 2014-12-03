@@ -35,8 +35,8 @@
 
 #include <cnc/internal/chronometer.h>
 #include <cnc/internal/tls.h>
-#include <tbb/concurrent_queue.h>
 #include <cnc/internal/tbbcompat.h>
+#include <tbb/concurrent_queue.h>
 
 namespace CnC {
     namespace Internal {

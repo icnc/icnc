@@ -29,6 +29,7 @@
 #define _CnC_SCALABLE_VECTOR_H_
 
 #include <vector>
+#include <cnc/internal/tbbcompat.h>
 #include <tbb/scalable_allocator.h>
 #include <tbb/tbb_stddef.h>
 

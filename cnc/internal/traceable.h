@@ -29,6 +29,7 @@
 #define _CnC_TRACEABLE_H_
 
 #include <string>
+#include <cnc/internal/tbbcompat.h>
 #include <tbb/queuing_mutex.h>
 #include <cnc/internal/cnc_api.h>
 

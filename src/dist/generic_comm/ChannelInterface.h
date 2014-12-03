@@ -35,6 +35,7 @@ typedef MPI_Request request_type;
 #else
 typedef int request_type;
 #endif
+#include <cnc/internal/tbbcompat.h>
 #include <tbb/spin_mutex.h>
 #include <vector>
 #include <cnc/serializer.h>
@@ -47,7 +48,7 @@ namespace CnC
         /// A lower level interface used by GenericCommunicator to free new
         /// communicators from re-inventing insfrastructure for asynchronous communication
         /// \see CnC::Internal::GenericCommunicator
-        class ChannelInterface
+        class ChannelInterface : CnC::Internal::no_copy
         {
         public:
             typedef unsigned long long size_type;
@@ -120,6 +121,8 @@ namespace CnC
                 bool m_isActive;
                 /// Constructor doing initialization
                 CommData() : m_isActive( true ) {}
+                CommData( const CommData & cd ) : m_isActive( cd.m_isActive ), m_sendMutex() {} // mutices are not copyable
+                void operator=( const CommData & cd ) { m_isActive = cd.m_isActive; } // mutices are not assignable
             };
 
             /// General communication data

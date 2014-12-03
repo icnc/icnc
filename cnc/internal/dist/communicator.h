@@ -30,6 +30,7 @@
 
 #include <cnc/internal/cnc_api.h>
 #include <cnc/internal/traceable.h>
+#include <cnc/internal/tbbcompat.h>
 #include <tbb/scalable_allocator.h>
 //#include <cnc/serializer.h>
 #include <cnc/internal/scalable_vector.h>

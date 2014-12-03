@@ -31,12 +31,12 @@
 #include <cnc/internal/cnc_api.h>
 #include <cnc/internal/dist/distributable.h>
 #include <cnc/internal/scalable_vector.h>
+#include <cnc/internal/tbbcompat.h>
 #include <tbb/concurrent_queue.h>
 #include <tbb/tbb_thread.h>
 #include <tbb/atomic.h>
 #include <tbb/spin_mutex.h>
 #include <cnc/internal/tls.h>
-#include <cnc/internal/tbbcompat.h>
 
 namespace CnC {
     namespace Internal {
@@ -75,7 +75,7 @@ namespace CnC {
         /// be received in the meanwhile. Hence, on non root processes (those
         /// which created the context through the creator/factory) have a
         /// dedicated thread that does waiting.
-        class CNC_API scheduler_i : public distributable
+        class CNC_API scheduler_i : public distributable, CnC::Internal::no_copy
         {
         public:
 			enum { AFFINITY_HERE = -1 };

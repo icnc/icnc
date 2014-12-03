@@ -32,6 +32,7 @@
 #include <cnc/internal/cnc_api.h>
 #include <cnc/internal/dist/creatable.h>
 #include <cnc/internal/dist/distributable.h>
+#include <cnc/internal/tbbcompat.h>
 #include <tbb/spin_mutex.h>
 #include <cnc/internal/scalable_vector.h>
 #include <tbb/concurrent_queue.h>
@@ -53,7 +54,7 @@ namespace CnC {
         /// get the updated data to remote processes through implementing serialize().
         /// Note: once cloned, updates don't promoted!
         /// \see CnC::Internal::dist_init
-        class CNC_API distributable_context : public creatable, public distributable
+        class CNC_API distributable_context : public creatable, public distributable, CnC::Internal::no_copy
         {
         public:
             distributable_context( const std::string & name );

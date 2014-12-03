@@ -33,6 +33,7 @@
 #define _CnC_JOIN_H_
 
 #include <cnc/internal/cnc_stddef.h>
+#include <cnc/internal/tbbcompat.h>
 #include <tbb/queuing_mutex.h>
 #include <set>
 
@@ -88,7 +89,7 @@ namespace CnC
     // tags locally where they are put and just send a bcast message
     // when a new tag arrives. This can produce duplicate output tags.
     template< typename TagA, typename TunerA, typename TagB, typename TunerB, typename TagC, typename TunerC >
-    class join : public CnC::graph
+    class join : public CnC::graph, CnC::Internal::no_copy
     {
         typedef tbb::queuing_mutex mutex_type;
         typedef std::set< TagA > seta_type;
