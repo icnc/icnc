@@ -76,7 +76,7 @@ set( CNC_MPI_SOURCES "${CNC_SRC_ROOT}/src/dist/generic_comm/ChannelInterface.cpp
 ################################################################################
 # Misc vars
 
-set(CNC_LIBS cnc cnc_socket)
+set(CNC_LIBS cnc_socket)
 
 
 ################################################################################
@@ -189,9 +189,11 @@ endif(DOXYGEN_FOUND)
 if (NOT DEFINED LIB)
   set(LIB "lib/intel64")
 endif(NOT DEFINED LIB)
-install(TARGETS ${CNC_LIBS} LIBRARY DESTINATION ${LIB} RUNTIME DESTINATION bin/intel64)
 if(CMAKE_SYSTEM_NAME STREQUAL Windows)
-  install(TARGETS cnc ARCHIVE DESTINATION ${LIB})
+  install(TARGETS ${CNC_LIBS} RUNTIME DESTINATION bin/intel64)
+  install(TARGETS cnc LIBRARY DESTINATION ${LIB} RUNTIME DESTINATION bin/intel64 ARCHIVE DESTINATION ${LIB})
+else()
+  install(TARGETS cnc ${CNC_LIBS} LIBRARY DESTINATION ${LIB} RUNTIME DESTINATION bin/intel64)
 endif()
 install(DIRECTORY ${CNC_SRC_ROOT}/cnc DESTINATION include FILES_MATCHING PATTERN "*.h")
 install(DIRECTORY ${CNC_SRC_ROOT}/src/dist/socket_comm/test/ DESTINATION misc/distributed/socket FILE_PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_WRITE GROUP_READ FILES_MATCHING REGEX ".*(sh|bat)$")

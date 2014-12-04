@@ -34,7 +34,7 @@ else()
 endif()
 set(NEEDED_LIBS optimized ${CNC_LIB} debug ${CNC_LIB_DBG})
 set(NEEDED_LIBS ${NEEDED_LIBS} ${CNC_ADD_LIBS}) 
-message(${NEEDED_LIBS})
+
 if(DIST_CNC)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_DIST_")
 endif(DIST_CNC)
