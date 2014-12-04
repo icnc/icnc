@@ -18,11 +18,8 @@ option(CNC_PRODUCT_BUILD   "Build an \"official\" binary release" FALSE)
 # Project paths
 
 set(CNC_SRC_ROOT ${CMAKE_SOURCE_DIR})
-set(EXECUTABLE_OUTPUT_PATH "bin")
-if(LIBRARY_OUTPUT_PATH)
-else()
-  set(LIBRARY_OUTPUT_PATH "lib/intel64")
-endif(LIBRARY_OUTPUT_PATH)
+set(EXECUTABLE_OUTPUT_PATH "bin/${ARCH}")
+set(LIBRARY_OUTPUT_PATH "lib/${ARCH}")
 
 ################################################################################
 # source files for different libs
@@ -187,13 +184,13 @@ endif(DOXYGEN_FOUND)
 # Install
 
 if (NOT DEFINED LIB)
-  set(LIB "lib/intel64")
+  set(LIB "lib/${ARCH}")
 endif(NOT DEFINED LIB)
 if(CMAKE_SYSTEM_NAME STREQUAL Windows)
-  install(TARGETS ${CNC_LIBS} RUNTIME DESTINATION bin/intel64)
-  install(TARGETS cnc LIBRARY DESTINATION ${LIB} RUNTIME DESTINATION bin/intel64 ARCHIVE DESTINATION ${LIB})
+  install(TARGETS ${CNC_LIBS} RUNTIME DESTINATION bin/${ARCH})
+  install(TARGETS cnc LIBRARY DESTINATION ${LIB} RUNTIME DESTINATION bin/${ARCH} ARCHIVE DESTINATION ${LIB})
 else()
-  install(TARGETS cnc ${CNC_LIBS} LIBRARY DESTINATION ${LIB} RUNTIME DESTINATION bin/intel64)
+  install(TARGETS cnc ${CNC_LIBS} LIBRARY DESTINATION ${LIB} RUNTIME DESTINATION bin/${ARCH})
 endif()
 install(DIRECTORY ${CNC_SRC_ROOT}/cnc DESTINATION include FILES_MATCHING PATTERN "*.h")
 install(DIRECTORY ${CNC_SRC_ROOT}/src/dist/socket_comm/test/ DESTINATION misc/distributed/socket FILE_PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_WRITE GROUP_READ FILES_MATCHING REGEX ".*(sh|bat)$")

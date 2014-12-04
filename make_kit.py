@@ -1,6 +1,7 @@
 import sys, os, imp, platform, shutil, subprocess, argparse
 
 argParser = argparse.ArgumentParser(prog="make_kit.py", description="Build CnC runtime and API kit")
+argParser.add_argument('-a', '--arch',      default='intel64',                       help="Processor architecture(s) to build for")
 argParser.add_argument('-r', '--release',   default="current", help="release number")
 argParser.add_argument('-t', '--travis',    default=False, action='store_true',      help="Run in Travis mode (implies --nodebug --itac='' --mpi=/usr)")
 argParser.add_argument('-p', '--product',   default=False, action='store_true',      help="Build a release/product package (implies -i --mic and not -d -t --nodebug)")
@@ -30,8 +31,7 @@ mpiroot = args.mpi
 itacroot = args.itac
 vs = args.msvs
 phi = args.phi
-
-ARCHS = ['intel64']  # dropped support for ia32
+ARCHS = args.arch.split()
     
 if travis == True:
     release = "current"
@@ -47,13 +47,14 @@ if product == True:
     devbuild = False
     travis = False
     phi = True
+    ARCHS = ['intel64']
     release = '1.0.100' # hm, need to update this automatically?
     if pf == 'Windows':
         tbbroot = "C:\\tbb42_20140122oss" #C:\\tbb41_20121003oss"
         vs = '12 11'
     else:
         tbbroot = "/nfs/hd/disks/tpi0/vssad3/proj/CnC/intel/tbb42_20140122oss"
-        #  ARCHS += ['mic']
+        ARCHS += ['mic']
     if itacroot == 'NONE' or mpiroot == 'NONE':
         print('Need itacroot and mpiroot for product build')
         sys.exit(44)
@@ -135,11 +136,15 @@ cmake_args_core += ['..']
 # build all libs and install headers and examples etc into reldir
 for vs in VSS:
   for arch in ARCHS:
+    if arch == 'mic':
+	cxx = 'icpc'
+    else:
+        cxx = 'g++'
     for rel in BUILDS:
 
       print('Building ' + vs + ' ' + arch + ' ' + rel)
       
-      builddir = 'kit.' + rel
+      builddir = 'kit.' + rel + '.' + arch
       if not vs == '':
           builddir += '.' + vs
       if keepbuild == False:
@@ -147,7 +152,7 @@ for vs in VSS:
       if os.path.isdir(builddir) == False:
           os.mkdir(builddir)
 
-      cmake_args = ['-DCMAKE_BUILD_TYPE=' + rel] + cmake_args_core
+      cmake_args = ['-DCMAKE_CXX_COMPILER=' + cxx, '-DCMAKE_BUILD_TYPE=' + rel, '-DARCH=' + arch] + cmake_args_core
       
       os.chdir(builddir)
       if pf == 'Windows':
@@ -235,7 +240,7 @@ if installer == True:
         exe_cmd(['cp', '-r', os.path.join(tbbroot, 'include'), tbbver + '/'])
         exe_cmd(['cp', '-r', os.path.join(tbbroot, 'lib/intel64'), os.path.join(tbbver, 'lib/')])
         if phi:
-          exe_cmd(['cp', '-r', os.path.join(tbbroot, '/lib/mic'), os.path.join(tbbver, 'lib/')])
+          exe_cmd(['cp', '-r', os.path.join(tbbroot, 'lib/mic'), os.path.join(tbbver, 'lib/')])
         exe_cmd('cp ' + os.path.join(tbbroot, 'bin/tbbvars.*h') + ' ' + os.path.join(tbbver, 'bin/'))
         exe_cmd(['cp', os.path.join(tbbroot, 'README'), os.path.join(tbbroot, 'CHANGES'), os.path.join(tbbroot, 'COPYING'), tbbver + '/'])
         exe_cmd(['tar', 'cfj', tbbver + '_cnc_files.tbz', tbbver + '/'])

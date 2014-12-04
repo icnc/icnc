@@ -6,7 +6,7 @@
 set(TBBROOT $ENV{TBBROOT}     CACHE PATH "path to TBB")
 set(MPIROOT $ENV{I_MPI_ROOT}  CACHE PATH "path to MPI")
 set(ITACROOT $ENV{VT_ROOT}    CACHE PATH "path to ITAC")
-
+option(ARCH "architecture: intel64, ia32 or mic" intel64)
 
 ################################################################################
 # Misc vars and platform specifics
@@ -29,6 +29,9 @@ else()
   set(CNC_DLL_SFX "")
 endif(CMAKE_SYSTEM_NAME STREQUAL Windows)
 
+if(${ARCH} STREQUAL mic)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mmic")
+endif()
 
 ################################################################################
 # generic compiler options
@@ -36,7 +39,7 @@ endif(CMAKE_SYSTEM_NAME STREQUAL Windows)
 include_directories("${TBBROOT}/include")
 
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -D_DEBUG -DCNC_USE_ASSERT=1 -DTBB_USE_ASSERT=1 -DTBB_USE_THREADING_TOOLS")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
 
 if(CMAKE_SYSTEM_NAME STREQUAL Windows)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /TP /Od /wd4996 /wd4275 /wd4251 /EHsc /MDd /Gy-")
@@ -52,7 +55,7 @@ set(CMAKE_DEBUG_POSTFIX "_debug")
 ################################################################################
 # TBB deps
 
-set(CMAKE_PREFIX_PATH "${TBBROOT}/lib/intel64/gcc4.4" "${TBBROOT}/lib/intel64/cc4.1.0_libc2.4_kernel2.6.16.21" "${TBBROOT}/lib/intel64/${TBB_DLL_PFX}")
+set(CMAKE_PREFIX_PATH "${TBBROOT}/lib/${ARCH}/gcc4.4" "${TBBROOT}/lib/${ARCH}/cc4.1.0_libc2.4_kernel2.6.16.21" "${TBBROOT}/lib/${ARCH}/${TBB_DLL_PFX}")
 find_library(TBB_LIB tbb)
 find_library(TBBMALLOC_LIB tbbmalloc)
 set(CNC_ADD_LIBS ${CNC_ADD_LIBS} optimized ${TBB_LIB} optimized ${TBBMALLOC_LIB})
@@ -68,7 +71,7 @@ endif()
 if(CMAKE_SYSTEM_NAME STREQUAL Windows)
   set(MPIARCH em64t)
 else()
-  set(MPIARCH intel64)
+  set(MPIARCH ${ARCH})
 endif(CMAKE_SYSTEM_NAME STREQUAL Windows)
 set(CMAKE_PREFIX_PATH "${MPIROOT}/${MPIARCH}/include" "${MPIROOT}/include" "${MPIROOT}/include/mpich2")
 find_path(MPI_INC_DIR mpi.h)
@@ -103,7 +106,7 @@ function(find_itac)
     set(CMAKE_PREFIX_PATH ${ITACROOT}/lib/impi64)
   else()
     string(REPLACE "-l" "" VT_ADD_LIBS__ ${VT_ADD_LIBS_ENV})
-    set(CMAKE_PREFIX_PATH "${ITACROOT}/intel64/slib")
+    set(CMAKE_PREFIX_PATH "${ITACROOT}/${ARCH}/slib")
   endif(CMAKE_SYSTEM_NAME STREQUAL Windows)
   string(REPLACE " " ";" VT_ADD_LIBS_ ${VT_ADD_LIBS__})
   find_library(ITACMPI_LIB VT)
@@ -123,6 +126,6 @@ find_itac()
 function(set_itac_link_flags tgt)
   target_link_libraries(${tgt} ${ITAC_LIBS})
   if(CMAKE_SYSTEM_NAME STREQUAL Windows)
-    set_target_properties(${tgt} PROPERTIES LINK_FLAGS "/LIBPATH:\"${ITACROOT}/../../../Composer XE/compiler/lib/intel64\"")
+    set_target_properties(${tgt} PROPERTIES LINK_FLAGS "/LIBPATH:\"${ITACROOT}/../../../Composer XE/compiler/lib/${ARCH}\"")
   endif(CMAKE_SYSTEM_NAME STREQUAL Windows)
 endfunction()
