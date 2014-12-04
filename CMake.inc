@@ -51,7 +51,7 @@ set(CMAKE_DEBUG_POSTFIX "_debug")
 
 ################################################################################
 # TBB deps
-message("${TBBROOT}/lib/intel64/${TBB_DLL_PFX}")
+
 set(CMAKE_PREFIX_PATH "${TBBROOT}/lib/intel64/gcc4.4" "${TBBROOT}/lib/intel64/cc4.1.0_libc2.4_kernel2.6.16.21" "${TBBROOT}/lib/intel64/${TBB_DLL_PFX}")
 find_library(TBB_LIB tbb)
 find_library(TBBMALLOC_LIB tbbmalloc)
@@ -83,9 +83,7 @@ endif()
 foreach(mpilib mpi_cxx mca_common_sm open-rte)
   find_library(MPI_LIB_${mpilib} NO_DEFAULT_PATH HINTS ${MPI_INC_DIR}/../lib ${MPIROOT}/lib NAMES ${mpilib})
   if(MPI_LIB_${mpilib})
-    message("aeaea " ${MPI_LIB_${mpilib}})
     set(MPI_LIB ${MPI_LIB} optimized ${MPI_LIB_${mpilib}} debug ${MPI_LIB_${mpilib}})
-    message("aeaea " ${MPI_LIB})
   endif(MPI_LIB_${mpilib})
   unset(MPI_LIB_${mpilib} CACHE)
 endforeach(mpilib)

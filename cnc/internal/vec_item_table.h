@@ -60,6 +60,7 @@ namespace CnC {
                 data_t( ItemT * i, const item_properties & p ) : m_item(), m_prop( p ), m_mutex() { m_item = i;}
                 data_t( const data_t & dt ) : m_item( dt.m_item ), m_prop( dt.m_prop ), m_mutex() {} // mutices are not copyable
                 ~data_t() { erase(); }
+                void operator=( const data_t & dt ) { m_item = dt.m_item; m_prop = dt.m_prop; } // mutices are not assignable
                 void erase()
                 {
                     m_item = NULL;
@@ -68,7 +69,6 @@ namespace CnC {
                 item_properties              m_prop; /// the getcount in here is an atomic var!
                 mutex_t                      m_mutex;
             private:
-                void operator=( const data_t & dt ); // { m_item = dt.m_item; m_prop = dt.m_prop; } // mutices are not assignable
             };
 
             /// the internally used table type
