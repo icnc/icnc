@@ -6,5 +6,5 @@ launcher={ 'shared' : 'env ' + sys.argv[4],
            'SHMEM'  : 'env ' + sys.argv[4] + ' DIST_CNC=SHMEM'
 }
 cmd=launcher[sys.argv[2]] + " " + sys.argv[1] + " " + " ".join(sys.argv[5:]) + " > " + sys.argv[3]
-print "run.py: " + cmd + "(" + sys.argv[4] + ")"
+#print "run.py: " + cmd + "(" + sys.argv[4] + ")"
 os.system(cmd)

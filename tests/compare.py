@@ -16,8 +16,8 @@ def CompareBinFile(f1, f2):
     sm = difflib.SequenceMatcher(None,lines1,lines2)
     if sm.ratio() < 1:
         print "Error: binary files do not match."
-        return False
-    return True
+        return True
+    return False
 
 def CompareFile(fp, fc):
     fileCompare = open( fc )

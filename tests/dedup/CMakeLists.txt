@@ -22,7 +22,7 @@ add_compare_test(
   dedup
   dedup
   "-c -i ${CMAKE_CURRENT_LIST_DIR}/ipf_man_vol3.pdf -o ${CMAKE_CURRENT_BINARY_DIR}/ipf_man_vol3.out"
-  ""
+  "${CMAKE_CURRENT_BINARY_DIR}/dedup.out"
   "${CMAKE_CURRENT_BINARY_DIR}/ipf_man_vol3.out"
   "ipf_man_vol3.compress"
   "bin"
