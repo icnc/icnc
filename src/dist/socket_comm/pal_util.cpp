@@ -186,7 +186,7 @@ int PAL_StartProcessInBackground( const char exeName[], const char* argv[] )
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-std::string PAL_GetProgname()
+std::string PAL_GetProgname( std::string * args )
 {
     const int bufLen = 2048;
     char buf[bufLen]; // file name of target file must fit in here
@@ -194,6 +194,8 @@ std::string PAL_GetProgname()
 #ifdef _WIN32
 
     // ==> Windows:
+    CNC_ASSERT( args == NULL || "getting program arguments not implemented for Windows" == NULL );
+
     int len = GetModuleFileNameA( 0, buf, bufLen ); // FIXME: Unicode?
     if ( len > 0 && len < bufLen ) {
         buf[len] = '\0';
@@ -219,6 +221,13 @@ std::string PAL_GetProgname()
             }
             buf[nChars] = '\0';
             exeName = buf;
+            if( args ) {
+                int s = -1;
+                while( buf[++s] );
+                ++s;
+                for( int i = s; i < nChars; ++i ) if( buf[i] == 0 ) buf[i] = ' ';
+                *args = &buf[s];
+            }
         }
         fclose( cmdlineFile );
     }

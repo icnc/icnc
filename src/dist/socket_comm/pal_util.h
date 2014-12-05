@@ -78,8 +78,9 @@ namespace Internal
 
     /**
      * Determines the name of the currently running executable.
+     * optionally stores command-line arguments in (optional) string parameter
      */
-    std::string PAL_GetProgname();
+    std::string PAL_GetProgname( std::string * = NULL );
 
     /**
      * Determines the name of the current working directory.

@@ -71,7 +71,7 @@ namespace CnC
          * determines the number of clients from its output.
          * If an error occurs, -1 is returned.
          */
-        static int determine_nclients_from_script( const char scriptName[] )
+        static int determine_nclients_from_script( const char scriptName[], bool & startClientsInOrder )
         {
 #ifdef _WIN32
 #           define popen  _popen
@@ -86,8 +86,12 @@ namespace CnC
                 char buf[bufLen];
                 char* res = fgets( buf, bufLen, myScript );
                 if ( res ) {
-                    CNC_ASSERT( isdigit( res[0] ) );
+                    CNC_ASSERT( isdigit( res[0] ) || res[0] == '+' );
                     nClients = atoi( res );
+                    // Check whether the clients should be started one after the other.
+                    // This may be useful if several clients are to be started under a debugge
+                    // enabled if number of clients is prepended with +
+                    if( res[0] == '+' ) startClientsInOrder = false;
                 }
                 pclose( myScript );
             }
@@ -106,6 +110,7 @@ namespace CnC
              // How many clients are to be expected?
              // Default is 1, may be changed via environment variable.
             int nClientsExpected = 1;
+            bool startClientsInOrder = true;
             const char* cncSocketHost = Internal::Settings::get_string( "CNC_SOCKET_HOST", NULL );
             const char* cncSocketHostname = Internal::Settings::get_string( "CNC_SOCKET_HOSTNAME", NULL );
             UINT32 cncSocketPort = Settings::get_int( "CNC_SOCKET_PORT", 0 );
@@ -121,7 +126,7 @@ namespace CnC
                      // - tells the number of expected clients (via option -n)
                      // - starts the clients
                     m_clientStartupScript = cncSocketHost;
-                    nClientsExpected = determine_nclients_from_script( cncSocketHost );
+                    nClientsExpected = determine_nclients_from_script( cncSocketHost, startClientsInOrder );
                     if ( nClientsExpected < 0 ) {
                         std::ostringstream oss;
                         oss << "*** given script does not specify the number of clients via -n option.\n"
@@ -163,7 +168,7 @@ namespace CnC
 
             // Start clients and setup socket connections to them.
             // The function aborts if a client could not be started.
-            start_client_and_setup_connection( 1, nClientsExpected );
+            start_client_and_setup_connection( 1, nClientsExpected, startClientsInOrder );
 
              // Initial socket is no longer needed
             SocketChannelInterface::closeSocket( m_initialSocket );
@@ -187,9 +192,11 @@ namespace CnC
         void SocketHostInitializer::setClientStarterEnvironment()
         {
             // name of host executable:
-            std::string hostExeName = PAL_GetProgname();
+            std::string hostArgs;
+            std::string hostExeName = PAL_GetProgname( &hostArgs );
             if ( ! hostExeName.empty() ) {
-                PAL_SetEnvVar( "CNC_SOCKET_HOST_EXECUTABLE", hostExeName.c_str() );
+                PAL_SetEnvVar( "CNC_HOST_EXECUTABLE", hostExeName.c_str() );
+                PAL_SetEnvVar( "CNC_HOST_ARGS", hostArgs.c_str() );
             }
         }
 
@@ -197,19 +204,16 @@ namespace CnC
 
         void SocketHostInitializer::start_client_and_setup_connection(
                              int firstClient, // 1,2,...
-                             int nClients )
+                             int nClients,
+                             bool startClientsInOrder )
         {
-             // Check whether the clients should be started one after the other.
-             // This may be useful if several clients are to be started under a debugger.
-            int cncStartClientsInOrder = Settings::get_int( "CNC_SOCKET_START_CLIENTS_IN_ORDER", -1 );
-            if ( cncStartClientsInOrder > 0 ) {
+            if ( startClientsInOrder ) {
                 int nRemainingClients = nClients;
                 for ( int client = firstClient; client < firstClient + nClients; ++client ) {
                     start_client_and_setup_connection_impl( client, 1, nRemainingClients );
                     --nRemainingClients;
                 }
-            }
-            else {
+            } else {
                  // The clients are started all at once.
                  // Thereafter, the connections to each are set up.
                 start_client_and_setup_connection_impl( firstClient, nClients, nClients );

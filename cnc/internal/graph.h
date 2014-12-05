@@ -41,7 +41,8 @@ namespace CnC
         : distributable( name ),
           m_context( ctxt )
     {
-            m_context.subscribe( this );
+        Internal::traceable::set_name( name );
+        m_context.subscribe( this );
     }
 
     // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

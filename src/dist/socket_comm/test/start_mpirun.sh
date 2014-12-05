@@ -26,12 +26,12 @@
 #  the possibility of such damage.                                              **
 # ********************************************************************************
 #
-# start.sh, this is the script file to perform startup activities
+# start_batch.sh, this is the script file to perform startup activities
 # when running with distCnC over sockets. General information can be
 # found in the runtime_api documentation: CnC for distributed memory.
 
-# This script starts each process individually. For an example of how to start 
-# processes in batch mode see start_batch.sh.
+# This script starts all client processes in one go using mpirun.
+# For an example of how to start processes individually see start.sh.
 
 # You can use the following environment variables to configure the behavior of this script:
 #   CNC_CLIENT_EXE  sets the client executable to start
@@ -50,7 +50,8 @@ mode=$1
 
  # Special mode: query number of clients
 if [ "$mode" = "-n" ]; then
-    echo $CNC_NUM_CLIENTS
+    # we prepend '+' to indicate that we're going to start all clients at once
+    echo "+$CNC_NUM_CLIENTS"
     exit 0
 fi
 
@@ -67,16 +68,9 @@ __my_wdir=`pwd`
 
 # determine hostname
 if [ -r "$CNC_HOST_FILE" ]; then
-    echo "Using hostfile $CNC_HOST_FILE..." 1>&2
-    __thishost=`hostname`
-    __nhosts=`grep -v -e '^$' $CNC_HOST_FILE | grep -v $__thishost | wc -l`
-    __hostId=$(($mode % $__nhosts))
-    if [ "$__hostId" = "0" ]; then
-	__hostId=$__nhosts
-    fi
-    __my_host=`cat $CNC_HOST_FILE | grep -v -e '^$' | grep -v $__thishost | head -n $__hostId | tail -n 1`
+    __my_hostarg="-f $CNC_HOST_FILE"
 else
-    __my_host=localhost
+    __my_hostarg=""
 fi
 
 if [ -z "$CNC_CLIENT_EXE" ]; then
@@ -86,7 +80,7 @@ if [ -z "$CNC_CLIENT_ARGS" ]; then
     CNC_CLIENT_ARGS=$__my_args
 fi
 
-_CLIENT_CMD1_="ssh $__my_host 'cd $__my_wdir && $__my_xterm env CNC_NUM_THREADS=$CNC_NUM_THREADS CNC_SOCKET_CLIENT=$contactString DIST_CNC=SOCKETS LD_LIBRARY_PATH=$LD_LIBRARY_PATH $__my_debugger $CNC_CLIENT_EXE $CNC_CLIENT_ARGS'"
+_CLIENT_CMD1_="mpirun -genv DIST_CNC=SOCKETS -genv CNC_SOCKET_CLIENT=$contactString $__my_hostarg -n $CNC_NUM_CLIENTS $__my_xterm $__my_debugger $CNC_CLIENT_EXE $CNC_CLIENT_ARGS"
 
 # start client process 
 eval exec $_CLIENT_CMD1_

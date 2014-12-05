@@ -67,7 +67,7 @@ namespace CnC
             void setClientStarterEnvironment();
 
             /// Start client processes and setup socket connections:
-            void start_client_and_setup_connection( int firstClient, int nClients );
+            void start_client_and_setup_connection( int firstClient, int nClients, bool startClientsInOrder );
             void start_client_and_setup_connection_impl( int firstClient, int nClients, 
                                                          int nRemainingClients );
 

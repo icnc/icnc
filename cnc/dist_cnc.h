@@ -158,18 +158,40 @@ started "manually" as follows: set DIST_CNC=SOCKETS and
 "CNC_SOCKET_CLIENT" to the given contact string and launch the
 same executable on the desired machine.
 
+You can also manually provide the hostname and port number by
+setting the enironment variables CNC_SOCKET_HOST and 
+CNC_SOCKET_HOSTNAME.
+
 If "CNC_SOCKET_HOST" is not a number it is interpreted as a
 name of a script. CnC executes the script twice: First with "-n"
 it expects the script to return the number of clients it will
 start. The second invocation is expected to launch the client
-processes.
+processes. If the returned number of clients if prepended with
+'+' CnC will assume that the script starts all client processes
+in one one go when called the second time (without -n). If it's
+a plain positive integer CnC will run the script once for each
+client process individually.
 
-There is a sample script "misc/start.sh" which you can
-use. Usually all you need is setting the number of clients and
-replacing "localhost" with the names of the machines you want the
-application(-clients) to be started on. It requires password-less
-login via ssh. It also gives some details of the start-up
-procedure. For windows, the script "start.bat" does the same,
+CnC also sets 2 environment variables that the script can read:
+- CNC_HOST_EXECUTABLE : the name of the executable that's run
+                        by the host process
+- CNC_HOST_ARGS : the command-line arguments passed to the host
+                  process
+
+Three example scripts are provided:
+- misc/distributed/socket/start.sh : starts each client individually
+- misc/distributed/socket/start_batch.sh : starts all client in one go
+- misc/distributed/socket/start_mpirun.sh: uses mpirun to start all clients together
+
+All scripts require password-less ssh login (or whatever MPI is
+configured to use if you use the mpirun script). Set the env var
+CNC_NUM_CLIENTS to the number of clients you want to start.  To
+facilitate the use of different machines they also read the env var
+CNC_HOST_FILE. If found, they will read the hostnames to use from the
+given file (expect one hostname per line). If CNC_HOST_FILE is not
+specified all clients get started on localhost.
+
+For windows, the script "start.bat" does the same as start.sh,
 except that it will start the clients on the same machine without
 ssh or alike. Adjust the script to use your preferred remote login
 mechanism.

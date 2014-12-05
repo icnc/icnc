@@ -31,7 +31,7 @@ mpiroot = args.mpi
 itacroot = args.itac
 vs = args.msvs
 phi = args.phi
-ARCHS = args.arch.split()
+PARCHS = args.arch.split()
     
 if travis == True:
     release = "current"
@@ -47,14 +47,14 @@ if product == True:
     devbuild = False
     travis = False
     phi = True
-    ARCHS = ['intel64']
+    PARCHS = ['intel64']
     release = '1.0.100' # hm, need to update this automatically?
     if pf == 'Windows':
         tbbroot = "C:\\tbb42_20140122oss" #C:\\tbb41_20121003oss"
         vs = '12 11'
     else:
         tbbroot = "/nfs/hd/disks/tpi0/vssad3/proj/CnC/intel/tbb42_20140122oss"
-        ARCHS += ['mic']
+        PARCHS += ['mic']
     if itacroot == 'NONE' or mpiroot == 'NONE':
         print('Need itacroot and mpiroot for product build')
         sys.exit(44)
@@ -135,11 +135,9 @@ cmake_args_core += ['..']
 ##############################################################
 # build all libs and install headers and examples etc into reldir
 for vs in VSS:
-  for arch in ARCHS:
+  for arch in PARCHS:
     if arch == 'mic':
-	cxx = 'icpc'
-    else:
-        cxx = 'g++'
+	cmake_args = ['-DCMAKE_CXX_COMPILER=icpc', '-DCMAKE_C_COMPILER=icc'] + cmake_args_core
     for rel in BUILDS:
 
       print('Building ' + vs + ' ' + arch + ' ' + rel)
@@ -152,7 +150,7 @@ for vs in VSS:
       if os.path.isdir(builddir) == False:
           os.mkdir(builddir)
 
-      cmake_args = ['-DCMAKE_CXX_COMPILER=' + cxx, '-DCMAKE_BUILD_TYPE=' + rel, '-DARCH=' + arch] + cmake_args_core
+      cmake_args = ['-DCMAKE_BUILD_TYPE=' + rel, '-DPARCH=' + arch] + cmake_args_core
       
       os.chdir(builddir)
       if pf == 'Windows':
