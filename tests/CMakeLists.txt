@@ -51,6 +51,7 @@ else()
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
 endif(CMAKE_SYSTEM_NAME STREQUAL Windows)
 
+find_package(PythonInterp 2 REQUIRED)
 
 ################################################################################
 # now some functions and settings to make adding tests easy
@@ -89,6 +90,7 @@ function( add_compare_test
     -Dcompare_file=${cmpfile}
     -Dcompare_mode=${cmpmode}
     -Ddist_mode=${distmode}
+    -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE}
     -P ${CMAKE_SOURCE_DIR}/run_compare.cmake
     ) 
 endfunction()
