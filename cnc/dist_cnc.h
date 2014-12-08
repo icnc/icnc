@@ -180,7 +180,7 @@ CnC also sets 2 environment variables that the script can read:
 
 Three example scripts are provided:
 - misc/distributed/socket/start.sh : starts each client individually
-- misc/distributed/socket/start_batch.sh : starts all client in one go
+- misc/distributed/socket/start_batch.sh : starts all clients in one go
 - misc/distributed/socket/start_mpirun.sh: uses mpirun to start all clients together
 
 All scripts require password-less ssh login (or whatever MPI is
@@ -213,7 +213,7 @@ CNC_MPI_SPAWN=n.  If host and client applications need to be
 different, set CNC_MPI_EXECUTABLE to the client-program
 name. Here's an example:
 \code
-env DIST_CNC=MPI env CNC_MPI_SPAWN=3 env CNC_MPI_EXECUTABLE=cnc_client cnc_host
+env DIST_CNC=MPI CNC_MPI_SPAWN=3 CNC_MPI_EXECUTABLE=cnc_client cnc_host
 \endcode
 It starts your host executable "cnc_host" and then spawns 3 additional 
 processes which all execute the client executable "cnc_client".
