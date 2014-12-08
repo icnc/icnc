@@ -137,7 +137,9 @@ cmake_args_core += ['..']
 for vs in VSS:
   for arch in PARCHS:
     if arch == 'mic':
-	cmake_args = ['-DCMAKE_CXX_COMPILER=icpc', '-DCMAKE_C_COMPILER=icc'] + cmake_args_core
+	cmake_args = ['-DCMAKE_CXX_COMPILER=icpc', '-DCMAKE_C_COMPILER=icc']
+    else:
+	cmake_args = []
     for rel in BUILDS:
 
       print('Building ' + vs + ' ' + arch + ' ' + rel)
@@ -150,7 +152,7 @@ for vs in VSS:
       if os.path.isdir(builddir) == False:
           os.mkdir(builddir)
 
-      cmake_args = ['-DCMAKE_BUILD_TYPE=' + rel, '-DPARCH=' + arch] + cmake_args_core
+      cmake_args += ['-DCMAKE_BUILD_TYPE=' + rel, '-DPARCH=' + arch] + cmake_args_core
       
       os.chdir(builddir)
       if pf == 'Windows':

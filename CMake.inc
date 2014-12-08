@@ -6,12 +6,7 @@
 set(TBBROOT $ENV{TBBROOT}     CACHE PATH "path to TBB")
 set(MPIROOT $ENV{I_MPI_ROOT}  CACHE PATH "path to MPI")
 set(ITACROOT $ENV{VT_ROOT}    CACHE PATH "path to ITAC")
-set(PARCH $ENV{PARCH}         CACHE STRING "processor architecture")
-if("$ENV{PARCH}")
-  set(PARCH $ENV{PARCH}       CACHE STRING "processor architecture")
-else()
-    set(PARCH "intel64" CACHE STRING "processor architecture" FORCE)
-endif()
+option(PARCH  "processor architecture" "intel64") 
 
 ################################################################################
 # Misc vars and platform specifics
