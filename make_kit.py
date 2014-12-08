@@ -171,12 +171,12 @@ if installer == True:
     docdir = os.path.join(reldir, 'doc')
     pagesdir = 'icnc.github.io'
     os.chdir('..')
-    # if os.path.isdir(pagesdir) == False:
-    #     exe_cmd(("git clone --depth=1 https://github.com/icnc/"+pagesdir).split())
-    # else:
-    #     os.chdir(pagesdir)
-    #     exe_cmd(['git', 'pull'])
-    #     os.chdir('..')
+    if os.path.isdir(pagesdir) == False:
+        exe_cmd(("git clone --depth=1 https://github.com/icnc/"+pagesdir).split())
+    else:
+        os.chdir(pagesdir)
+        exe_cmd(['git', 'pull'])
+        os.chdir('..')
     os.chdir(pwd)
     orgdir = os.path.join('..', pagesdir)
     shutil.copy(os.path.join(orgdir, 'LICENSE'), reldir)
