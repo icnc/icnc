@@ -44,10 +44,10 @@ separate_arguments( test_args )
 #endif()
 #set(output_test ${CMAKE_CURRENT_BINARY_DIR}/${output_test})
 
-message("python ${CMAKE_CURRENT_LIST_DIR}/run.py ${CMAKE_CURRENT_BINARY_DIR}/${test_cmd} ${dist_mode} ${output_test} ${test_env} ${test_args}")
+message("${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_LIST_DIR}/run.py ${CMAKE_CURRENT_BINARY_DIR}/${test_cmd} ${dist_mode} ${output_test} ${test_env} ${test_args}")
 
 execute_process(
-   COMMAND python ${CMAKE_CURRENT_LIST_DIR}/run.py ${CMAKE_CURRENT_BINARY_DIR}/${test_cmd} ${dist_mode} ${output_test} "${test_env}" ${test_args} RESULT_VARIABLE hadd_error
+   COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_LIST_DIR}/run.py ${CMAKE_CURRENT_BINARY_DIR}/${test_cmd} ${dist_mode} ${output_test} "${test_env}" ${test_args} RESULT_VARIABLE hadd_error
 )
 
 if(had_error)
@@ -55,10 +55,10 @@ if(had_error)
   #FATAL_ERROR?
 endif(had_error)
 
-message("python ${CMAKE_CURRENT_LIST_DIR}/compare.py ${output_blessed} ${compare_file} ${compare_mode}")
+message("${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_LIST_DIR}/compare.py ${output_blessed} ${compare_file} ${compare_mode}")
 
 execute_process(
-   COMMAND python ${CMAKE_CURRENT_LIST_DIR}/compare.py ${output_blessed} ${compare_file} ${compare_mode} RESULT_VARIABLE differs
+   COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_LIST_DIR}/compare.py ${output_blessed} ${compare_file} ${compare_mode} RESULT_VARIABLE differs
 )
 
 if(differs)

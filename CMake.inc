@@ -3,10 +3,18 @@
 ################################################################################
 # Path options: TBB, MPI, ITAC
 
-set(TBBROOT $ENV{TBBROOT}     CACHE PATH "path to TBB")
-set(MPIROOT $ENV{I_MPI_ROOT}  CACHE PATH "path to MPI")
-set(ITACROOT $ENV{VT_ROOT}    CACHE PATH "path to ITAC")
-option(PARCH  "processor architecture" "intel64") 
+if(NOT TBBROOT)
+    set(TBBROOT $ENV{TBBROOT} CACHE PATH "path to TBB")
+endif()
+if(NOT MPIROOT)
+    set(MPIROOT $ENV{I_MPI_ROOT} CACHE PATH "path to MPI")
+endif()
+if(NOT ITACROOT)
+    set(ITACROOT $ENV{VT_ROOT} CACHE PATH "path to ITAC")
+endif()
+if(NOT PARCH)
+    set(PARCH "intel64")
+endif()
 
 ################################################################################
 # Misc vars and platform specifics
