@@ -230,3 +230,9 @@ foreach(smpl reduce_rows
     install(FILES samples/Makefile DESTINATION samples/eight_patterns/${smpl}/)
 endforeach(smpl)
 install(FILES samples/CMakeLists.txt samples/Makefile samples/allsamples.sln DESTINATION samples/)
+
+option(ENABLE_TESTING "Enable in-source testing" FALSE)
+if(ENABLE_TESTING)
+    enable_testing()
+    add_subdirectory(tests)
+endif(ENABLE_TESTING)

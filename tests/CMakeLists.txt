@@ -25,13 +25,20 @@ include( "../CMake.inc" )
 
 include_directories("${CNCROOT}/include")
 set(CMAKE_PREFIX_PATH "${CNCROOT}/lib/intel64")
-find_library(CNC_LIB NAMES "cnc" "cnc${CNC_DLL_SFX}")
-
-if (CMAKE_BUILD_TYPE STREQUAL "Debug")
-  find_library(CNC_LIB_DBG NAMES "cnc${CNC_DBG_SFX}" "cnc${CNC_DBG_SFX}${CNC_DLL_SFX}")
+if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
+  find_library(CNC_LIB NAMES "cnc" "cnc${CNC_DLL_SFX}")
+  if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+    find_library(CNC_LIB_DBG NAMES "cnc${CNC_DBG_SFX}" "cnc${CNC_DBG_SFX}${CNC_DLL_SFX}")
+  else()
+    set(CNC_LIB_DBG ${CNC_LIB})
+  endif()
+  set(RUN_COMPARE "${CMAKE_SOURCE_DIR}/run_compare.cmake")
 else()
-  set(CNC_LIB_DBG ${CNC_LIB})
+  set(CNC_LIB cnc)
+  set(CNC_LIB_DBG cnc)
+  set(RUN_COMPARE "${CMAKE_CURRENT_SOURCE_DIR}/run_compare.cmake")
 endif()
+
 set(NEEDED_LIBS optimized ${CNC_LIB} debug ${CNC_LIB_DBG})
 set(NEEDED_LIBS ${NEEDED_LIBS} ${CNC_ADD_LIBS}) 
 
@@ -89,7 +96,7 @@ function( add_compare_test
     -Dcompare_file=${cmpfile}
     -Dcompare_mode=${cmpmode}
     -Ddist_mode=${distmode}
-    -P ${CMAKE_SOURCE_DIR}/run_compare.cmake
+    -P ${RUN_COMPARE}
     ) 
 endfunction()
 
