@@ -150,6 +150,10 @@ endif(BUILD_LIBS_FOR_ITAC)
 ################################################################################
 # add a target to generate API documentation with Doxygen
 
+if (NOT DEFINED DATA)
+  set(DATA "share/icnc")
+endif(NOT DEFINED DATA)
+
 find_package(Doxygen)
 if(DOXYGEN_FOUND)
   configure_file(${CNC_SRC_ROOT}/Doxyfile.in ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile @ONLY)
@@ -176,7 +180,7 @@ if(DOXYGEN_FOUND)
     COMMENT "Generating HTML documentation"
     )
   ADD_CUSTOM_TARGET(doc ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/doc/html/index.html)
-  INSTALL(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/doc/html/ DESTINATION doc/api)
+  INSTALL(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/doc/html/ DESTINATION ${DATA}/doc/api)
 endif(DOXYGEN_FOUND)
 
 
@@ -189,11 +193,13 @@ endif(NOT DEFINED LIB)
 if(CMAKE_SYSTEM_NAME STREQUAL Windows)
   install(TARGETS ${CNC_LIBS} RUNTIME DESTINATION bin/${PARCH})
   install(TARGETS cnc LIBRARY DESTINATION ${LIB} RUNTIME DESTINATION bin/${PARCH} ARCHIVE DESTINATION ${LIB})
+  install(DIRECTORY ${CNC_SRC_ROOT}/src/dist/socket_comm/test/ DESTINATION ${DATA}/misc/distributed/socket FILE_PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_WRITE GROUP_READ FILES_MATCHING REGEX ".*(sh|bat)$")
 else()
   install(TARGETS cnc ${CNC_LIBS} LIBRARY DESTINATION ${LIB} RUNTIME DESTINATION bin/${PARCH})
+  install(DIRECTORY ${CNC_SRC_ROOT}/src/dist/socket_comm/test/ DESTINATION ${DATA}/misc/distributed/socket FILE_PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_WRITE GROUP_READ FILES_MATCHING REGEX ".*sh$")
+  install(DIRECTORY ${CNC_SRC_ROOT}/src/dist/socket_comm/test/ DESTINATION ${DATA}/misc/distributed/socket FILE_PERMISSIONS OWNER_WRITE OWNER_READ GROUP_WRITE GROUP_READ FILES_MATCHING REGEX ".*bat$")
 endif()
 install(DIRECTORY ${CNC_SRC_ROOT}/cnc DESTINATION include FILES_MATCHING PATTERN "*.h")
-install(DIRECTORY ${CNC_SRC_ROOT}/src/dist/socket_comm/test/ DESTINATION misc/distributed/socket FILE_PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_WRITE GROUP_READ FILES_MATCHING REGEX ".*(sh|bat)$")
 foreach(smpl fib
              primes
 	     mandelbrot
@@ -216,8 +222,8 @@ foreach(smpl fib
 	     search_in_sorted_tree
 	     raytracer
 	     jacobi2d)
-    install(DIRECTORY ${CNC_SRC_ROOT}/samples/${smpl} DESTINATION samples/)
-    install(FILES samples/Makefile DESTINATION samples/${smpl}/)
+    install(DIRECTORY ${CNC_SRC_ROOT}/samples/${smpl} DESTINATION ${DATA}/samples/)
+    install(FILES samples/Makefile DESTINATION ${DATA}/samples/${smpl}/)
 endforeach(smpl)
 # example codes from eight patterns document
 foreach(smpl reduce_rows
@@ -226,10 +232,10 @@ foreach(smpl reduce_rows
 	     divide_conquer
 	     red_rows_until_pred
 	     gen_new_iter_space)
-    install(DIRECTORY ${CNC_SRC_ROOT}/samples/${smpl} DESTINATION samples/eight_patterns/)
-    install(FILES samples/Makefile DESTINATION samples/eight_patterns/${smpl}/)
+    install(DIRECTORY ${CNC_SRC_ROOT}/samples/${smpl} DESTINATION ${DATA}/samples/eight_patterns/)
+    install(FILES samples/Makefile DESTINATION ${DATA}/samples/eight_patterns/${smpl}/)
 endforeach(smpl)
-install(FILES samples/CMakeLists.txt samples/Makefile samples/allsamples.sln DESTINATION samples/)
+install(FILES samples/CMakeLists.txt samples/Makefile samples/allsamples.sln DESTINATION ${DATA}/samples/)
 
 option(ENABLE_TESTING "Enable in-source testing" FALSE)
 if(ENABLE_TESTING)
