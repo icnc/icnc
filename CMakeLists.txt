@@ -98,8 +98,13 @@ set(CMAKE_RELEASE_POSTFIX "${CNC_DLL_SFX}")
 ################################################################################
 # base library
 
+#increase if ABI changes
+set(SOVERSION 0)
+
 add_library(cnc SHARED ${CNC_BASE_SOURCES} )
+set_target_properties(cnc PROPERTIES SOVERSION ${SOVERSION})
 add_library(cnc_socket SHARED ${CNC_SOCKET_SOURCES} )
+set_target_properties(cnc_socket PROPERTIES SOVERSION ${SOVERSION})
 
 # only the base library exports symbols!!
 set_target_properties(cnc PROPERTIES COMPILE_FLAGS "-DCNC_DLL_EXPORTS")
