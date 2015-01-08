@@ -164,26 +164,30 @@ for vs in VSS:
       os.chdir('..')
 
 ##############################################################
-# now sanitize files and create installer
-if installer == True:
-    tbbver = os.path.basename( tbbroot )
-    pwd = os.getcwd()
-    docdir = os.path.join(reldir, 'doc')
-    pagesdir = 'icnc.github.io'
+# now copy license and docu
+tbbver = os.path.basename( tbbroot )
+pwd = os.getcwd()
+docdir = os.path.join(reldir, 'doc')
+pagesdir = 'icnc.github.io'
+os.chdir('..')
+if os.path.isdir(pagesdir) == False:
+    exe_cmd(("git clone --depth=1 https://github.com/icnc/"+pagesdir).split())
+else:
+    os.chdir(pagesdir)
+    exe_cmd(['git', 'pull'])
     os.chdir('..')
-    if os.path.isdir(pagesdir) == False:
-        exe_cmd(("git clone --depth=1 https://github.com/icnc/"+pagesdir).split())
-    else:
-        os.chdir(pagesdir)
-        exe_cmd(['git', 'pull'])
-        os.chdir('..')
-    os.chdir(pwd)
-    orgdir = os.path.join('..', pagesdir)
-    shutil.copy(os.path.join(orgdir, 'LICENSE'), reldir)
-    shutil.copy(os.path.join(orgdir, 'README.md'), os.path.join(reldir, 'README')) 
-    for doc in ['FAQ.html', 'Release_Notes.html', 'Getting_Started.html', 'CnC_eight_patterns.pdf']:
-        shutil.copy(os.path.join(orgdir, doc), docdir)
+os.chdir(pwd)
+orgdir = os.path.join('..', pagesdir)
+shutil.copy(os.path.join(orgdir, 'LICENSE'), reldir)
+shutil.copy(os.path.join(orgdir, 'README.md'), os.path.join(reldir, 'README')) 
+if os.path.isdir(docdir) == False:
+    os.mkdir(docdir)
+for doc in ['FAQ.html', 'Release_Notes.html', 'Getting_Started.html', 'CnC_eight_patterns.pdf']:
+    shutil.copy(os.path.join(orgdir, doc), docdir)
 
+##############################################################
+# finally sanitize files and create installer
+if installer == True:
     if pf == 'Windows':
         for withTBB in [True, False]:
             aip = 'cnc_installer_' + arch + '.aip'
