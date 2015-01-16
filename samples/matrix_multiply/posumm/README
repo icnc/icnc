@@ -1,0 +1,140 @@
+
+        POSUMM,  Portable OSU Matrix-Multiply, a CnC implementation
+        -----------------------------------------------------------
+
+Contact : Martin Kong <kongm@cse.ohio-state.edu>
+Revision: January 2015 
+
+
+
+
+The current distribution implements the Cannon [1][2] and Johnson [3][4]
+distributed memory algorithms for matrix multiply.
+
+
+Implementation notes:
+=====================
+
+Both algorithms are implemented as Dist-CnC ready programs, with at least one
+tuner for each (item and step) collection.  
+The main program parameters for both implementations are the matrix size, the
+block size and the number of processes used. We assume a block distribution of
+ranks.  
+These parameters are used for tuning the collections.  The only requirement is
+that the block size divides the matrix size.
+In terms of general structure, Cannon's implementation uses 3 item collections
+and one step collection whereas Johnson's uses 4 item collections and two 
+step collections (one for the 3D parallel block multiplication and one for the
+reduction phase).
+Both implementations use an optimized kernel (kernel.cpp), tiled for L3 and L1
+cache.  The kernel is unrolled by 4 along the k dimension of the L1 tile and
+has vector pragmas. Thus, the tiling size used on this dimension should be a
+multiple of 4.  With the provided parameters both implementations give above
+200 GFLOPS/sec using 4 nodes (2 sockets per node, 4 cores per sockets), on an
+Intel Xeon E3560 (2.4 GHz, 32 KB L1, 256 KB L2, 12 MB L3).
+
+
+
+Compiling:
+==========
+
+The current implementation has been tested on a Slurm managed cluster
+with two compiler/run-time configurations:
+1) Intel's ICPC + Intel MPI
+2) g++ + mpich-3.1.2-slurm
+
+Source the Intel MPI and CNC scripts to set the proper environement variables.
+Here we assume that $MPIDIR points at the root of Intel's MPI dir and $CNCDIR
+points at Intel's CNC root directory.
+  source ${MPIDIR}/impi_latest/bin64/mpivars.sh
+  source ${CNCDIR}/bin/cncvars.sh
+
+
+Optionaly, load your favorite compiler module. For instance, with the command:
+  module load intel/latest
+
+Define the CXX environment variable to the compiler to use (icpc or g++):
+  export CXX=icpc
+
+If CXX is not defined, the g++ compiler will be used.
+
+Finally, run the make command:
+  make
+to build the shared memory and the distributed memory targets. The latter will
+have the prefix "dist".
+
+
+
+
+Running the programs:
+=====================
+
+These CnC implementations have only been tested in a small cluster managed by
+Slurm.  For convenience, a compile script that invokes the Makefile is included
+in each directory.  In addition, this distribution includes a script that
+performs all the previously explained tasks, some of which are specific to
+Slurm:
+- build-and-run.sh
+
+The arguments to the first script are:
+./build-and-run.sh <nodes> <ranks> <ranks-per-socket> <matrix-size> <block-size> <check:0/1> <compile:0/1>
+
+In any other cluster environment the typical mpi commands should work and be
+used instead.
+
+The following command launches the distributed memory version with a matrix
+size of 8000, a block size of 800, to be executed on 16 ranks/processes using
+the cnc features and invoking a correctness check: 
+mpirun -np 4 ./dist_<prog>.exe -n 8000 -b 800 -p 16 -cnc -check
+
+For reference, the experiments conducted when implementing this distribution
+assume a block distribution of ranks and a contiguous allocation of nodes.
+
+Please refer to the build-and-run.sh script to see the suggested set of MPI and CNC
+environment variables.
+
+
+
+References:
+===========
+
+@inproceedings{lee1997ics,
+  title={Generalized Cannon's algorithm for parallel matrix multiplication},
+  author={Lee, Hyuk-Jae and Robertson, James P and Fortes, Jos{\'e} AB},
+  booktitle={Proceedings of the 11th international conference on Supercomputing},
+  pages={44--51},
+  year={1997},
+  organization={ACM}
+}
+
+
+@incollection{solomonik2011europar,
+  title={Communication-optimal parallel 2.5 D matrix multiplication and LU factorization algorithms},
+  author={Solomonik, Edgar and Demmel, James},
+  booktitle={Euro-Par 2011 Parallel Processing},
+  pages={90--109},
+  year={2011},
+  publisher={Springer}
+}
+
+@article{dekel1981parallel,
+  title={Parallel matrix and graph algorithms},
+  author={Dekel, Eliezer and Nassimi, David and Sahni, Sartaj},
+  journal={SIAM Journal on computing},
+  volume={10},
+  number={4},
+  pages={657--675},
+  year={1981},
+  publisher={SIAM}
+}
+
+@article{agarwal1995ibm,
+  title={A three-dimensional approach to parallel matrix multiplication},
+  author={Agarwal, Ramesh C and Balle, Susanne M and Gustavson, Fred G and Joshi, M and Palkar, P},
+  journal={IBM Journal of Research and Development}, 
+  volume={39},
+  number={5},
+  pages={575--582},
+  year={1995},
+  publisher={IBM}
+}

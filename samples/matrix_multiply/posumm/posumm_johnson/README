@@ -1,0 +1,195 @@
+
+       POSUMM-Johnson: Johnson's CnC Matrix-Multiply Implementation 
+       ------------------------------------------------------------
+
+
+
+General notes:
+==============
+
+The current implementation has been tested on a Slurm managed cluster
+with two compiler/run-time configurations:
+1) Intel's ICPC + Intel MPI
+2) g++ + mpich-3.1.2-slurm
+
+
+
+Setup:
+======
+
+The script compile-and-run.sh provides a setup for compiling and executing
+in a shared-memory and distributed environment.
+
+Before proceeding, set the basic environment variables that point at the roots
+of the Intel MPI and Intel CNC libraries. These variables are referred from the
+script as $MPIDIR and $CNCDIR. Once they are set, the corresponding scripts for
+sourcing and configuring these libraries are invoked as follows:
+  source ${MPIDIR}/impi_latest/bin64/mpivars.sh
+  source ${CNCDIR}/bin/cncvars.sh
+
+
+
+Compiling:
+==========
+
+First, and optionaly, load your favorite compiler module. For instance, with
+the command:
+  module load intel/latest
+
+To build the matmul implementation (after setting the appropiate environment
+variables), simply do:
+  make
+
+The Makefile included in the distribution has been tested with Intel's ICPC
+compiler and with GCC 4.8.
+
+To use Intel's ICPC define the CXX variable to icpc, as follows:
+  export CXX=icpc
+otherwise the g++ compiler will be used.
+
+The current distribution allows to change the program behavior via the
+following two macros: TIMESTEP and UF. These can be defined directly in the
+source code or in the Makefile to time the execution of the step kernels and to
+unroll the K-dimension of the step kernel. Supported values for UF are 1-4.
+
+In order to use the step timing functions, set the enviroment variable
+$TIMESTEP to -DTIMESTEP. This variable is used in the Makefile to enable this
+conditional behavior:
+  export TIMESTEPS=-DTIMESTEP
+then proceed to run the make command.
+
+Note: the build-and-run script assumes that the Intel compiler module will 
+be loaded and is named: intel/latest. Please modify the script as needed.
+
+
+
+General Execution Parameters:
+=============================
+
+The current CnC MatMul implementation supports 4 execution modes:
+- CnC distributed memory (-cnc with dist_mm_<algorithm>_cnc.exe)
+- CnC shared memory (-cnc with mm_<algorithm>_cnc.exe)
+- OpenMP (flag -omp)
+- Sequential (flag -seq)
+
+Both CnC variants require the use of the following flags:
+-m <nodes>: number of machines ($M)
+-p <processes>: number of ranks/processes/tasks ($P)
+-n <matrix_size>: matrix size
+-b <block_size>: block size
+
+The two reference implementations require the -n flag only
+
+In addition, the CnC variants can use the -check option to validate the results.
+
+
+
+CnC Distributed Memory Execution:
+=================================
+
+To execute in a distributed memory environment, first set the DIST_CNC environment
+variable to MPI, as follows:
+
+  export DIST_CNC=MPI
+
+
+If the Slurm job scheduler is used (for distributed memory execution), the
+script compile-and-run will set the adequate options for launching the job, and
+can be invoked as follows:
+  ./compile-and-run.sh <nodes> <tasks> <tasks-per-socket> <matrix_size> <block_size> <check:0/1> <compile:1/0>
+
+However, if/when using some other job scheduler the following command can be
+used:
+  mpirun -np 4 ./dist_mm_johnson_cnc.exe  -b $B -m $M -n $N -p $P -cnc -check
+
+Please see Intel's MPI reference for further information regarding job placement and
+task mapping:
+  https://software.intel.com/sites/products/documentation/hpc/ics/impi/41/lin/Reference_Manual/
+
+For further MPI tuning and debugging the following environment variables and values can be used:
+  ## Intel MPI options
+  export I_MPI_DEBUG=5
+  ## The PMI library should be here, this might not be needed in all cases.
+  export I_MPI_PMI_LIBRARY=/usr/lib64/libpmi.so
+  ## To avoid some correctness issues with DAPL
+  export I_MPI_DAPL_TRANSLATION_CACHE=0
+  ## Verbose debugging with IMPI
+  export I_MPI_STATS=5
+  ## To guarantee that even "big" messages are sent out immediately
+  export I_MPI_EAGER_THRESHOLD=20000kb
+  ## To use RDMA
+  export I_MPI_SHM_BYPASS=1
+  ## To guarantee that even "big" messages are sent out immediately
+  export I_MPI_INTRANODE_EAGER_THRESHOLD=20000kb
+
+Finally, in some cases might be needed to add the /usr/lib and/or the /usr/lib64 library
+to the LD_LIBRARY_PATH:
+  export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/usr/lib:/usr/lib64
+
+Note: In some Slurm environments, the processes being launched in foreign nodes
+might not receive all the command line arguments passed. So, in order to
+execute, the implementation requires the working directory to contain a
+configuration file "conf.txt" that lists the following 4 parameters:
+  nodes matrix_size block_size tasks
+This configuration file is automatically created by the main thread of the program
+before starting the computing phase.
+
+
+
+CnC - Shared Memory Execution:
+==============================
+
+If shared memory is to be used define DIST_CNC as:
+  export DIST_CNC=SHMEM
+
+then the distributed memory executable can be used to execute in shared memory mode:
+  ./dist_mm_johnson_cnc.exe  -m $M -p $P -b $B -n $N -cnc -check
+
+In addition, the environment variable CNC_NUM_THREADS can be defined to control
+the number of threads used during the shared memory execution:
+  export CNC_NUM_THREADS=8
+
+If this variable is not defined then the number of threads used will be equal
+to the number of cores.
+
+Alternatively, to execute the shared memory CnC variant issue the following command:
+  ./mm_johnson_cnc.exe  -b $B -n $N -cnc -check
+
+In this case, the DIST_CNC variable will be ignored and need not be defined at all.
+
+
+
+Other shared memory execution modes:
+====================================
+
+Two additional shared memory MatMul implementations are provided for reference:
+the sequential version and an OpenMP parallelized version. These can be
+executed in the same run as a CnC variant or in a different run. The only
+mandatory argument for these variants is the matrix size. 
+
+For trying these versions issue any of the following commands:
+  ./mm_johnson_cnc.exe  -n $N -omp 
+  ./mm_johnson_cnc.exe  -n $N -seq
+  ./mm_johnson_cnc.exe  -n $N -seq -omp
+  ./mm_johnson_cnc.exe  -b $B -n $N -m $M -p $P  -cnc -check -omp -seq
+
+
+
+Kernel Step:
+============
+
+Each implemented algorithm consists of one or more step collections and each
+step is associated to a kernel step, the core computation performed by the
+step.  These kernels are implemented in kernel.cpp with the following
+optimizations:
+- 2-level tiling (for 12 MB of L3 and 32 KB of L1 caches)
+- Permutation of j and k L1-tile dimensions
+- 4-way unrolling of dimension k 
+- Decoration with vector SIMD pragmas
+The kernel code is invoked from the execute method of each step with default
+values that performed well on a dual-socket Westmere (4 cores per socket). The
+tile sizes should be tuned according to the cache sizes of the target machine.
+In addition, the floating point precision used (single precision = 4 bytes or
+double precision = 8 bytes) and the number of cores should be considered when
+choosing the tile sizes for L3 so that every core gets an equal share of the
+L3.

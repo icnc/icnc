@@ -1,8 +1,8 @@
 # see parent $CNCROOT/samples/CMakeLists.txt
 
-set(myname jacobi2d_heureka)
+set(myname mm_cannon)
 
-add_executable(${myname} jacobi2D.cpp jacobi2D_cnc.cpp)
+add_executable(${myname} ${myname}_cnc.cpp kernel.cpp ../common/utils.cpp)
 target_link_libraries(${myname} ${NEEDED_LIBS})
 
 if(USE_ITAC)
