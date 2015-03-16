@@ -310,7 +310,7 @@ int main( int argc, char* argv[] )
 {
     std::cout << "Hello!\n";
 
-    ray_tracer cnc_ray_tracer = ray_tracer();
+    ray_tracer cnc_ray_tracer;
  //    CnC::debug::trace(cnc_ray_tracer.frame);
  //   CnC::debug::trace(cnc_ray_tracer.frame_fragment);
  //   CnC::debug::trace(cnc_ray_tracer.execution_time);
