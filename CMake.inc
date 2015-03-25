@@ -67,7 +67,7 @@ set(CMAKE_PREFIX_PATH "${TBBROOT}/lib/${PARCH}/gcc4.4" "${TBBROOT}/lib/${PARCH}/
 find_library(TBB_LIB tbb)
 find_library(TBBMALLOC_LIB tbbmalloc)
 set(CNC_ADD_LIBS ${CNC_ADD_LIBS} optimized ${TBB_LIB} optimized ${TBBMALLOC_LIB})
-if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+if (CMAKE_BUILD_TYPE STREQUAL "Debug" OR ";${CMAKE_CONFIGURATION_TYPES};" MATCHES ";Debug;")
   find_library(TBB_LIB_DBG tbb_debug)
   find_library(TBBMALLOC_LIB_DBG tbbmalloc_debug)
   set(CNC_ADD_LIBS ${CNC_ADD_LIBS} debug ${TBB_LIB_DBG} debug ${TBBMALLOC_LIB_DBG})
