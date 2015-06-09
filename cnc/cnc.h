@@ -550,7 +550,7 @@ namespace CnC {
        This yields more maintanable code and future versions of CnC may require this convention. 
     **/
     template< class Derived >
-    class /*CNC_API*/ context : private Internal::context_base
+    class /*CNC_API*/ context : public Internal::context_base
     {
     public:
         /// default constructor
