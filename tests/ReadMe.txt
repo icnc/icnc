@@ -32,6 +32,9 @@ Python
 Compilers, TBB
   Using TBB version 4.3 (or later) doesn't work with g++ versions
   older than 4.8 (4.8 works fine).
+Some tests/smaples have extra dependencies
+  dedup: zlib and openssl (libopenssl-dev)
+  db/mysql_simple: mysqlcppconn (libmysqlcppconn-dev)
 
 
 Running the tests
