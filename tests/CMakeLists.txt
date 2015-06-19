@@ -10,7 +10,7 @@ enable_testing()
 option(RUN_DIST "run tests on distributed memory" TRUE)
 set(CNCROOT $ENV{CNCROOT}     CACHE PATH "path to CnC")
 
-## TODO option(USE_ITAC "Compile/link with ITAC" FALSE)
+option(USE_ITAC "Compile/link with ITAC" FALSE)
 
 
 ################################################################################

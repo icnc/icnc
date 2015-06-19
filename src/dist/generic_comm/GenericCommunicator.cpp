@@ -619,6 +619,14 @@ namespace CnC
 
         //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+        GenericCommunicator::~GenericCommunicator()
+        {
+            // Cleanup ITAC stuff:
+            VT_FINALIZE();
+        }
+
+        //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
         int GenericCommunicator::myPid()
         {
             return m_channel->localId() + m_globalIdShift;
@@ -730,9 +738,6 @@ namespace CnC
             m_recvThread = NULL;
             delete m_sendThread;
             m_sendThread = NULL;
-
-            // Cleanup ITAC stuff:
-            VT_FINALIZE();
         }
 
         //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

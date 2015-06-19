@@ -82,7 +82,7 @@ namespace CnC
         {
         public:
             GenericCommunicator( msg_callback & distr, bool de = false );
-            virtual ~GenericCommunicator() {}
+            virtual ~GenericCommunicator();
 
             /// The flag argument is an option argument.
             /// It is not used here, it is specific to the actual communicator.
