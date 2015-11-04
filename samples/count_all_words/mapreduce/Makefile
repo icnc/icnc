@@ -13,7 +13,7 @@ endif
 
 APPNAME = mapreduce
 
-CXX = icpc
+#CXX = icpc
 TARGETS   := $(APPNAME) dist$(APPNAME)
 DEST_OBJS := $(TARGETS:=.o)
 CNCFILE   := $(APPNAME).cnc
