@@ -226,7 +226,8 @@ foreach(smpl fib
 	     heat_equation
 	     search_in_sorted_tree
 	     raytracer
-	     jacobi2d)
+	     jacobi2d
+	     auto_graph_pipeline)
     install(DIRECTORY ${CNC_SRC_ROOT}/samples/${smpl} DESTINATION ${DATA}/samples/)
     install(FILES samples/Makefile DESTINATION ${DATA}/samples/${smpl}/)
 endforeach(smpl)
