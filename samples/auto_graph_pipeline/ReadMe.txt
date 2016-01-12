@@ -57,10 +57,9 @@ In the Makefile, modify the following variables as needed:
 Then 
     make [USE_MKL=1] [all,auto_graph_pipeline,distauto_graph_pipeline,clean]
 
-Usage
+Usage (distributed memory)
 ===================
-mpd& 
-env DIST_CNC=MPI mpiexec -n <#processes> ./hello_world
+env DIST_CNC=MPI mpirun -n <#processes> ./distauto_graph_pipeline
 
 Known issues
 ===================
