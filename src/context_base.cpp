@@ -106,26 +106,28 @@ namespace CnC {
 
 			if( _sched ) {
                 Speaker oss;
+				const bool _can_steal = m_numThreads > 1;
 				if( ! strcmp( _sched, "FIFO_STEAL" ) ) {
 					if( _first ) oss << "Using FIFO_STEAL scheduler" << _prior << _pin;
 					if( _use_prior ) {
 						_ts = new tbb_concurrent_queue_prioritized_scheduler( *this, m_numThreads, true, _htstride );
 					} else  {
-						_ts = new tbb_concurrent_queue_scheduler( *this, m_numThreads, true, _htstride );
+						_ts = new tbb_concurrent_queue_scheduler( *this, m_numThreads, _can_steal, _htstride );
 					}
 				} else if( ! strcmp( _sched, "FIFO_SINGLE" ) ) {
 					if( _first ) oss << "Using FIFO_SINGLE scheduler" << _prior << _pin;
 					if( _use_prior ) {
+						// FIXME: Priorities make FIFO_SINGLE identical to FIFO_STEAL...
 						_ts = new tbb_concurrent_queue_prioritized_scheduler( *this, m_numThreads, true, _htstride );
 					} else  {
-						_ts = new tbb_concurrent_queue_scheduler( *this, m_numThreads, true, _htstride );
+						_ts = new tbb_concurrent_queue_scheduler( *this, m_numThreads, false, _htstride );
 					}
 				} else if( ! strcmp( _sched, "FIFO_AFFINITY" ) ) {
 					if( _first ) oss << "Using FIFO_AFFINITY scheduler" << _prior << _pin;
 					if( _use_prior ) {
 						_ts = new tbb_concurrent_queue_prioritized_affinity_scheduler( *this, m_numThreads, true, _htstride );
 					} else {
-						_ts = new tbb_concurrent_queue_affinity_scheduler( *this, m_numThreads, true, _htstride );
+						_ts = new tbb_concurrent_queue_affinity_scheduler( *this, m_numThreads, _can_steal, _htstride );
 					}
 				} 
 			}

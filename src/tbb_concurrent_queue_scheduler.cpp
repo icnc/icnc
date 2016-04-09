@@ -185,7 +185,7 @@ namespace CnC {
         template< typename Q, bool use_affinity >
         tbb_concurrent_queue_scheduler_base< Q, use_affinity >::tbb_concurrent_queue_scheduler_base( context_base & c, int numThreads, bool steal, int hts )
             : scheduler_i( c ),
-              m_steal( numThreads > 1 ? steal : false ),
+              m_steal( steal ),
               m_htstride( hts )
         {
             tbb::queuing_rw_mutex::scoped_lock _lock( _mtx );
