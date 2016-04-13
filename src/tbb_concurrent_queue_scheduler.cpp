@@ -168,9 +168,11 @@ namespace CnC {
                 // nothing found on root thread, must not block, so let's return
                 si = NULL;
             } else {
-                if( block ) m_gQueue->pop( si );
-                else {
-                    si = NULL;
+                si = NULL;
+                if( m_queues->try_pop( si ) ) return;
+                if( block ) {
+                    m_gQueue->pop( si );
+                } else {
                     m_gQueue->try_pop( si );
                 }
             }
@@ -231,7 +233,7 @@ namespace CnC {
 					m_queues[_aff].push( stepInstance );
 				}
             } else {
-                m_gQueue->push( stepInstance );
+                m_queues->push( stepInstance );
             }
                 // wake another thread if at least one thread is waiting
             if( m_gQueue->size() < 0 ) m_gQueue->push( wakeUpStep );
