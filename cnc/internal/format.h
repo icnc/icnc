@@ -131,46 +131,56 @@ inline std::ostream & cnc_format< float >( std::ostream & o, const float & t )
     return o << t;
 }
 
-
-//namespace std {
-
 inline std::ostream & cnc_format( std::ostream & o, const std::string & t )
-    {
-        return o << t;
-    }
+{
+    return o << t;
+}
 
-    template< class A, class B >
-    inline std::ostream & cnc_format( std::ostream& os, const std::pair< A, B > & p )
-    {
-        os << "(";
-        cnc_format( os, p.first );
+template< class A, class B >
+inline std::ostream & cnc_format( std::ostream& os, const std::pair< A, B > & p )
+{
+    os << "(";
+    cnc_format( os, p.first );
+    os << ",";
+    cnc_format( os, p.second );
+    return os << ")";
+}
+
+// now some help with vectors
+template< class T, class Allocator >
+inline std::ostream & cnc_format( std::ostream& os, const std::vector< T, Allocator > & x )
+{
+    os << "[";
+    for( typename std::vector< T, Allocator >::const_iterator i = x.begin(); i != x.end(); ++ i ) {
+        cnc_format( os, *i );
         os << ",";
-        cnc_format( os, p.second );
-        return os << ")";
     }
+    return os << "]";
+}
 
-    // now some help with vectors
-    template< class T, class Allocator >
-    inline std::ostream & cnc_format( std::ostream& os, const std::vector< T, Allocator > & x )
-    {
-        os << "[";
-        for( typename std::vector< T, Allocator >::const_iterator i = x.begin(); i != x.end(); ++ i ) {
-            cnc_format( os, *i );
-            os << ",";
-        }
-         return os << "]";
+#if (defined(_GLIBCXX_ARRAY) && _GLIBCXX_ARRAY != 0) || defined(WIN32)
+// now some help with std::array
+template< typename T, std::size_t N >
+inline std::ostream & cnc_format( std::ostream& os, const std::array< T, N > & x )
+{
+    os << "[";
+    for( int i = 0; i < N; ++i ) {
+        cnc_format( os, x[i] );
+        os << ",";
     }
-//}
+    return os << "]";
+}
+#endif
 
 #include <cnc/internal/tbbcompat.h>
 #include <tbb/blocked_range.h>
 
-    template< class T >
-    inline std::ostream & cnc_format( std::ostream & os, const tbb::blocked_range< T > & x )
-    {
-        os << "[";
-        if( ! x.empty() ) os << x.begin() << ", " << x.end();
-        return os << "[";
-    }
+template< class T >
+inline std::ostream & cnc_format( std::ostream & os, const tbb::blocked_range< T > & x )
+{
+    os << "[";
+    if( ! x.empty() ) os << x.begin() << ", " << x.end();
+    return os << "[";
+}
 
 #endif // FORMAT_HH_ALREADY_INCLUDED
