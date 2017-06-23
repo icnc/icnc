@@ -623,6 +623,7 @@ namespace CnC
         {
             // Cleanup ITAC stuff:
             VT_FINALIZE();
+            m_callback.set_communicator(NULL);
         }
 
         //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

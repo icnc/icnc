@@ -158,7 +158,7 @@ namespace CnC {
             static distributor  * theDistributor;
             static communicator * m_communicator;
 
-            template< class C1, class C2, class C3, class C4, class C5 > friend struct dist_init;
+            friend struct dist_init;
         };
 
     } // namespace Internal

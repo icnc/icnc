@@ -96,7 +96,7 @@ namespace CnC {
         {
             if( active() && theDistributor->m_communicator ) {
                 theDistributor->m_communicator->fini();
-                // theDistributor->m_communicator = NULL;
+                theDistributor->m_communicator = NULL;
             }
             theDistributor->m_state = DIST_SUSPENDED;
         }   // FIXME more than one communicator
