@@ -120,10 +120,11 @@ namespace CnC {
         ///   * agglomorate requests for items
         ///   * use optimized partial bcast when flushing
         ///   * optimize bcast (e.g. communicate over a tree)
-        template< class C1, class C2, class C3, class C4, class C5 >
         struct dist_init
         {
-            dist_init( long flag = 0, bool dist_env = false )
+            typedef void (*subscriber_type)();
+
+            dist_init( subscriber_type subscriber, long flag = 0, bool dist_env = false )
             {
                 const char * dist_cnc_comm = getenv( "DIST_CNC" ); 
                 communicator_loader_type loader = Internal::dist_cnc_load_comm( dist_cnc_comm,
@@ -135,11 +136,7 @@ namespace CnC {
                                                                                 );
                 if( loader ) {
                     Internal::distributor::init( loader, dist_env );
-                    Internal::factory::subscribe< C1 >();
-                    Internal::factory::subscribe< C2 >();
-                    Internal::factory::subscribe< C3 >();
-                    Internal::factory::subscribe< C4 >();
-                    Internal::factory::subscribe< C5 >();
+                    subscriber();
                     Internal::distributor::start( flag );
                 }
             }

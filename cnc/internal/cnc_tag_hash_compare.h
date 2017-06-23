@@ -176,6 +176,41 @@ public:
 };
 
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+#if (defined(_GLIBCXX_ARRAY) && _GLIBCXX_ARRAY != 0) || defined(WIN32)
+// \brief hash/equality for std::array
+template< typename T,  std::size_t N >
+struct cnc_hash< std::array< T, N > >
+{
+public:
+    size_t operator()( const std::array< T, N > & x ) const
+    {
+        cnc_hash< T > _hasher;
+        switch( N ) {
+        case 0 : return 0;
+        case 1 : return _hasher.operator()( x[0] );
+        case 2 : return ( _hasher.operator()( x[0] )
+                          + ( _hasher.operator()( x[1] ) << 10 ) );;
+        case 3 : return ( _hasher.operator()( x[0] )
+                          + ( _hasher.operator()( x[1] ) << 9 )
+                          + ( _hasher.operator()( x[2] ) << 18 ) );
+        case 4 : return ( _hasher.operator()( x[0] )
+                          + ( _hasher.operator()( x[3] ) << 8 )
+                          + ( _hasher.operator()( x[1] ) << 16 )
+                          + ( _hasher.operator()( x[2] ) << 24 ) );
+        default : {
+            size_t _hv = 0;
+            for( int i = 0; i < N; ++i ) {
+                _hv = _hv * 3  + _hasher.operator()( x[i] );
+            }
+            return _hv;
+        }
+        }
+    }
+};
+#endif
+
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 

@@ -573,15 +573,26 @@ namespace CnC {
     /// CnC::Internal::dist_init
     template< class C1, class C2 = Internal::void_context, class C3 = Internal::void_context,
               class C4 = Internal::void_context, class C5 = Internal::void_context >
-    struct /*CNC_API*/ dist_cnc_init : public Internal::dist_init< C1, C2, C3, C4, C5 >
+    struct /*CNC_API*/ dist_cnc_init : public Internal::dist_init
     {
-        dist_cnc_init() : Internal::dist_init< C1, C2, C3, C4, C5 >() {}
+        struct mysubscriber
+        {
+            void operator()() {
+                Internal::factory::subscribe< C1 >();
+                Internal::factory::subscribe< C2 >();
+                Internal::factory::subscribe< C3 >();
+                Internal::factory::subscribe< C4 >();
+                Internal::factory::subscribe< C5 >();
+            }
+        };
+
+        dist_cnc_init() : Internal::dist_init( mysubscriber() ) {}
         /// \param dist_env enable SPMD-style access to contexts
         /// \param flag MPI_Comm to be used (MPI only)
-        dist_cnc_init( bool dist_env, long flag = 0  ) : Internal::dist_init< C1, C2, C3, C4, C5 >( flag, dist_env ) {}
+        dist_cnc_init( bool dist_env, long flag = 0  ) : Internal::dist_init( mysubscriber(), flag, dist_env ) {}
         /// \param dist_env enable SPMD-style access to contexts
         /// \param flag MPI_Comm to be used (MPI only)
-        dist_cnc_init( long flag, bool dist_env = false ) : Internal::dist_init< C1, C2, C3, C4, C5 >( flag, dist_env ) {}
+        dist_cnc_init( long flag, bool dist_env = false ) : Internal::dist_init( mysubscriber(), flag, dist_env ) {}
     };
 
 } // namespace CnC

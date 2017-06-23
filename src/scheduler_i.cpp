@@ -363,7 +363,6 @@ namespace CnC {
         /// however, the real wait() can only be issued by the owner/creator (currently only the host)
         void scheduler_i::init_wait( bool send )
         {
-            std::cerr << subscribed() << " " << distributor::active() << " " << m_context.distributed() << std::endl;
             CNC_ASSERT( subscribed() );
             CNC_ASSERT( distributor::active() );
             CNC_ASSERT( m_context.distributed() );
