@@ -168,9 +168,11 @@ namespace CnC {
                 // nothing found on root thread, must not block, so let's return
                 si = NULL;
             } else {
-                if( block ) m_gQueue->pop( si );
-                else {
-                    si = NULL;
+                si = NULL;
+                if( m_queues->try_pop( si ) ) return;
+                if( block ) {
+                    m_gQueue->pop( si );
+                } else {
                     m_gQueue->try_pop( si );
                 }
             }
@@ -185,7 +187,7 @@ namespace CnC {
         template< typename Q, bool use_affinity >
         tbb_concurrent_queue_scheduler_base< Q, use_affinity >::tbb_concurrent_queue_scheduler_base( context_base & c, int numThreads, bool steal, int hts )
             : scheduler_i( c ),
-              m_steal( numThreads > 1 ? steal : false ),
+              m_steal( steal ),
               m_htstride( hts )
         {
             tbb::queuing_rw_mutex::scoped_lock _lock( _mtx );
@@ -231,7 +233,7 @@ namespace CnC {
 					m_queues[_aff].push( stepInstance );
 				}
             } else {
-                m_gQueue->push( stepInstance );
+                m_queues->push( stepInstance );
             }
                 // wake another thread if at least one thread is waiting
             if( m_gQueue->size() < 0 ) m_gQueue->push( wakeUpStep );

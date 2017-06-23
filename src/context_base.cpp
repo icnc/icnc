@@ -116,9 +116,9 @@ namespace CnC {
 				} else if( ! strcmp( _sched, "FIFO_SINGLE" ) ) {
 					if( _first ) oss << "Using FIFO_SINGLE scheduler" << _prior << _pin;
 					if( _use_prior ) {
-						_ts = new tbb_concurrent_queue_prioritized_scheduler( *this, m_numThreads, true, _htstride );
+						_ts = new tbb_concurrent_queue_prioritized_scheduler( *this, m_numThreads, false, _htstride );
 					} else  {
-						_ts = new tbb_concurrent_queue_scheduler( *this, m_numThreads, true, _htstride );
+						_ts = new tbb_concurrent_queue_scheduler( *this, m_numThreads, false, _htstride );
 					}
 				} else if( ! strcmp( _sched, "FIFO_AFFINITY" ) ) {
 					if( _first ) oss << "Using FIFO_AFFINITY scheduler" << _prior << _pin;
