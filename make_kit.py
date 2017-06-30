@@ -80,7 +80,7 @@ if nodbg == False:
     BUILDS += ['Debug']
 
 def exe_cmd( cmd ):
-  print cmd
+  print(cmd)
   if isinstance(cmd, str):
       retv = os.system(cmd)
   else:
@@ -137,9 +137,9 @@ cmake_args_core += ['..']
 for vs in VSS:
   for arch in PARCHS:
     if arch == 'mic':
-	cmake_args_arch = ['-DCMAKE_CXX_COMPILER=icpc', '-DCMAKE_C_COMPILER=icc', '-DPARCH=' + arch]
+        cmake_args_arch = ['-DCMAKE_CXX_COMPILER=icpc', '-DCMAKE_C_COMPILER=icc', '-DPARCH=' + arch]
     else:
-	cmake_args_arch = ['-DPARCH=' + arch]
+        cmake_args_arch = ['-DPARCH=' + arch]
     for rel in BUILDS:
 
       print('Building ' + vs + ' ' + arch + ' ' + rel)
