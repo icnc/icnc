@@ -60,7 +60,9 @@ namespace CnC
             /// if thecomm != 0 it is interpreted as the MPI_Comm to use
             virtual int init( int minId, long thecomm = 0 );
             virtual void fini();
+            virtual void unsafe_barrier();
         private:
+            MPI_Comm m_comm;
             bool m_customComm;
         };
     }

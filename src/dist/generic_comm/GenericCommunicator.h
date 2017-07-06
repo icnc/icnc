@@ -90,6 +90,8 @@ namespace CnC
             virtual int init( int minId, long flag = 0 );
             virtual void fini();
 
+            virtual void unsafe_barrier();
+
             virtual int myPid();
             virtual int numProcs();
             virtual bool remote();

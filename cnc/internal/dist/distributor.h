@@ -138,6 +138,9 @@ namespace CnC {
             /// reset received message count
             static int reset_recvd_msg_count() { return active() && theDistributor->m_communicator ? theDistributor->m_nMsgsRecvd.fetch_and_store( 0 ) : 0; }
 
+            /// Use this with care. Only useful for distributed and envs when you know what you're doing.
+            static void unsafe_barrier() { if( active() && theDistributor->m_communicator ) theDistributor->m_communicator->unsafe_barrier(); }
+
         private:
             typedef enum {
                 DIST_OFF,

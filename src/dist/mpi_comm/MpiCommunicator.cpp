@@ -49,6 +49,7 @@ namespace CnC
     {
         MpiCommunicator::MpiCommunicator( msg_callback & cb, bool dist_env )
             : GenericCommunicator( cb, dist_env ),
+              m_comm( MPI_COMM_NULL ),
               m_customComm( false )
         {
         }
@@ -89,7 +90,7 @@ namespace CnC
             }
 
 
-            MPI_Comm myComm = MPI_COMM_WORLD;
+            m_comm = MPI_COMM_WORLD;
             int rank;
             MPI_Comm parentComm;
             if( thecomm == 0 ) {
@@ -97,9 +98,9 @@ namespace CnC
             } else {
                 m_customComm = true;
                 m_exit0CallOk = false;
-                myComm = thecomm;
+                m_comm = thecomm;
             }
-            MPI_Comm_rank( myComm, &rank );
+            MPI_Comm_rank( m_comm, &rank );
             
             // father of all checks if he's requested to spawn processes:
             if ( rank == 0 && parentComm == MPI_COMM_NULL ) {
@@ -140,26 +141,26 @@ namespace CnC
                         // can't use Speaker yet, need Channels to be inited
                         std::cerr << "[CnC " << rank << "] Error in MPI_Comm_spawn. Skipping process spawning";
                     } else {
-                        MPI_Intercomm_merge( interComm, 0, &myComm );
+                        MPI_Intercomm_merge( interComm, 0, &m_comm );
                     }
                 } // else {
                 // No process spawning
                 // MPI-1 situation: all clients to be started by mpiexec
-                //                    myComm = MPI_COMM_WORLD;
+                //                    m_comm = MPI_COMM_WORLD;
                 //}
             }
             if ( thecomm == 0 && parentComm != MPI_COMM_NULL ) {
                 // I am a child. Build intra-comm to the parent.
-                MPI_Intercomm_merge( parentComm, 1, &myComm );
+                MPI_Intercomm_merge( parentComm, 1, &m_comm );
             }
-            MPI_Comm_rank( myComm, &rank );
+            MPI_Comm_rank( m_comm, &rank );
 
             CNC_ASSERT( m_channel == NULL );
-            MpiChannelInterface* myChannel = new MpiChannelInterface( use_crc(), myComm );
+            MpiChannelInterface* myChannel = new MpiChannelInterface( use_crc(), m_comm );
             m_channel = myChannel;
 
             int size;
-            MPI_Comm_size( myComm, &size );
+            MPI_Comm_size( m_comm, &size );
             // Are we on the host or on the remote side?
             if ( rank == 0 ) {
                 if( size <= 1 ) {
@@ -168,17 +169,17 @@ namespace CnC
                 // ==> HOST startup: 
                 // This initializes the mpi environment in myChannel.
                 MpiHostInitializer hostInitializer( *myChannel );
-                hostInitializer.init_mpi_comm( myComm );
+                hostInitializer.init_mpi_comm( m_comm );
             } else {
                 // ==> CLIENT startup:
                 // This initializes the mpi environment in myChannel.
                 MpiClientInitializer clientInitializer( *myChannel );
-                clientInitializer.init_mpi_comm( myComm );
+                clientInitializer.init_mpi_comm( m_comm );
             }
 
             { Speaker oss( std::cerr ); oss << "MPI initialization complete (rank " << rank << ")."; }
 
-            //            MPI_Barrier( myComm );
+            //            MPI_Barrier( m_comm );
 
             // Now the mpi specific setup is finished.
             // Do the generic initialization stuff.
@@ -206,6 +207,12 @@ namespace CnC
             if( ! ( isDistributed() || m_customComm ) ) {
                 MPI_Finalize();
             }
+        }
+
+        /// Use this with care. Only useful for distributed and envs when you know what you're doing.
+        void MpiCommunicator::unsafe_barrier()
+        {
+            MPI_Barrier(m_comm);
         }
 
         //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

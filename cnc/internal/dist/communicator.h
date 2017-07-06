@@ -96,6 +96,9 @@ namespace CnC {
 
             /// \return true if at least one message is pending (waiting for being sent)
             virtual bool has_pending_messages() = 0;
+
+            /// Use this with care. Only useful for distributed and envs when you know what you're doing.
+            virtual void unsafe_barrier() = 0;
         };
 
     } // namespace Internal
