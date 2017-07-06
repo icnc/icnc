@@ -843,5 +843,12 @@ namespace CnC
             return m_sendThread->has_pending_messages();
         }
 
+        //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+        void GenericCommunicator::unsafe_barrier()
+        {
+            CNC_ABORT("unsafe_barrier not implemented for this communicator");
+        }
+
     } // namespace Internal
 } // namespace CnC
