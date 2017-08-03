@@ -158,7 +158,7 @@ inline std::ostream & cnc_format( std::ostream& os, const std::vector< T, Alloca
     return os << "]";
 }
 
-#if (defined(_GLIBCXX_ARRAY) && _GLIBCXX_ARRAY != 0) || defined(WIN32)
+#if (defined(_GLIBCXX_ARRAY) && _GLIBCXX_ARRAY != 0) || defined(_WIN32)
 // now some help with std::array
 template< typename T, std::size_t N >
 inline std::ostream & cnc_format( std::ostream& os, const std::array< T, N > & x )

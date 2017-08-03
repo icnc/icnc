@@ -177,7 +177,7 @@ public:
 
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-#if (defined(_GLIBCXX_ARRAY) && _GLIBCXX_ARRAY != 0) || defined(WIN32)
+#if (defined(_GLIBCXX_ARRAY) && _GLIBCXX_ARRAY != 0) || defined(_WIN32)
 // \brief hash/equality for std::array
 template< typename T,  std::size_t N >
 struct cnc_hash< std::array< T, N > >

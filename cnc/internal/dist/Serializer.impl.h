@@ -501,7 +501,7 @@ namespace CnC {
 #endif
 }
 
-#if ( defined( __GXX_EXPERIMENTAL_CXX0X__ ) && __GXX_EXPERIMENTAL_CXX0X__ == 1 ) || ( defined( _HAS_CPP0X ) && _HAS_CPP0X == 1 )
+#if (defined(_GLIBCXX_ARRAY) && _GLIBCXX_ARRAY != 0) || defined(_WIN32)
 #include <array>
 namespace CnC {
     template< class T, size_t N >
