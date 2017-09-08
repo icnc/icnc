@@ -31,8 +31,8 @@ More information can be found from the following talk:
 
 Prerequisite
 ================
-Any recent version of g++ with CBLAS, or icpc with CBLAS or MKL,
-should work.
+Any recent version of g++ with CBLAS, or icpc with CBLAS or Intel(R) Math
+Kernel Library (Intel(R) MKL), should work.
 
 The compilers we have tried are 
     gcc version 4.8.1 (Ubuntu 4.8.1-2ubuntu1~12.04) 

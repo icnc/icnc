@@ -31,19 +31,20 @@ a symmetric positive definite (SPD) matrix. Otherwise Cholesky factorization
 cannot be performed. 
 
 The version in cholesky_mkl uses sequential BLAS routines for its
-matrix-multiplication. These calls in MKL highly optimized and so
+matrix-multiplication. These calls in Intel(R) Math Kernel Library
+(Intel(R) MKL) highly optimized and so
 significantly improve the performance of the CnC implementation. You
-need icc and MKL to be able to build this implementation.
+need icc and Intel(R) MKL to be able to build this implementation.
 
 
-BLAS/MKL
+BLAS/Intel(R) MKL
 ========
 For better performance, the implementation can use cblas_dgemm and
 cblas_dsyrk instead of a naive nested loop (in S3). It will however not use any
-paralleism within MKL (all parallelism there is explicitly switched
+paralleism within Intel(R) MKL (all parallelism there is explicitly switched
 off).
-To turn this on, you need blas/MKL. Compile with -DUSE_MKL. The
-makefile is setup for MKL's BLAS, just do make USE_MKL=1.
+To turn this on, you need blas/Intel(R) MKL. Compile with -DUSE_MKL. The
+makefile is setup for Intel(R) MKL's BLAS, just do make USE_MKL=1.
 
 
 
