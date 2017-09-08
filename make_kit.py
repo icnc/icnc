@@ -4,7 +4,7 @@ argParser = argparse.ArgumentParser(prog="make_kit.py", description="Build CnC r
 argParser.add_argument('-a', '--arch',      default='intel64',                       help="Processor architecture(s) to build for")
 argParser.add_argument('-r', '--release',   default="current", help="release number")
 argParser.add_argument('-t', '--travis',    default=False, action='store_true',      help="Run in Travis mode (implies --nodebug --itac='' --mpi=/usr)")
-argParser.add_argument('-p', '--product',   default=False, action='store_true',      help="Build a release/product package (implies -i --mic and not -d -t --nodebug)")
+argParser.add_argument('-p', '--product',   default=False, action='store_true',      help="Build a release/product package (implies -i --mic --sdl and not -d -t --nodebug)")
 argParser.add_argument('-d', '--devbuild',  default=False, action='store_true',      help="Build from an unclean development branch (implies -r=current)")
 argParser.add_argument('-k', '--keep',      default=False, action='store_true',      help="Keep existing (partial) builds")
 argParser.add_argument('-v', '--verbose',   default=False, action='store_true',      help="Verbose builds")
@@ -16,6 +16,7 @@ argParser.add_argument('--mpi',             default=os.getenv('I_MPI_ROOT', '/us
 argParser.add_argument('--itac',            default=os.getenv('VT_ROOT', 'NONE'),    help="ITAC root directory")
 argParser.add_argument('--msvs',            default='12',                            help="Version(s) of MS Visual Studio to use/build for (MS Windows only)")
 argParser.add_argument('--zip',             default=False, action='store_true',      help="also create password protected zip archive (requires -i)")
+argParser.add_argument('--sdl',             default=False, action='store_true',      help="Add SDL flags (security).")
 args = argParser.parse_args()
 
 release = args.release  
@@ -32,6 +33,7 @@ itacroot = args.itac
 vs = args.msvs
 phi = args.phi
 PARCHS = args.arch.split()
+sdl = args.sdl
     
 if travis == True:
     release = "current"
@@ -129,6 +131,11 @@ if verbose == True:
   cmake_args_core += ['-DCMAKE_VERBOSE_MAKEFILE=TRUE']
 else:
   cmake_args_core += ['-DCMAKE_VERBOSE_MAKEFILE=FALSE']
+
+if sdl == True:
+  cmake_args_core += ['-DSDL=TRUE']
+else:
+  cmake_args_core += ['-DSDL=FALSE']
   
 cmake_args_core += ['..']
 
