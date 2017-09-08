@@ -29,10 +29,6 @@ More information can be found from the following talk:
     The Seventh Annual Concurrent Collections Workshop, 2015
     https://www.researchgate.net/publication/285232588_Transparently_Composing_CnC_Graph_Pipelines_on_a_Cluster
 
-For any questions, please contact
-    hongbo.rong@intel.com
-    frank.schlimbach@intel.com
-
 Prerequisite
 ================
 Any recent version of g++ with CBLAS, or icpc with CBLAS or MKL,
