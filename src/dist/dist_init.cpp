@@ -77,8 +77,8 @@ namespace CnC {
 #else              
             loader = (communicator_loader_type) dlsym( clientDllHandle, "load_communicator_" );
 #endif
-            if ( ! clientDllHandle ) {
-                std::cerr << "\nCould not open client library \'" << clientDllName << "\'\n";
+            if ( ! loader ) {
+                std::cerr << "\nCould not get loader \'" << clientDllName << "\'\n";
 #ifdef _WIN32
                 std::cerr << "Error code: " << GetLastError() << std::endl;
                 // FIXME: get Windows error string

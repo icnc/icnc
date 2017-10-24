@@ -221,7 +221,7 @@ namespace CnC
         /**
          * Initializing function
          */
-        extern "C" void load_communicator_( msg_callback & cb, bool dist_env )
+        extern "C" CNC_API void load_communicator_( msg_callback & cb, bool dist_env )
         {
             // init communicator, there can only be one
             static MpiCommunicator _mpi_c( cb, dist_env );

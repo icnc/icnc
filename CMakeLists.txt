@@ -95,7 +95,7 @@ if(SDL)
 endif(SDL)
 
 if(CMAKE_SYSTEM_NAME STREQUAL Windows)
-  add_definitions("-D_LIB -D_WIN_DLL -DCNC_DLL_SUFX=${CNC_DLL_SFX}")
+  add_definitions("-D_LIB -D_WIN_DLL -DCNC_DLL_SUFX=${CNC_DLL_SFX} -DCNC_DLL_EXPORTS")
   set(${CMAKE_SHARED_LINKER_FLAGS} "${CMAKE_SHARED_LINKER_FLAGS} /INCREMENTAL:NO /OPT:NOREF")
 else()
 endif(CMAKE_SYSTEM_NAME STREQUAL Windows)
@@ -115,8 +115,6 @@ set_target_properties(cnc PROPERTIES SOVERSION ${SOVERSION})
 add_library(cnc_socket SHARED ${CNC_SOCKET_SOURCES} )
 set_target_properties(cnc_socket PROPERTIES SOVERSION ${SOVERSION})
 
-# only the base library exports symbols!!
-set_target_properties(cnc PROPERTIES COMPILE_FLAGS "-DCNC_DLL_EXPORTS")
 target_link_libraries(cnc ${CNC_ADD_LIBS})
 target_link_libraries(cnc_socket general cnc ${CNC_ADD_LIBS})
 
