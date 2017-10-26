@@ -374,7 +374,7 @@ namespace CnC {
                 CNC_ASSERT( m_root == 0 ); // FIXME wait on clients not supported
                 (*_ser) & PING & m_root;
                 m_context.bcast_msg( _ser );
-                //                { Speaker oss; oss << "sent PING"; }
+                // { Speaker oss; oss << "sent PING"; }
             }
         }
 
@@ -457,11 +457,13 @@ namespace CnC {
         /// Distributed systems require communication flushing and barriers. See \ref scheduler_i::init_wait for details.
         void scheduler_i::wait_loop( bool from_schedulable )
         {
+            // { Speaker oss; oss << "wait_loop"; }
             // if called from schedulable, this taks/step will not complete herein
             //   -> don't increment/decrement counter
             if( ! from_schedulable ) ++m_userStepsInFlight;
-            bool send = m_root == distributor::myPid() && !distributor::distributed_env(); // if dist_env, the remote processes also call wait explicitly!
+            bool send = m_root == distributor::myPid(); // && !distributor::distributed_env(); // if dist_env, the remote processes also call wait explicitly!
             if( subscribed() && m_context.distributed() ) {
+                // { Speaker oss; oss << "wait_loop sub&&dist"; }
                 int _nProcs = distributor::numProcs();
                 do {
                     init_wait( send );
@@ -480,9 +482,9 @@ namespace CnC {
                     serializer * _ser = m_context.new_serializer( this );
                     (*_ser) & DONE;
                     m_context.bcast_msg( _ser );
-                    //                    { Speaker oss; oss << "bcast DONE"; }
+                    // { Speaker oss; oss << "bcast DONE"; }
                 } else {
-                    //                    { Speaker oss; oss << "not sending bcast DONE distenv=" << distributor::distributed_env() << " root=" << m_root; }
+                    // { Speaker oss; oss << "not sending bcast DONE distenv=" << distributor::distributed_env() << " root=" << m_root; }
                 }
             } else {
                 wait_all();
@@ -500,26 +502,27 @@ namespace CnC {
             CNC_ASSERT( subscribed() && distributor::active() && m_context.distributed() );
 
             if( m_root != distributor::myPid() ) { 
+                if( distributor::distributed_env() ) {
+                    // { Speaker oss; oss << "waiting for PING/DONE"; }
+                    int _tmp;
+                    m_barrier->pop( _tmp );
+                    if(_tmp == 1) return false;
+                }
                 // remote procs send pong to host
                 CNC_ASSERT( m_root >= 0 );
                 serializer * _ser = m_context.new_serializer( this );
                 (*_ser) & PONG;
                 m_context.send_msg( _ser, m_root );
-                //                { Speaker oss; oss << "sent PONG"; }
+                // { Speaker oss; oss << "sent PONG"; }
                 // host will send PING or DONE
-                if( distributor::distributed_env() ) {
-                    int _tmp;
-                    m_barrier->pop( _tmp );
-                    return _tmp == 0;
-                }
-                return false;
+                return distributor::distributed_env(); // not sure why we return false in non-dist-env case
             } else {
                 // local host wait for all pongs to arrive
                 int n = distributor::numProcs() - 1;
                 int _tmp;
-                //                { Speaker oss; oss << "waiting for PONGs"; }
+                // { Speaker oss; oss << "waiting for PONGs"; }
                 for( int i = 0; i < n; ++i ) m_barrier->pop( _tmp );
-                //                { Speaker oss; oss << "done waiting for PONGs"; }
+                // { Speaker oss; oss << "done waiting for PONGs"; }
                 return false;
             }
         }
@@ -536,7 +539,7 @@ namespace CnC {
             (*ser) & _pingpong;
             switch( _pingpong ) {
             case PING : {
-                //                { Speaker oss; oss << "recvd PING"; }
+                // { Speaker oss; oss << "recvd PING"; }
                 // remote procs are told to to wait
                 (*ser) & m_root;
                 CNC_ASSERT( m_root >= 0 );
@@ -549,13 +552,13 @@ namespace CnC {
                 break;
             }
             case PONG : {
-                //                { Speaker oss; oss << "recvd PONG"; }
+                // { Speaker oss; oss << "recvd PONG"; }
                 CNC_ASSERT( m_barrier );
                 m_barrier->push( 1 ); // local host "registers" pong
                 break;
             }
             default: {
-                //                { Speaker oss; oss << "recvd DONE"; }
+                // { Speaker oss; oss << "recvd DONE"; }
                 CNC_ASSERT( _pingpong == DONE );
                 CNC_ASSERT( distributor::distributed_env() );
                 m_barrier->push( 1 );

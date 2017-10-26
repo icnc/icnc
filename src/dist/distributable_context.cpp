@@ -56,6 +56,7 @@ namespace CnC {
               m_mutex(),
               m_statistics( NULL ),
               m_distributables(),
+              m_barrier(),
               //              m_wasDistributed( false ),
               m_distributionEnabled( false ),
               m_distributionReady( false )
@@ -67,7 +68,11 @@ namespace CnC {
 
         distributable_context::~distributable_context()
         {
-            delete m_statistics;
+            // we need a lock to protect other threads
+            // in particular the receiver thread might have indirectly triggered destruction
+            // before having returned
+            mutex_type::scoped_lock _lock( m_mutex );
+            if( m_statistics ) delete m_statistics;
         }
         
         // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -106,14 +111,13 @@ namespace CnC {
         
         void distributable_context::recv_msg( serializer * serlzr )
         {
+            mutex_type::scoped_lock _lock( m_mutex );
             int _did;
             (*serlzr) & _did;
             if( _did >= 0 ) {
                 distributable * _dist = NULL;
-                mutex_type::scoped_lock _lock( m_mutex );
                 CNC_ASSERT( _did >= 0 && _did < (int)m_distributables.size() );
                 _dist = m_distributables[_did];
-                _lock.release();
                 if( _dist ) _dist->recv_msg( serlzr );
             } else { // own message handling
                 char _msg;
