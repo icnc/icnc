@@ -340,7 +340,7 @@ namespace CnC {
 
         template< class T, class item_type, class Tuner >
         item_collection_base< T, item_type, Tuner >::item_collection_base( context_base & g, const std::string & name, const Tuner & tnr )
-            : item_collection_i( g, name ),
+            : item_collection_i( g, name.c_str() ),
               tagItemTable( this ),
               m_tuner( tnr ),
               m_allocator(),
@@ -370,7 +370,7 @@ namespace CnC {
 
         template< class T, class item_type, class Tuner >
         item_collection_base< T, item_type, Tuner >::item_collection_base( context_base & g, const std::string & name )
-            : item_collection_i( g, name ),
+            : item_collection_i( g, name.c_str() ),
               tagItemTable( this ),
               m_tuner( get_default_tuner< Tuner >() ),
               m_allocator(),

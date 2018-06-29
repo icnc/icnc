@@ -42,7 +42,7 @@ namespace CnC {
         class CNC_API item_collection_i : public virtual distributable
         {
         public:
-            item_collection_i( context_base & g, const std::string & name );
+            item_collection_i( context_base & g, const char* name );
             virtual ~item_collection_i();
             context_base & get_context() const { return m_context; }
 

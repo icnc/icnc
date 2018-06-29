@@ -41,7 +41,7 @@ namespace CnC {
         class CNC_API tag_collection_i : public virtual distributable
         {
         public:
-            tag_collection_i( context_base &, const std::string & name );
+            tag_collection_i( context_base &, const char* name );
             ~tag_collection_i();
             context_base & get_context() const { return m_context; }
 

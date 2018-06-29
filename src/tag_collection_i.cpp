@@ -39,7 +39,7 @@
 namespace CnC {
     namespace Internal {
 
-        tag_collection_i::tag_collection_i( context_base & ctxt, const std::string & name )
+        tag_collection_i::tag_collection_i( context_base & ctxt, const char* name )
             : distributable( name ),
               m_context( ctxt )
         {

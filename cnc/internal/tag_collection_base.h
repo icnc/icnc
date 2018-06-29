@@ -117,7 +117,7 @@ namespace CnC {
 
         template< class Tag, class Tuner >
         tag_collection_base< Tag, Tuner >::tag_collection_base( context_base & g, const std::string & name )
-            : tag_collection_i( g, name ),
+            : tag_collection_i( g, name.c_str() ),
               m_prescribedStepCollections(),
               m_tuner( get_default_tuner< Tuner >() ),
               m_tagTable(),
@@ -131,7 +131,7 @@ namespace CnC {
 
         template< class Tag, class Tuner >
         tag_collection_base< Tag, Tuner >::tag_collection_base( context_base & g, const std::string & name, const Tuner & tnr )
-            : tag_collection_i( g, name ),
+            : tag_collection_i( g, name.c_str() ),
               m_prescribedStepCollections(),
               m_tuner( tnr ),
               m_tagTable(),
