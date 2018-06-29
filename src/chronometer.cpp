@@ -126,7 +126,7 @@ namespace CnC {
         // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-        void chronometer::add_record( const std::string & name,
+        void chronometer::add_record( const char * name,
                                       const int id,
                                       const uint64_t sc,
                                       const uint64_t cc,
@@ -144,7 +144,7 @@ namespace CnC {
             }
             if( static_cast< unsigned int >( _c->m_curr ) >= _c->m_log.size() ) _c->m_log.resize( 2 * _c->m_curr );
             Record_t & _r = _c->m_log[_c->m_curr++];
-            _r.m_name = &name;
+            _r.m_name = name;
             _r.m_startCycle = sc;
             _r.m_cycleCount = cc;
             _r.m_getCycles = gcc;
@@ -164,7 +164,7 @@ namespace CnC {
             static char const * ExecutionStatusNames[] = { "completed", "requeued", "failed", "error" };
             os << "cycle\t" << r.m_startCycle
                << "\tthread\t" << m_threadId
-               << "\tstep\t" << (*r.m_name)
+               << "\tstep\t" << r.m_name
                << "\tid\t" << r.m_stepId
                << "\tstatus\t" << ExecutionStatusNames[static_cast< unsigned int >( r.m_type )]
                //<< "\t" << r.si->timing_name()
@@ -198,8 +198,9 @@ namespace CnC {
         // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-        void chronometer::save_log( const std::string& filename )
+        void chronometer::save_log( const char * filename_ )
         {
+            std::string filename(filename_);
             if( filename == "-" ) {
                 s_cinit.dump_log( std::cout );
             } else {
@@ -214,6 +215,32 @@ namespace CnC {
 
                 tfile.close();
             }
+        }
+
+        // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+        chronometer::Record_t::Record_t( const char * name,
+                                         const int id,
+                                         const uint64_t sc,
+                                         const uint64_t cc,
+                                         const uint64_t gcc,
+                                         const uint64_t pcc,
+                                         const double sec,
+                                         const double gsec,
+                                         const double psec,
+                                         const StepReturnValue_t rt )
+        : m_name( name ),
+          m_startCycle( sc ),
+          m_cycleCount( cc ),
+          m_getCycles( gcc ),
+          m_putCycles( pcc ),
+          m_seconds( sec ),
+          m_getSeconds( gsec ),
+          m_putSeconds( psec ),
+          m_stepId( id ),
+          m_type( rt )
+        {
         }
 
     } //    namespace Internal

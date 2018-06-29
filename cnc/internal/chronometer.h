@@ -103,7 +103,7 @@ namespace CnC {
                 inline void stop_get() ;
                 inline void start_put() ;
                 inline void stop_put();
-                inline void log( const std::string & name, const int id, const StepReturnValue_t rt ) const;
+                inline void log( const char * name, const int id, const StepReturnValue_t rt ) const;
             private:
                 uint64_t                    m_startCycle;
                 uint64_t                    m_tmpStartCycle;
@@ -119,7 +119,7 @@ namespace CnC {
 
             struct Record_t
             {
-                const std::string * m_name;
+                const char *        m_name;
                 uint64_t            m_startCycle;
                 uint64_t            m_cycleCount;
                 uint64_t            m_getCycles;
@@ -130,10 +130,10 @@ namespace CnC {
                 int                 m_stepId;
                 StepReturnValue_t   m_type;
 
-                inline Record_t( const std::string * name = NULL, const int id = -1,
-                                 const uint64_t sc = 0, const uint64_t cc = 0, const uint64_t gcc = 0, const uint64_t pcc = 0,
-                                 const double sec = 0.0, const double gsec = 0.0, const double psec = 0.0,
-                                 const StepReturnValue_t rt = CnC_incomplete );
+                Record_t( const char * name = NULL, const int id = -1,
+                          const uint64_t sc = 0, const uint64_t cc = 0, const uint64_t gcc = 0, const uint64_t pcc = 0,
+                          const double sec = 0.0, const double gsec = 0.0, const double psec = 0.0,
+                          const StepReturnValue_t rt = CnC_incomplete );
             };
 
             // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -141,11 +141,11 @@ namespace CnC {
             chronometer();
             static void init( bool RDTSC_only );
 
-            static void add_record( const std::string & name, const int id,
+            static void add_record( const char * name, const int id,
                                     const uint64_t sc, const uint64_t cc, const uint64_t gcc, const uint64_t pcc,
                                     const double sec, const double gsec, const double psec,
                                     const StepReturnValue_t rt );
-            static void save_log( const std::string& filename );
+            static void save_log( const char * filename );
             void dump_log( std::ostream & );
 
         private:
@@ -237,7 +237,7 @@ namespace CnC {
             if( chronometer::s_useTBB ) m_putTicks += tbb::tick_count::now() - m_tmpStartTick;
         }
 
-        inline void chronometer::step_timer::log( const std::string & name, const int id, const StepReturnValue_t rt ) const
+        inline void chronometer::step_timer::log( const char * name, const int id, const StepReturnValue_t rt ) const
         {
             uint64_t _tmp = cnc_rdtsc();
             tbb::tick_count _now;
@@ -252,31 +252,6 @@ namespace CnC {
                                      chronometer::s_useTBB ? m_getTicks.seconds() : 0,
                                      chronometer::s_useTBB ? m_putTicks.seconds() : 0,
                                      rt );
-        }
-
-        // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-        inline chronometer::Record_t::Record_t( const std::string * name,
-                                                const int id,
-                                                const uint64_t sc,
-                                                const uint64_t cc,
-                                                const uint64_t gcc,
-                                                const uint64_t pcc,
-                                                const double sec,
-                                                const double gsec,
-                                                const double psec,
-                                                const StepReturnValue_t rt )
-            : m_name( name ),
-              m_startCycle( sc ),
-              m_cycleCount( cc ),
-              m_getCycles( gcc ),
-              m_putCycles( pcc ),
-              m_seconds( sec ),
-              m_getSeconds( gsec ),
-              m_putSeconds( psec ),
-              m_stepId( id ),
-              m_type( rt )
-        {
         }
 
         // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

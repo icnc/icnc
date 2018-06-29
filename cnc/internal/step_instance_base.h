@@ -108,7 +108,7 @@ namespace CnC {
         inline void step_instance_base::stop_timing( const StepReturnValue_t rt, const std::string & name )
         {
             if( ! m_timer ) return;
-            m_timer->log( name, id(), rt );
+            m_timer->log( name.c_str(), id(), rt );
         }
 
         inline void step_instance_base::start_get()
