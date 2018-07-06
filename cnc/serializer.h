@@ -299,11 +299,14 @@ namespace CnC
     /// Convenience macro for declaring serializable pointers.
     /// The object being pointed to should be serializable.
 
-#    define CNC_POINTER_SERIALIZABLE( T )                       \
-    namespace CnC {                                             \
-        static inline void serialize( serializer & ser, T *& t ) {  \
-            ser & chunk< T >(t, 1);                        \
-        }                                                       \
+#    define CNC_POINTER_SERIALIZABLE( T )                              \
+    namespace CnC {                                                    \
+        static inline void serialize( serializer & ser, T *& t ) {     \
+            int sz = ser.is_packing() && t == NULL ? 0 : 1;            \
+            ser & sz;                                                  \
+            if(sz) ser & chunk< T >(t, sz);                            \
+            else if(ser.is_unpacking()) t = NULL;                      \
+        }                                                              \
     }
     
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
