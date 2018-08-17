@@ -1,0 +1,30 @@
+{% set version = "1.2.300" %}
+{% set buildnumber = 1 %}
+
+package:
+    name: cnc
+    version: {{version}}
+
+source:
+    path: ..
+#    git_url: https://github.com/icnc/icnc
+#    git_rev: {{"v"+version}}
+
+requirements:
+    build:
+        - tbb-devel
+        - cmake
+        - mpich >=3.1
+    run:
+        - mpich >=3.1
+        - tbb
+
+build:
+    number: {{buildnumber}}
+    script_env:
+        - https_proxy
+
+about:
+    license: BSD-3
+    license_file: LICENSE
+    license_family: Proprietary
