@@ -12,6 +12,8 @@ source:
 
 requirements:
     build:
+        - {{ compiler('c') }}
+        - {{ compiler('cxx') }}
         - tbb-devel
         - cmake
         - mpich >=3.1
