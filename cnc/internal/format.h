@@ -31,6 +31,9 @@
 #include <string>
 #include <vector>
 #include <ostream>
+#ifdef WIN32
+#include <array>
+#endif
 
 /// cnc_format is used to print tag and item objects in error messages
 /// and tracing output. Standard types are supported out-of-the-box.
