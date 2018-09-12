@@ -34,7 +34,9 @@
 
 #include <string>
 #include <vector>
+#ifdef WIN32
 #include <array>
+#endif
 #include <cnc/internal/cnc_stddef.h>
 #include <cstring>
 #include <cnc/internal/tbbcompat.h>
