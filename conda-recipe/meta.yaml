@@ -16,13 +16,17 @@ requirements:
         - {{ compiler('cxx') }}
         - tbb-devel
         - cmake
-        - mpich >=3.1
+        - mpich >=3.1  [not win]
+        - impi-devel   [win]
+
     run:
-        - mpich >=3.1
+        - mpich >=3.1  [not win]
+        - impi_rt      [win]
         - tbb
 
 build:
     number: {{buildnumber}}
+    include_recipe: False
     script_env:
         - https_proxy
 
