@@ -28,6 +28,24 @@
 #ifndef _CnC_PINNING_H_
 #define _CnC_PINNING_H_
 
+#ifdef __APPLE__
+// Not supported on Mac
+namespace CnC {
+  namespace Internal {
+
+    static void pin_thread( int tid, int cid, int htstride )
+    {}
+
+    class pinning_observer
+    {
+    public:
+      pinning_observer( int hts ) {}
+    };
+  }
+}
+
+#else // __APPLE__
+
 #ifndef WIN32
 #include <cstring>
 #include <pthread.h>
@@ -197,4 +215,5 @@ namespace CnC {
 	} //namespace internal
 } // namespace CnC
 
+#endif // __APPLE__
 #endif // _CnC_PINNING_H_
