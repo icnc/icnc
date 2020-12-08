@@ -251,7 +251,7 @@ namespace CnC {
                                 serializer * _serlzr = new_serializer( NULL );
                                 // wait until send-queue is empty
                                 if( has_pending_messages() ) {++theDistributor->m_nMsgsRecvd;}
-                                int _nMsgs = theDistributor->m_nMsgsRecvd.fetch_and_store( 0 );
+                                int _nMsgs = theDistributor->m_nMsgsRecvd.exchange( 0 );
                                 // int _pid = myPid();
                                 (*_serlzr) & PONG & _nMsgs; // & _pid;
                                 send_msg( _serlzr, 0 );
@@ -325,7 +325,7 @@ namespace CnC {
             for( int i = 0; i < _n; ++i ) {
                 theDistributor->m_sync.pop( _tmp );
             }
-            int _res = theDistributor->m_nMsgsRecvd.fetch_and_store( 0 ); //_ret;
+            int _res = theDistributor->m_nMsgsRecvd.exchange( 0 ); //_ret;
             // std::cerr << "\t." << _res << std::endl;
             return _res;// - (2*_n + 1);
         }

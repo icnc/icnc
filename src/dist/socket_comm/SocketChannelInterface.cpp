@@ -33,7 +33,7 @@
 #include "itac_internal.h"
 
 #include <cnc/internal/tbbcompat.h>
-#include <tbb/atomic.h>
+#include <atomic>
 
 #define HERE __FILE__, __LINE__
 
@@ -147,7 +147,7 @@ namespace CnC
             // don't handle all other exceptions, as we do not know them, they must be weired
 
              // Try to be fair with picking the next message to be received:
-            static tbb::atomic< int > prevClient;
+            static std::atomic< int > prevClient;
             int client = prevClient;
             while (    client < nClients
                     && (    m_recvSocketTmp[client] != PAL_INVALID_SOCKET

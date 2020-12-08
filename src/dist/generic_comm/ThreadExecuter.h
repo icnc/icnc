@@ -29,7 +29,7 @@
 #define _CNC_COMM_THREADEXECUTER_H_
 
 #include <cnc/internal/tbbcompat.h>
-#include <tbb/tbb_thread.h>
+#include <thread>
 #include <string>
 
 namespace CnC
@@ -68,7 +68,7 @@ namespace CnC
 
         protected:
             class ThreadArgs;
-            tbb::tbb_thread * m_thread;
+            std::thread * m_thread;
             ThreadArgs      * m_threadArgs;
             std::string       m_threadName;
             int               m_threadNameSuffix;

@@ -7,10 +7,10 @@
 
 #include <iostream>
 #include <sstream>
-#include <tbb/atomic.h>
+#include <atomic>
 #include <tbb/tick_count.h>
 #include <tbb/parallel_for.h>
-#include <tbb/tbb_thread.h>
+#include <thread>
 #include <tbb/blocked_range.h>
 #include <cassert>
 
@@ -221,8 +221,8 @@ struct fnctr
     fnctr( int t = -1 ) : m_tag( t ) {}
 };
 
-tbb::atomic< int > counter;
-tbb::atomic< int > checker[1001];
+std::atomic< int > counter;
+std::atomic< int > checker[1001];
 
 int my_step::execute( const std::pair< int, int > & tag, my_context & c ) const
 {
@@ -265,7 +265,7 @@ int my_step2::execute( const int & tag, my_context & c ) const
     return CnC::CNC_Success;
 }
 
-static tbb::atomic< char > _chck[512];
+static std::atomic< char > _chck[512];
 
 // test putting custom ranges prescribing a step with dependencies 
 int my_step3::execute( const int & tag, my_context & c ) const

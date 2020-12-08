@@ -28,13 +28,13 @@
 #ifndef  _CnC_SCHEDULER_H_
 #define  _CnC_SCHEDULER_H_
 
+#include <atomic>
+#include <thread>
 #include <cnc/internal/cnc_api.h>
 #include <cnc/internal/dist/distributable.h>
 #include <cnc/internal/scalable_vector.h>
 #include <cnc/internal/tbbcompat.h>
 #include <tbb/concurrent_queue.h>
-#include <tbb/tbb_thread.h>
-#include <tbb/atomic.h>
 #include <tbb/spin_mutex.h>
 #include <cnc/internal/tls.h>
 
@@ -153,7 +153,7 @@ namespace CnC {
             static int get_target_pid( int pot );
 
 			/// counter type for counting steps in flight
-			typedef tbb::atomic< unsigned int > inflight_counter_type;
+			typedef std::atomic< unsigned int > inflight_counter_type;
 
         protected:
             /// blocks until all scheduled step instances have been fully executed
@@ -213,8 +213,8 @@ namespace CnC {
         protected:
             int                                    m_root;         ///< root process requesting wait
         private:
-            tbb::atomic< unsigned int >            m_userStepsInFlight;
-            tbb::atomic< unsigned int >            m_activeGraphs;
+            std::atomic< unsigned int >            m_userStepsInFlight;
+            std::atomic< unsigned int >            m_activeGraphs;
             const bool                             m_bypass;
             static TLS_static< schedulable * >     m_TLSCurrent;
 

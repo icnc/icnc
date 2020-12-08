@@ -185,7 +185,7 @@ private:
 };
 
 #include <cnc/internal/hash_item_table.h>
-#include <tbb/tbb_thread.h>
+#include <thread>
 
 /// Stores items in a hash_table and in a SQL table.
 /// Implements the required interface to be used by item_collection_base.

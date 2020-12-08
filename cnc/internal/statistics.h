@@ -29,7 +29,7 @@
 #define  _CnC_STATSISTICS_H_
 
 #include <cnc/internal/tbbcompat.h>
-#include "tbb/atomic.h"
+#include <atomic>
 #include <cnc/internal/cnc_api.h>
 #include <ostream>
 
@@ -74,14 +74,14 @@ namespace CnC {
 
         private:
             // Scheduler statistics
-            tbb::atomic< int >  m_steps_created;  
-            tbb::atomic< int >  m_steps_scheduled;  
-            tbb::atomic< int >  m_steps_launched;  
-            tbb::atomic< int >  m_steps_suspended;  
-            tbb::atomic< int >  m_steps_resumed; 
-            tbb::atomic< int >  m_msgs_sent;
-            tbb::atomic< int >  m_msgs_recvd;
-            tbb::atomic< int >  m_bcasts_sent;
+            std::atomic< int >  m_steps_created;
+            std::atomic< int >  m_steps_scheduled;
+            std::atomic< int >  m_steps_launched;
+            std::atomic< int >  m_steps_suspended;
+            std::atomic< int >  m_steps_resumed;
+            std::atomic< int >  m_msgs_sent;
+            std::atomic< int >  m_msgs_recvd;
+            std::atomic< int >  m_bcasts_sent;
         }; // class context_base
 
     } // namespace Internal

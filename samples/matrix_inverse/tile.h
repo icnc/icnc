@@ -34,8 +34,8 @@
 #endif
 #define MINPIVOT 1E-12
 
-static tbb::atomic<int> tiles_created;
-static tbb::atomic<int> tiles_deleted;
+static std::atomic<int> tiles_created;
+static std::atomic<int> tiles_deleted;
 
 enum construct_type {
     C_INVERSE,

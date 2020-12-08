@@ -122,9 +122,9 @@ namespace CnC {
         ///   * optimize bcast (e.g. communicate over a tree)
         struct dist_init
         {
-            typedef void (*subscriber_type)();
-
-            dist_init( subscriber_type subscriber, long flag = 0, bool dist_env = false )
+            // typedef void (*subscriber_type)();
+            template<typename SubscriberType>
+            dist_init( SubscriberType subscriber, long flag = 0, bool dist_env = false )
             {
                 const char * dist_cnc_comm = getenv( "DIST_CNC" ); 
                 communicator_loader_type loader = Internal::dist_cnc_load_comm( dist_cnc_comm,

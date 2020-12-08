@@ -42,7 +42,7 @@
 #endif
 
 #include "tbb/tick_count.h"
-#include "tbb/atomic.h"
+#include "atomic"
 #include "cnc/cnc.h"
 #include "cnc/debug.h"
 #include "../tile.h"

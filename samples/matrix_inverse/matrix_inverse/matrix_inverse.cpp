@@ -42,7 +42,7 @@
 #endif
 
 #include "tbb/tick_count.h"
-#include "tbb/atomic.h"
+#include "atomic"
 
 #ifdef _DIST_
 #include <cnc/dist_cnc.h>

@@ -119,7 +119,7 @@ typedef unsigned long long int auto_id;
 
 static auto_id id_gen()
 {
-    static tbb::atomic< unsigned int > g_cnt;
+    static std::atomic< unsigned int > g_cnt;
     return ( ( (auto_id)CnC::Internal::distributor::myPid() ) << (sizeof(auto_id)*4) ) + ( (auto_id)(++g_cnt) );
 }
 

@@ -34,7 +34,7 @@
 #include <cnc/internal/item_collection_i.h>
 #include <cnc/internal/tbbcompat.h>
 #include <tbb/concurrent_priority_queue.h>
-#include <tbb/atomic.h>
+#include <atomic>
 #include <tbb/task_scheduler_init.h>
 #include <tbb/task.h>
 #include <cnc/internal/statistics.h>
@@ -61,8 +61,8 @@ namespace CnC {
             typedef TaskWrapper2< apply_step_instance > ApplyTask2;
 
             run_queue                  m_runQueue;
-            tbb::atomic< int >         m_status;
-            tbb::atomic< bool>         m_allocated;
+            std::atomic< int >         m_status;
+            std::atomic< bool>         m_allocated;
             tbb::task_scheduler_init   m_initTBB ;
             apply_step_instance      * m_applyStepInstance;
             friend class apply_step_instance; //to call set_current

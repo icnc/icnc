@@ -534,7 +534,7 @@ namespace CnC {
                             // (we reached quiescence, not 100% guaranteed in dist-mode)
                             probed = true;
                         } else {
-                            tbb::this_tbb_thread::sleep(tbb::tick_count::interval_t(0.005));  
+                            std::this_thread::sleep_for(std::chrono::microseconds(500));
                         }
                     } 
                 } while( ++_trials < NUM_TRIALS );

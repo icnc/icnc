@@ -12,11 +12,11 @@ namespace CnC
     namespace Internal
     {
         distributor::my_map          distributor::m_distContexts[2];
-        tbb::atomic< int >           distributor::m_nextGId;
+        std::atomic< int >           distributor::m_nextGId;
         distributor::state_type      distributor::m_state;
         tbb::concurrent_queue< int > distributor::m_sync;
         int                          distributor::m_flushCount;
-        tbb::atomic< int >           distributor::m_nMsgsRecvd;
+        std::atomic< int >           distributor::m_nMsgsRecvd;
         
         communicator * distributor::m_communicator;
         static SocketCommunicator g_mySocketComm;

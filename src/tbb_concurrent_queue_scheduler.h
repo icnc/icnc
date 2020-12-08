@@ -31,7 +31,7 @@
 #include <cnc/internal/scheduler_i.h>
 #include <cnc/internal/tbbcompat.h>
 #include <tbb/concurrent_queue.h>
-#include <tbb/tbb_thread.h>
+#include <thread>
 #include <cnc/internal/tls.h>
 #include <tbb/concurrent_priority_queue.h>
 
@@ -84,7 +84,7 @@ namespace CnC {
 
             static my_concurrent_queue   * m_queues;
             static tbb::concurrent_bounded_queue< schedulable * > * m_gQueue;
-            static tbb::tbb_thread      ** m_threads;
+            static std::thread      ** m_threads;
             static int                     m_numThreads;
             static my_tls_queue            m_localQueue;
             const bool                     m_steal;

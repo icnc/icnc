@@ -28,13 +28,13 @@
 #ifndef  _CnC_CONTEXT_BASE_H_
 #define  _CnC_CONTEXT_BASE_H_
 
+#include <atomic>
+#include <thread>
 #include <cnc/internal/cnc_api.h>
 #include <cnc/internal/dist/distributable_context.h>
 #include <cnc/internal/traceable.h>
 #include <cnc/internal/tbbcompat.h>
-#include <tbb/atomic.h>
 #include <tbb/concurrent_queue.h>
-#include <tbb/tbb_thread.h>
 #include <cnc/internal/cnc_stddef.h>
 
 namespace CnC {
@@ -45,7 +45,7 @@ namespace CnC {
         class item_collection_i;
         class chronometer;
 
-        typedef tbb::atomic< int > Counter_t;
+        typedef std::atomic< int > Counter_t;
 
         /// The actualy core of a context.
         /// A context_base manages the dynamic instantiation of a runnable graph.
@@ -112,9 +112,9 @@ namespace CnC {
             chronometer       * m_timer;
             scheduler_i       * m_scheduler;
             blocking_queue      m_envIsWaiting;
-            tbb::tbb_thread   * m_gcThread;
+            std::thread       * m_gcThread;
             int                 m_numThreads;
-            tbb::atomic< int >  m_stepInstanceCount;
+            std::atomic< int >  m_stepInstanceCount;
 
             friend std::ostream & operator<<( std::ostream &, const context_base & );
             template< typename T, typename item_type, typename Tuner > friend class item_collection_base;

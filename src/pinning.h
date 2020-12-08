@@ -35,7 +35,7 @@
 #endif
 #include <cnc/internal/tbbcompat.h>
 #include <tbb/task_scheduler_observer.h>
-#include <tbb/atomic.h>
+#include <atomic>
 
 namespace CnC {
 	namespace Internal {
@@ -43,7 +43,7 @@ namespace CnC {
 		inline static void pin_thread( int tid, int cid, int htstride );
 		
         /// pins TBB thraeds to cores
-        static tbb::atomic< int > s_id;
+        static std::atomic< int > s_id;
         class pinning_observer: public tbb::task_scheduler_observer
         {
         public:
@@ -53,7 +53,7 @@ namespace CnC {
                 observe(true); // activate the observer
             }
             /*override*/ void on_scheduler_entry( bool worker ) {
-                int _i = s_id.fetch_and_increment();
+                int _i = s_id.fetch_add(1);
                 pin_thread( _i, -1, m_hts );
                 // set_thread_affinity( tbb::task_arena::current_slot(), m_mask ); 
             }

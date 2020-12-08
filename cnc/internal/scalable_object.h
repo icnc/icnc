@@ -46,7 +46,7 @@ namespace CnC {
         class CNC_API scalable_object
         {
         public:
-            inline void * operator new( size_t size ) throw( std::bad_alloc )
+            inline void * operator new( size_t size )
             {
                 void * _ptr = scalable_malloc( size );
                 if ( _ptr ) return _ptr;

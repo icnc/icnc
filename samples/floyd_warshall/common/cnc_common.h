@@ -32,7 +32,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <tbb/tick_count.h>
-#include <tbb/tbb_thread.h>
 #ifdef _DIST_
 #include <cnc/dist_cnc.h>
 #include <cnc/internal/dist/distributor.h>

@@ -39,7 +39,7 @@
 namespace CnC {
     namespace Internal {
         
-        static tbb::atomic< bool > s_have_pinning_observer;
+        static std::atomic< bool > s_have_pinning_observer;
 
 		namespace {
 			static pinning_observer * s_po = NULL;
@@ -79,7 +79,8 @@ namespace CnC {
               m_taskGroupContext( tbb::task_group_context::isolated, tbb::task_group_context::default_traits | tbb::task_group_context::concurrent_wait )
         {
             //            {Speaker oss; oss << std::max( 2, numThreads + ( distributor::myPid() == 0 ? 0 : 1 ) );}
-			if( htstride && s_have_pinning_observer.compare_and_swap( true, false ) == false ) {
+            bool _tmp(false);
+			if( htstride && s_have_pinning_observer.compare_exchange_strong( _tmp, true ) ) {
 				s_po = new pinning_observer( htstride );
 			}
             m_status = COMPLETED;
@@ -100,8 +101,9 @@ namespace CnC {
         // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
         void simplest_scheduler::do_schedule( schedulable * stepInstance )
-        { 
-            m_status.compare_and_swap( RUNNING, COMPLETED );
+        {
+            int _tmp(COMPLETED);
+            m_status.compare_exchange_strong( _tmp, RUNNING );
             //            tbb_waiter * _waitTask = new( tbb::task::allocate_root() ) TaskWrapper( stepInstance );
             TaskWrapper * newTask = new( tbb::task::allocate_additional_child_of( *m_rootTask ) ) TaskWrapper( stepInstance );
             //tbb::task::enqueue( *newTask );

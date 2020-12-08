@@ -35,8 +35,8 @@
 #include <cnc/internal/context_base.h>
 #include <cnc/internal/statistics.h>
 #include <cnc/internal/tbbcompat.h>
-#include <tbb/atomic.h>
-#include <tbb/tbb_thread.h>
+#include <atomic>
+#include <thread>
 #include <tbb/queuing_rw_mutex.h>
 #include <cnc/internal/cnc_stddef.h>
 #include <cnc/internal/dist/distributor.h>
@@ -197,10 +197,10 @@ namespace CnC {
                 m_gQueue = new tbb::concurrent_bounded_queue< schedulable * >;
                 m_numThreads = numThreads;
                 m_queues = new my_concurrent_queue[m_steal ? m_numThreads : 1];
-                m_threads = new tbb::tbb_thread*[m_numThreads];
+                m_threads = new std::thread*[m_numThreads];
                 m_threads[0] = NULL;
                 for( int i = _amroot ? 1 : 0; i < m_numThreads; ++i ) {
-                    m_threads[i] = new tbb::tbb_thread( run_steps(), this, i );
+                    m_threads[i] = new std::thread( run_steps(), this, i );
                 }
                 wakeUpStep = new wakeup_step( *this );
 				if( m_htstride ) pin_thread( 0, -1, m_htstride );
@@ -291,7 +291,7 @@ namespace CnC {
         // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
         template< typename Q, bool use_affinity > typename tbb_concurrent_queue_scheduler_base< Q, use_affinity >::my_concurrent_queue  * tbb_concurrent_queue_scheduler_base< Q, use_affinity >::m_queues = NULL;
-        template< typename Q, bool use_affinity > tbb::tbb_thread ** tbb_concurrent_queue_scheduler_base< Q, use_affinity >::m_threads = NULL;
+        template< typename Q, bool use_affinity > std::thread ** tbb_concurrent_queue_scheduler_base< Q, use_affinity >::m_threads = NULL;
         template< typename Q, bool use_affinity > int tbb_concurrent_queue_scheduler_base< Q, use_affinity >::m_numThreads = 0;
         template< typename Q, bool use_affinity > typename tbb_concurrent_queue_scheduler_base< Q, use_affinity >::my_tls_queue tbb_concurrent_queue_scheduler_base< Q, use_affinity >::m_localQueue;
         template< typename Q, bool use_affinity > tbb::concurrent_bounded_queue< schedulable * > * tbb_concurrent_queue_scheduler_base< Q, use_affinity >::m_gQueue = NULL;

@@ -37,7 +37,7 @@
 
 #include <cnc/internal/tbbcompat.h>
 #include <tbb/scalable_allocator.h>
-#include <tbb/atomic.h>
+#include <atomic>
 
 #include <cnc/internal/scalable_vector.h>
 #include <cnc/internal/cnc_stddef.h>
@@ -157,8 +157,8 @@ namespace CnC {
               m_step(),
               m_inited( false )
         {
-            static tbb::atomic< bool > _inited;
-            if( _inited.fetch_and_store( true ) == false ) {
+            static std::atomic< bool > _inited;
+            if( _inited.exchange( true ) == false ) {
                 if( s_tracingName.empty() ) {
                     s_tracingName = "Range<";
                     s_tracingName.append( m_stepLauncher.m_stepColl.name() );

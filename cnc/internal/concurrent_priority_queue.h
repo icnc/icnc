@@ -34,7 +34,7 @@
 
 #include <cnc/internal/tbbcompat.h>
 #include <tbb/queuing_mutex.h>
-#include <tbb/atomic.h>
+#include <atomic>
 #include <tbb/concurrent_vector.h>
 
 namespace CnC {
@@ -50,7 +50,7 @@ namespace CnC {
             class HeapNode;
             typedef tbb::queuing_mutex mutex_t;
             typedef int intptr_t;
-            tbb::atomic< int > counter;
+            std::atomic< int > counter;
             static const int ROOT = 0;
             mutex_t heapLock;
             tbb::concurrent_vector< HeapNode > heap;
