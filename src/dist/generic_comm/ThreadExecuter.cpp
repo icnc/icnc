@@ -101,7 +101,7 @@ namespace CnC
             if ( m_thread != 0 ) return;
 
             m_threadArgs = new ThreadArgs( *this );
-            m_thread = new tbb::tbb_thread( *m_threadArgs );
+            m_thread = new std::thread( *m_threadArgs );
         }
 
         //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

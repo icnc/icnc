@@ -31,7 +31,7 @@
 #include <cnc/internal/tbbcompat.h>
 #include <cnc/internal/item_properties.h>
 #include <tbb/spin_mutex.h>
-#include <tbb/atomic.h>
+#include <atomic>
 #include <cnc/internal/scalable_vector.h>
 #include <cnc/internal/cnc_stddef.h>
 
@@ -65,7 +65,7 @@ namespace CnC {
                 {
                     m_item = NULL;
                 }
-                tbb::atomic< const ItemT * > m_item; /// atomic var allows lock-free access in certain cases
+                std::atomic< const ItemT * > m_item; /// atomic var allows lock-free access in certain cases
                 item_properties              m_prop; /// the getcount in here is an atomic var!
                 mutex_t                      m_mutex;
             private:
@@ -143,7 +143,7 @@ namespace CnC {
 
         private:
             map_t                 m_map;
-            tbb::atomic< size_t > m_size;
+            std::atomic< size_t > m_size;
         };
 
         // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -309,7 +309,8 @@ namespace CnC {
                 _data->m_prop.set_owner( owner );
                 // update item after getcount to guarantee that a get_item does not return getcount and item before
                 // both are actually updated (get_count only checks item).
-                if( _data->m_item.compare_and_swap( item, NULL ) != NULL ) return false;
+                ItemT * _sw(NULL);
+                if( ! _data->m_item.compare_exchange_strong( _sw, item ) ) return false;
                 m_size++;
                 return true;
             } // else

@@ -80,8 +80,8 @@ namespace CnC {
 
             int set_or_increment_get_count( int cnt )
             {
-                int _tmp = m_getCount.compare_and_swap( cnt, UNSET_GET_COUNT );
-                if( _tmp == UNSET_GET_COUNT ) return _tmp;
+                int _tmp( UNSET_GET_COUNT );
+                if( m_getCount.compare_exchange_strong( _tmp, cnt ) ) return _tmp;
                 CNC_ASSERT( static_cast< unsigned int >( _tmp ) != NO_GET_COUNT );
                 return increment_get_count( cnt );
             }
@@ -164,7 +164,7 @@ namespace CnC {
 #else
         private:
 #endif
-            tbb::atomic< int >           m_getCount;
+            std::atomic< int >           m_getCount;
         };
 
     } // namespace Internal

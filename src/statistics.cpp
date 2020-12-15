@@ -31,7 +31,6 @@
 
 #include <cnc/internal/statistics.h>
 #include <cnc/internal/tbbcompat.h>
-#include "tbb/atomic.h"
 
 namespace CnC {
     namespace Internal {

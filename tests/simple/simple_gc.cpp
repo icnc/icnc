@@ -10,7 +10,7 @@
 #endif
 #include <cnc/debug.h>
 #include <cassert>
-#include <tbb/tbb_thread.h>
+#include <thread>
 #include <tbb/tick_count.h>
 #include <cstdlib>
 
@@ -99,7 +99,7 @@ int main( int, char*[] )
     c.wait();
 
     // sleep a bit to make sure the GC in the background has completed (distCnC)
-    //    tbb::this_tbb_thread::sleep( tbb::tick_count::interval_t( 1.0 ) );
+    tbb::this_tbb_thread::sleep( tbb::tick_count::interval_t( 1.0 ) );
     
     std::cout << c.m_vitems.size() << " " << c.m_hitems.size() << std::endl;
 

@@ -73,7 +73,7 @@ namespace CnC
 
             // turn wait mode on for intel mpi if possible
             // this should greatly improve performance for intel mpi
-            PAL_SetEnvVar( "I_MPI_WAIT_MODE", "enable", 0);
+            PAL_SetEnvVar( "I_MPI_WAIT_MODE", "1", 0);
 
             int flag;
             MPI_Initialized( &flag );
@@ -114,6 +114,17 @@ namespace CnC
                     std::string clientExe( _tmp ? _tmp : "" );
                     if( clientExe.empty() ) clientExe = PAL_GetProgname();
                     CNC_ASSERT( ! clientExe.empty() );
+                    // arguments
+                    _tmp = getenv( "CNC_MPI_EXE_ARGS" );
+                    std::istringstream iss( _tmp ? _tmp : "" );
+                    std::vector<std::string> args;
+                    std::copy(std::istream_iterator<std::string>(iss),
+                              std::istream_iterator<std::string>(),
+                              std::back_inserter(args));
+                    const char * clientArgs[args.size()+1];
+                    for(int i=0; i<args.size(); ++i) clientArgs[i] = args[i].c_str();
+                    clientArgs[args.size()] = nullptr;
+
                     // 3. Special setting for MPI_Info: hosts
                     const char * clientHost = getenv( "CNC_MPI_HOSTS" );
                     
@@ -133,9 +144,9 @@ namespace CnC
                     int* errCodes = new int[nClientsToSpawn];
                     MPI_Comm interComm;
                     int err = MPI_Comm_spawn( const_cast< char * >( clientExe.c_str() ),
-                                              MPI_ARGV_NULL, nClientsToSpawn,
-                                              clientInfo, 0, MPI_COMM_WORLD,
-                                              &interComm, errCodes );
+                                              const_cast< char ** >(clientArgs),
+                                              nClientsToSpawn, clientInfo, 0,
+                                              MPI_COMM_WORLD, &interComm, errCodes );
                     delete [] errCodes;
                     if ( err ) {
                         // can't use Speaker yet, need Channels to be inited

@@ -33,10 +33,9 @@
 #include <cnc/internal/context_base.h>
 #include <cnc/internal/item_collection_i.h>
 #include <cnc/internal/tbbcompat.h>
-#include <tbb/atomic.h>
+#include <atomic>
 #include <tbb/task_scheduler_init.h>
 #include <tbb/task.h>
-#include <tbb/tbb_thread.h>
 #include <cnc/internal/statistics.h>
 
 namespace CnC {
@@ -66,7 +65,7 @@ namespace CnC {
             
             class TaskWrapper;
 
-            tbb::atomic< int >         m_status;
+            std::atomic< int >         m_status;
             tbb::empty_task *          m_rootTask;
             tbb::task_scheduler_init   m_initTBB;
             tbb::task_group_context    m_taskGroupContext;

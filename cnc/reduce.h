@@ -36,7 +36,7 @@
 #include <cnc/internal/tbbcompat.h>
 #include <tbb/concurrent_unordered_map.h>
 #include <tbb/combinable.h>
-#include <tbb/atomic.h>
+#include <atomic>
 #include <tbb/spin_rw_mutex.h>
 #include <functional>
 
@@ -189,16 +189,16 @@ namespace CnC
         // thread-local storage per reduction
         struct red_tls {
             tbb::combinable< IType > val;
-            tbb::atomic< CType > nreduced;
-            tbb::atomic< CType > n;
+            std::atomic< CType > nreduced;
+            std::atomic< CType > n;
             mutex_type mtx;
 #ifdef _DIST_CNC_
-            tbb::atomic< int > nCounts;
-            tbb::atomic< int > nValues;
+            std::atomic< int > nCounts;
+            std::atomic< int > nValues;
             int owner;
             
 #endif
-            tbb::atomic< int > status;
+            std::atomic< int > status;
             red_tls();
             red_tls( const IType & v );
             red_tls( const red_tls & rt );
@@ -261,7 +261,7 @@ namespace CnC
         tls_map_type m_reductions;
         const IType  m_identity;
 #ifdef _DIST_CNC_
-        tbb::atomic< int > m_nDones;
+        std::atomic< int > m_nDones;
         bool         m_alldone;
 #endif
     };
@@ -426,7 +426,7 @@ namespace CnC
         // we might have a count-put and the last value-put concurrently and all local
         // only then the owner/to can be <0 or myself
         if( to < 0 || to == CnC::tuner_base::myPid() ) return false;
-        CType _cnt = i->second.nreduced.fetch_and_store( 0 );
+        CType _cnt = i->second.nreduced.exchange( 0 );
         if( always || _cnt > 0 ) { // someone else might have transmitted the combined count already
             CnC::serializer * ser = this->new_serializer();
             (*ser) & DISTRED::GATHERCOUNT & otag & _cnt;
@@ -463,7 +463,7 @@ namespace CnC
             oss << this->name() << " try_send_or_put_value [";
             cnc_format( oss, otag ) << "] nValues " << i->second.nValues << " status " << i->second.status;
         }
-        if( i->second.nValues.fetch_and_decrement() == 1 ) {
+        if( i->second.nValues.fetch_sub(1) == 1 ) {
             if( i->second.owner == CnC::tuner_base::myPid() ) {
                 if( i->second.status == FINISH ) {
                     CNC_ASSERT( i->second.nreduced == i->second.n || i->second.n == M1 );
@@ -772,12 +772,14 @@ namespace CnC
                                     << " owner " << i->second.owner << " status " << i->second.status;
         }
         i->second.owner = owner;
-        if( owner != CnC::tuner_base::myPid() || i->second.status.compare_and_swap( BCAST_DONE, CNT_AVAILABLE ) == CNT_AVAILABLE ) {
+        int _sw(CNT_AVAILABLE);
+        if( owner != CnC::tuner_base::myPid() || i->second.status.compare_exchange_strong( _sw, BCAST_DONE ) ) {
             // "forward" through bcast-tree (we are using our home-grown bcast!)
             i->second.nValues = 1000;
             i->second.nValues += m_reduce->bcast_count( otag, M1, owner );
-            int _tmp = i->second.status.compare_and_swap( FINISH, BCAST_DONE );
-            CNC_ASSERT( owner != CnC::tuner_base::myPid() || _tmp == BCAST_DONE );
+            _sw = BCAST_DONE;
+            i->second.status.compare_exchange_strong( _sw, FINISH );
+            CNC_ASSERT( owner != CnC::tuner_base::myPid() || _sw == BCAST_DONE );
             // we leave one more for ourself (no contribution to value)
 			i->second.nValues -= 999;
             // we might be a leaf or all the values came back between the bcast and now
@@ -795,8 +797,9 @@ namespace CnC
         i->second.owner = owner;
         i->second.n = cnt;
 
-        int _tmp = i->second.status.compare_and_swap( CNT_AVAILABLE, LOCAL );
-        CNC_ASSERT( _tmp == LOCAL );
+        int _sw(LOCAL);
+        i->second.status.compare_exchange_strong( _sw, CNT_AVAILABLE );
+        CNC_ASSERT( _sw == LOCAL );
         // "forward" through bcast-tree (we are using our home-grown bcast!)
         i->second.nCounts = 1;
         i->second.nCounts += m_reduce->bcast_count( otag, cnt, owner );
@@ -852,8 +855,9 @@ namespace CnC
             } else { // this is the done flag
                 // we have no idea what was put remotely
                 // -> we trigger the final gather phase
-                int _tmp = i->second.status.compare_and_swap( CNT_AVAILABLE, LOCAL );
-                CNC_ASSERT( _tmp == LOCAL );
+                int _sw(LOCAL);
+                i->second.status.compare_exchange_strong( _sw, CNT_AVAILABLE );
+                CNC_ASSERT( _sw == LOCAL );
                 i->second.nCounts = 0;
                 on_done( otag, i, CnC::tuner_base::myPid() );
             }

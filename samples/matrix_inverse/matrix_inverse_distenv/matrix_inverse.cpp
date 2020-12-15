@@ -62,7 +62,7 @@
 #endif
 
 #include "tbb/tick_count.h"
-#include "tbb/atomic.h"
+#include "atomic"
 
 #include "../tile.h"
 

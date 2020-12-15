@@ -70,7 +70,7 @@ inline CnC::bitwise_serializable serializer_category( const triple< t1, t2, t3 >
 }
 #endif
 
-static tbb::atomic< time_t > __tm;
+static std::atomic< time_t > __tm;
 // on distributed memory a global counter is difficult -> use pid to encode globally unique time
 // if we use non-globally-unique times we get duplicate tags and our verification fails
 static time_t time_gen()
@@ -113,7 +113,7 @@ private:
     template< typename IC >
     struct on_data : public IC::callback_type
     {
-        typedef typename tbb::atomic< typename IC::data_type > * val_ptr_type;
+        typedef typename std::atomic< typename IC::data_type > * val_ptr_type;
         // we accept the pointer to the curr-value member where we store the new value
         on_data( val_ptr_type vp  ) : curr_val(vp) {}
         void on_put( const typename IC::tag_type & tag, const typename IC::data_type & val )
@@ -138,9 +138,9 @@ private:
         cv_type * cv;
     };
 
-    tbb::atomic< typename IC1::data_type > curr_v1;
-    tbb::atomic< typename IC2::data_type > curr_v2;
-    tbb::atomic< typename IC3::data_type > curr_v3;
+    std::atomic< typename IC1::data_type > curr_v1;
+    std::atomic< typename IC2::data_type > curr_v2;
+    std::atomic< typename IC3::data_type > curr_v3;
     out_tcoll & outt;        
     out_icoll & outi;
 };

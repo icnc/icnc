@@ -34,7 +34,7 @@
 #include <cnc/default_tuner.h>
 #include <cnc/itac.h>
 #include <cnc/internal/tbbcompat.h>
-#include <tbb/atomic.h>
+#include <atomic>
 #include <sstream>
 
 namespace CnC {
@@ -108,7 +108,7 @@ namespace CnC {
 
             const Tag * get_tag_type() const { return NULL; } // need something to help the compiler deduce template argument type
             Arg                                        & m_arg;
-            mutable tbb::atomic< step_instance_type * >  m_stepInstance; // use pointer & lazy init avoid default constructor for tags
+            mutable std::atomic< step_instance_type * >  m_stepInstance; // use pointer & lazy init avoid default constructor for tags
             const step_coll_type                       & m_stepColl;
             const TagTuner                             & m_tagTuner;
             scheduler_i                                & m_scheduler;
@@ -228,13 +228,14 @@ namespace CnC {
 
         template< class Tag, class range_type, class step_instance_type, class StepTuner, class StepLauncher >
         tagged_step_instance< range_type > * create_rsi( const Tag *, const range_type & range, const StepLauncher * sc, context_base & ctxt, scheduler_i & sch,
-                                                         const StepTuner & tuner, tbb::atomic< step_instance_type * > & stepInstance, bool compute_on = true )
+                                                         const StepTuner & tuner, std::atomic< step_instance_type * > & stepInstance, bool compute_on = true )
         {
             // avoid default constructor for tags
             if( stepInstance == NULL ) {
                 step_instance_type * _tmp = new step_instance_type( tag_for_range< Tag, range_type >::get( range, sc->get_tag_tuner().partitioner() ),
                                                                     ctxt, sc );
-                if( stepInstance.compare_and_swap( _tmp, NULL ) != NULL ) delete _tmp;
+                step_instance_type * _sw(NULL);
+                if( ! stepInstance.compare_exchange_strong( _sw, _tmp ) ) delete _tmp;
             }
 #ifndef CNC_PRE_SPLIT
 # define CNC_PRE_SPLIT false
@@ -250,7 +251,7 @@ namespace CnC {
         // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
         template< class Tag, class step_instance_type, class StepTuner, class StepLauncher >
-        tagged_step_instance< no_range > * create_rsi( const Tag *, const no_range & range, const StepLauncher * sc, context_base & ctxt, scheduler_i & sch, const StepTuner & tuner, tbb::atomic< step_instance_type * > & stepInstance, bool = true )
+        tagged_step_instance< no_range > * create_rsi( const Tag *, const no_range & range, const StepLauncher * sc, context_base & ctxt, scheduler_i & sch, const StepTuner & tuner, std::atomic< step_instance_type * > & stepInstance, bool = true )
         {
             CNC_ABORT( "You need to specify a range type to put a range" );
             return NULL;

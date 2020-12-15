@@ -43,7 +43,7 @@
 #include <cnc/internal/item_properties.h>
 #include <cnc/internal/dist/distributor.h>
 #include <cnc/internal/tbbcompat.h>
-#include <tbb/atomic.h>
+#include <atomic>
 #include <tbb/concurrent_unordered_set.h>
 //#include <tbb/concurrent_hash_map.h>
 
@@ -421,7 +421,7 @@ namespace CnC {
 
         Internal::distributable_context & m_context;
         tbb::concurrent_unordered_set< Tag, Hasher, Equality > m_canceledTags;
-        tbb::atomic< bool > m_cancelAll;
+        std::atomic< bool > m_cancelAll;
     };
 
 
@@ -598,10 +598,11 @@ namespace CnC {
         template< typename Tuner >
         const Tuner & get_default_tuner()
         {
-            static tbb::atomic< Tuner * > s_tuner;
+            static std::atomic< Tuner * > s_tuner;
             if( s_tuner == NULL ) {
                 Tuner * _tmp = new Tuner;
-                if( s_tuner.compare_and_swap( _tmp, NULL ) != NULL ) delete _tmp;
+                Tuner * _sw(NULL);
+                if( ! s_tuner.compare_exchange_strong( _sw, _tmp ) ) delete _tmp;
             }
             return *s_tuner;
         }

@@ -41,7 +41,7 @@
 #include <mmsystem.h>
 #endif
 #include <iostream>
-#include "tbb/tick_count.h"
+//#include "tbb/tick_count.h"
 
 #include <cnc/cnc.h>
 #include <cnc/debug.h>
@@ -208,12 +208,12 @@ int main(int argc, char*argv[])
     std::cout << "Starting Concurrent Collections solver for size " << size << "...\n";
     std::cout << "Using a tuning factor of " << tuning_factor << "\n";
 
-    tbb::tick_count startTime = tbb::tick_count::now();
+//    tbb::tick_count startTime = tbb::tick_count::now();
     long long int count = solve(size, findall, tuning_factor);
-    tbb::tick_count endTime = tbb::tick_count::now();
+//    tbb::tick_count endTime = tbb::tick_count::now();
 
     std::cout << "Number of solutions: " << count << std::endl;
-    std::cout << "Calculations took " << (endTime-startTime).seconds() << "s.\n";
+ //   std::cout << "Calculations took " << (endTime-startTime).seconds() << "s.\n";
 
 
     return 0;

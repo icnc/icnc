@@ -4,7 +4,6 @@
 
 #include <iostream>
 #include <tbb/tick_count.h>
-#include <tbb/tbb_thread.h>
 #ifdef _DIST_
 #include <cnc/dist_cnc.h>
 #else
@@ -71,8 +70,7 @@ int main( int, char*[] )
     c.wait();
     c.wait();
     //    assert(c.m_items.size() == numProcs * ( N - 1 ) || NULL == "Number of elements in the item collection is incorrect!");
-    //    tbb::this_tbb_thread::sleep( tbb::tick_count::interval_t( 1.0 ) );
-
+    std::this_thread::sleep_for(std::chrono::seconds(1));
     for( CnC::item_collection< int, int >::const_iterator it = c.m_items.begin(); it != c.m_items.end(); ++it ) {
         std::cout << ( it->first - *it->second )/N << "," << *it->second << std::endl;
     }

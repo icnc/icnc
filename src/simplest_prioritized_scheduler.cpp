@@ -41,7 +41,7 @@ namespace CnC {
         // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 		
-        static tbb::atomic< bool > s_have_pinning_observer;
+        static std::atomic< bool > s_have_pinning_observer;
 		
 		namespace {
 			static pinning_observer * s_po = NULL;

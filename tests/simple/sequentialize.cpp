@@ -5,7 +5,7 @@
 #endif
 #include <cnc/debug.h>
 #include <cassert>
-#include <tbb/tbb_thread.h>
+#include <thread>
 
 struct my_context;
 

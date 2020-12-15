@@ -134,7 +134,7 @@ namespace CnC {
         private:
             //            typedef tbb::spin_mutex mutex_type;
             map_t                 m_map;
-            tbb::atomic< size_t > m_size;
+            std::atomic< size_t > m_size;
             //            mutable mutex_type    m_mutex;
         };
 

@@ -29,7 +29,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <tbb/tick_count.h>
-#include <tbb/tbb_thread.h>
 #ifdef _DIST_
 #include <cnc/dist_cnc.h>
 #include <cnc/internal/dist/distributor.h>
@@ -124,8 +123,8 @@ int main(int argc, char* argv[])
 
     c.wait();
 
-    //    tbb::this_tbb_thread::sleep( tbb::tick_count::interval_t( 1.0 ) );
     // FIXME we have to transfer the items to the host first (distCnC)
+    std::this_thread::sleep_for(std::chrono::seconds(1));
     number_of_primes = (int)c.m_primes.size() + 1;
     tbb::tick_count t1 = tbb::tick_count::now();
 

@@ -34,12 +34,12 @@
     #pragma warning (disable: 4251 4275)
 #endif
 
+#include <atomic>
 #include <cnc/internal/cnc_api.h>
 #include <cnc/internal/dist/msg_callback.h>
 #include <cnc/internal/dist/communicator.h>
 #include <cnc/internal/dist/factory.h>
 #include <cnc/internal/tbbcompat.h>
-#include <tbb/atomic.h>
 #include <tbb/concurrent_hash_map.h>
 #include <tbb/concurrent_queue.h>
 
@@ -136,7 +136,7 @@ namespace CnC {
             static int flush();
 
             /// reset received message count
-            static int reset_recvd_msg_count() { return active() && theDistributor->m_communicator ? theDistributor->m_nMsgsRecvd.fetch_and_store( 0 ) : 0; }
+            static int reset_recvd_msg_count() { return active() && theDistributor->m_communicator ? theDistributor->m_nMsgsRecvd.exchange( 0 ) : 0; }
 
             /// Use this with care. Only useful for distributed and envs when you know what you're doing.
             static void unsafe_barrier() { if( active() && theDistributor->m_communicator ) theDistributor->m_communicator->unsafe_barrier(); }
@@ -152,11 +152,11 @@ namespace CnC {
             typedef tbb::concurrent_hash_map< int, distributable_context * > my_map;
 
             my_map               m_distContexts[2]; // use first entry only, only single-process communicators need the other
-            tbb::atomic< int >   m_nextGId;
+            std::atomic< int >   m_nextGId;
             state_type           m_state;
             tbb::concurrent_bounded_queue< int > m_sync; // simulates conditional variable, using char corrupts the stack on windows
             int                  m_flushCount;
-            tbb::atomic< int >   m_nMsgsRecvd;
+            std::atomic< int >   m_nMsgsRecvd;
             bool                 m_distEnv;
             static distributor  * theDistributor;
             static communicator * m_communicator;

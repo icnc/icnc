@@ -74,14 +74,15 @@ set(CMAKE_DEBUG_POSTFIX "_debug")
 ################################################################################
 # TBB deps
 
-set(CMAKE_PREFIX_PATH "${TBBROOT}/lib" "${TBBROOT}/lib/${PARCH}/gcc4.4" "${TBBROOT}/lib/${PARCH}/cc4.1.0_libc2.4_kernel2.6.16.21" "${TBBROOT}/lib/${PARCH}/${TBB_DLL_PFX}")
+set(CMAKE_PREFIX_PATH "${TBBROOT}/lib" "${TBBROOT}/lib/${PARCH}/gcc4.7" "${TBBROOT}/lib/${PARCH}/gcc4.4" "${TBBROOT}/lib/${PARCH}/cc4.1.0_libc2.4_kernel2.6.16.21" "${TBBROOT}/lib/${PARCH}/${TBB_DLL_PFX}")
 find_library(TBB_LIB tbb)
 find_library(TBBMALLOC_LIB tbbmalloc)
 set(CNC_ADD_LIBS ${CNC_ADD_LIBS} optimized ${TBB_LIB} optimized ${TBBMALLOC_LIB})
 if (CMAKE_BUILD_TYPE STREQUAL "Debug" OR ";${CMAKE_CONFIGURATION_TYPES};" MATCHES ";Debug;")
-  find_library(TBB_LIB_DBG tbb_debug)
-  find_library(TBBMALLOC_LIB_DBG tbbmalloc_debug)
-  set(CNC_ADD_LIBS ${CNC_ADD_LIBS} debug ${TBB_LIB_DBG} debug ${TBBMALLOC_LIB_DBG})
+  #find_library(TBB_LIB_DBG tbb_debug)
+  #find_library(TBBMALLOC_LIB_DBG tbbmalloc_debug)
+  #set(CNC_ADD_LIBS ${CNC_ADD_LIBS} debug ${TBB_LIB_DBG} debug ${TBBMALLOC_LIB_DBG})
+  set(CNC_ADD_LIBS ${CNC_ADD_LIBS} debug ${TBB_LIB} debug ${TBBMALLOC_LIB})
 endif()
 
 ################################################################################
@@ -94,7 +95,7 @@ else()
 endif(CMAKE_SYSTEM_NAME STREQUAL Windows)
 set(CMAKE_PREFIX_PATH "${MPIROOT}/${MPIPARCH}/include" "${MPIROOT}/include" "${MPIROOT}/include/mpich2" "${MPIROOT}/include/mpich")
 find_path(MPI_INC_DIR mpi.h)
-find_library(MPI_LIB_OPT NO_DEFAULT_PATH HINTS ${MPI_INC_DIR}/../lib ${MPIROOT}/lib ${MPIROOT}/Library/lib NAMES mpi_mt impimt mpich mpi impi)
+find_library(MPI_LIB_OPT NO_DEFAULT_PATH HINTS ${MPI_INC_DIR}/../lib ${MPIROOT}/lib ${MPIROOT}/lib/release_mt ${MPIROOT}/Library/lib NAMES mpi_mt impimt mpich mpi impi)
 if(CMAKE_BUILD_TYPE STREQUAL Debug)
   find_library(MPI_LIB_DBG NO_DEFAULT_PATH HINTS ${MPI_INC_DIR}/../lib ${MPIROOT}/lib NAMES mpi_dbg_mt impidmt mpich mpi)
   set(MPI_LIB optimized ${MPI_LIB_OPT} debug ${MPI_LIB_DBG} CACHE INTERNAL "use for mpi-dependent links")

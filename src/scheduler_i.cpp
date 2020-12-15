@@ -41,7 +41,6 @@
 #include <cnc/serializer.h>
 #include <cnc/internal/tbbcompat.h>
 #include <tbb/task.h>
-#include <tbb/compat/thread>
 #include <tbb/enumerable_thread_specific.h>
 #include <cnc/default_tuner.h>
 #include <iostream>

@@ -29,8 +29,8 @@
 #define  _CnC_SCHEDULABLE_H_
 
 #include <string>
+#include <atomic>
 #include <cnc/internal/tbbcompat.h>
-#include <tbb/atomic.h>
 #include <cnc/internal/cnc_stddef.h>
 
 namespace CnC {
@@ -122,8 +122,8 @@ namespace CnC {
             schedulable       * m_succStep;
             scheduler_i       & m_scheduler;
             const int           m_priority;
-            tbb::atomic< int >  m_nSuspenders;
-            tbb::atomic< bool > m_wasSuspendedSinceReset;  // should be set to false, when execution starts
+            std::atomic< int >  m_nSuspenders;
+            std::atomic< bool > m_wasSuspendedSinceReset;  // should be set to false, when execution starts
             //            bool                m_time;
             char                m_status;
             bool                m_inPending;
@@ -167,9 +167,8 @@ namespace CnC {
 
         inline void schedulable::suspend() 
         {
-            m_nSuspenders.fetch_and_increment();
-            m_wasSuspendedSinceReset.compare_and_swap( true, false );
-            CNC_ASSERT( m_wasSuspendedSinceReset );
+            m_nSuspenders.fetch_add(1);
+            m_wasSuspendedSinceReset = true;
         }
 
         // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -194,7 +193,7 @@ namespace CnC {
         inline bool schedulable::unsuspend() 
         {
             CNC_ASSERT( m_nSuspenders >= 1 );
-            return m_nSuspenders.fetch_and_decrement() == 1;
+            return m_nSuspenders.fetch_sub(1) == 1;
         }
 
         // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
