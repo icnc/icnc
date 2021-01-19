@@ -23,7 +23,18 @@
 #endif
 #include <cnc/debug.h>
 
-#define SLEEP( _x ) tbb::this_tbb_thread::sleep( tbb::tick_count::interval_t( _x ) )
+#define SLEEP( _x ) std::this_thread::sleep_for( std::chrono::milliseconds(_x) )
+
+// TBB's bliocked range is not default constructable anymore
+template< typename T >
+class blocked_range : public tbb::blocked_range< T >
+{
+public:
+    using tbb::blocked_range< T >::blocked_range;
+    blocked_range()
+        : tbb::blocked_range< T >(0,0)
+    {}
+};
 
 struct my_context;
 
@@ -44,7 +55,7 @@ struct my_step3
 
 struct my_step4
 {
-    int execute( const tbb::blocked_range< int > & tag, my_context & c ) const
+    int execute( const blocked_range< int > & tag, my_context & c ) const
     {
 #ifdef _DIST_
         if( CnC::tuner_base::myPid() == 0 )
@@ -64,20 +75,18 @@ struct my_step4
 };
 
 template<>
-struct cnc_tag_hash_compare< tbb::blocked_range< int > >
+struct cnc_tag_hash_compare< blocked_range< int > >
 {
-    size_t hash( const tbb::blocked_range< int > & x ) const { 
+    size_t hash( const blocked_range< int > & x ) const {
         // Knuth's multiplicative hash
         return x.begin();
     }
-    bool equal( const tbb::blocked_range< int > & a, const tbb::blocked_range< int > & b ) const {
+    bool equal( const blocked_range< int > & a, const blocked_range< int > & b ) const {
         return a.begin() == b.begin() && a.end() == b.end();
     }
 };
 
-namespace tbb {
-    CNC_BITWISE_SERIALIZABLE( blocked_range< int > );
-}
+CNC_BITWISE_SERIALIZABLE( blocked_range< int > );
 
 template< class T >
 class A {};
@@ -123,12 +132,12 @@ struct my_tuner : public CnC::step_tuner<>
     // define dependencies separately
     template< class dependency_consumer >
     void depends( const std::pair< int, int > & tag, my_context & c, dependency_consumer & dC ) const;
-    
+
     // use XGet in step::execute
     bool preschedule() const { return false; }
-    
+
     int compute_on( const std::pair< int, int > & tag, my_context & ) const { return (tag.first & 0x8) ? 0 : 1; }
-    
+
     //bool lock_globally( const std::pair< int, int > &, my_context & ) const { return true; }
 };
 
@@ -143,7 +152,7 @@ struct my_tuner3 : public CnC::step_tuner<>
     {
         return ( tag - 22 ) / 60;
     }
-    int compute_on( const tbb::blocked_range< int > & tag, my_context & c ) const
+    int compute_on( const blocked_range< int > & tag, my_context & c ) const
     {
         return compute_on( tag.begin(), c );
     }
@@ -151,7 +160,7 @@ struct my_tuner3 : public CnC::step_tuner<>
 
 struct my_tuner4 : public CnC::step_tuner<>
 {
-    int compute_on( const tbb::blocked_range< int > & tag, my_context & ) const { return tag.begin() / 60; }// CnC::COMPUTE_ON_LOCAL; }
+    int compute_on( const blocked_range< int > & tag, my_context & ) const { return tag.begin() / 60; }// CnC::COMPUTE_ON_LOCAL; }
 };
 
 struct my_context : public CnC::context< my_context >
@@ -162,13 +171,13 @@ struct my_context : public CnC::context< my_context >
     CnC::step_collection< my_step4, my_tuner4 >       m_steps4;
     CnC::tag_collection< std::pair< int, int >, CnC::preserve_tuner< std::pair< int, int > > >              m_tags;
     CnC::tag_collection< int >                                                                              m_tags2;
-    CnC::tag_collection< int, CnC::tag_tuner< tbb::blocked_range< int >, CnC::default_partitioner< 30 > > > m_tags3;
-    CnC::tag_collection< tbb::blocked_range< int >, CnC::tag_tuner< tbb::blocked_range< int >, CnC::tag_partitioner< 20 > > > m_tags4;
+    CnC::tag_collection< int, CnC::tag_tuner< blocked_range< int >, CnC::default_partitioner< 30 > > > m_tags3;
+    CnC::tag_collection< blocked_range< int >, CnC::tag_tuner< blocked_range< int >, CnC::tag_partitioner< 20 > > > m_tags4;
     CnC::item_collection< int, my_item >             m_items;
     CnC::item_collection< double, double> m_items2;
     typedef CnC::item_collection< int, int *, CnC::vector_tuner > ip_collection_type;
     ip_collection_type m_itemsP;
-    my_context() 
+    my_context()
         : CnC::context< my_context >(),
           m_steps( *this, "my_step" ),
           m_steps2( *this, "my_step2" ),
@@ -188,8 +197,8 @@ struct my_context : public CnC::context< my_context >
         m_tags4.prescribes( m_steps4, *this );
         m_itemsP.set_max( 900 );
     }
-    
-    virtual void serialize( CnC::serializer & ) 
+
+    virtual void serialize( CnC::serializer & )
     {
         tbb::queuing_mutex::scoped_lock _lock( ::CnC::Internal::s_tracingMutex );
         std::cout << "my_context::serialize()\n" << std::flush;
@@ -240,7 +249,7 @@ int my_step::execute( const std::pair< int, int > & tag, my_context & c ) const
         checker[tag.first * 10] = 0;
         c.m_tags.put( std::make_pair( tag.first * 10, 2 ) );
         c.m_tags2.put( tag.first * 10 );
-        SLEEP( 0.3 );
+        SLEEP( 300 );
         c.m_items.put( tag.first * 10, tag.first * 10 + 1 );
         c.m_items2.put( tag.first * 10.0, tag.first * 10.0 + 1 );
     }
@@ -267,7 +276,7 @@ int my_step2::execute( const int & tag, my_context & c ) const
 
 static std::atomic< char > _chck[512];
 
-// test putting custom ranges prescribing a step with dependencies 
+// test putting custom ranges prescribing a step with dependencies
 int my_step3::execute( const int & tag, my_context & c ) const
 {
     if( _chck[tag] != 0 )
@@ -314,10 +323,10 @@ int main( int, char*[] )
             c.m_tags.put( std::make_pair( i, 2 ) );
             c.m_items.put( i, i + 1 );
             c.m_items2.put( i, i + 1 );
-            //SLEEP( 4 );
+            //SLEEP( 4000 );
         }
 
-        tbb::blocked_range< int > br( 22, 222, 1 );
+        blocked_range< int > br( 22, 222, 1 );
         c.m_tags3.put_range( br );
         c.m_tags4.put_range( br );
 
@@ -411,7 +420,7 @@ int main( int, char*[] )
             _tcv.get( _st, _tmp );
         }
 #endif
-        
+
     }
     return 0;
 }

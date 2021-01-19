@@ -1,5 +1,5 @@
 /* *******************************************************************************
- *  Copyright (c) 2007-2014, Intel Corporation
+ *  Copyright (c) 2007-2021, Intel Corporation
  *
  *  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted provided that the following conditions are met:
@@ -684,7 +684,7 @@ namespace CnC {
         inline item_type * item_collection_base< T, item_type, Tuner >::create( const item_type & org ) const
         {
             item_type * _item = m_allocator.allocate( 1 );
-            m_allocator.construct( _item, org );
+            std::allocator_traits< item_allocator_type >::construct( m_allocator, _item, org);
             return _item;
         }
 
@@ -694,7 +694,7 @@ namespace CnC {
         inline void item_collection_base< T, item_type, Tuner >::uncreate( item_type * item ) const
         {
             if( item ) {
-                m_allocator.destroy( item );
+                std::allocator_traits< item_allocator_type >::destroy( m_allocator, item );
                 m_allocator.deallocate( item, 1 );
             }
         }

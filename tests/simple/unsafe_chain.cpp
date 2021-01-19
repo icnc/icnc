@@ -35,13 +35,13 @@ struct my_context : public CnC::context< my_context >
 int my_step::execute( const int tag, my_context & c ) const
 {
     if( tag == 0 ) {
-        tbb::this_tbb_thread::sleep( tbb::tick_count::interval_t( 0.2 ) );
+        std::this_thread::sleep_for( std::chrono::milliseconds(200) );
         c.m_items.put( 0, 0 );
-        tbb::this_tbb_thread::sleep( tbb::tick_count::interval_t( 0.2 ) );
+        std::this_thread::sleep_for( std::chrono::milliseconds(200) );
         c.m_items.put( 1, 1 );
-        tbb::this_tbb_thread::sleep( tbb::tick_count::interval_t( 0.2 ) );
+        std::this_thread::sleep_for( std::chrono::milliseconds(200) );
         c.m_items.put( 2, 2 );
-        tbb::this_tbb_thread::sleep( tbb::tick_count::interval_t( 0.2 ) );
+        std::this_thread::sleep_for( std::chrono::milliseconds(200) );
         c.m_items.put( 3, 3 );
     } else {
         int _i0, _i1, _i2, _i3;

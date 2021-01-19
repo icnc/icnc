@@ -1,5 +1,5 @@
 /* *******************************************************************************
- *  Copyright (c) 2007-2014, Intel Corporation
+ *  Copyright (c) 2007-2021, Intel Corporation
  *
  *  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted provided that the following conditions are met:
@@ -34,8 +34,8 @@
 #include <cnc/internal/item_collection_i.h>
 #include <cnc/internal/tbbcompat.h>
 #include <atomic>
-#include <tbb/task_scheduler_init.h>
-#include <tbb/task.h>
+#include <tbb/task_arena.h>
+#include <tbb/task_group.h>
 #include <cnc/internal/statistics.h>
 
 namespace CnC {
@@ -43,9 +43,9 @@ namespace CnC {
 
         class context_base;
 
-        /// This scheduler is only simply because the complexity is hidden in TBB.
+        /// This scheduler is only simple because the complexity is hidden in TBB.
         /// It spawns a task for every schedulable that's scheduled.
-        /// Each task is a child of a root taks. Every scheduler instance has its own root task.
+        /// Each task is a member of task group. Every scheduler instance has its own task group.
         /// So we can wait for groups of tasks (as needed for parallel_for).
         /// See TBB docs for the scheduling policies of TBB.
         /// \todo use tbb::task_arena to avoid dead-locks in distCnC.
@@ -56,19 +56,16 @@ namespace CnC {
         {
         public:
             simplest_scheduler( context_base &, int numThreads, int );
-            virtual ~simplest_scheduler();
+            virtual ~simplest_scheduler() noexcept;
             virtual void do_schedule( schedulable * stepInstance );
             virtual void wait( const inflight_counter_type & /*steps_in_flight*/ );
 
         private:
             enum { RUNNING, WAITING, COMPLETED };
             
-            class TaskWrapper;
-
-            std::atomic< int >         m_status;
-            tbb::empty_task *          m_rootTask;
-            tbb::task_scheduler_init   m_initTBB;
-            tbb::task_group_context    m_taskGroupContext;
+            std::atomic< int > m_status;
+            tbb::task_arena    m_taskArena;
+            tbb::task_group    m_taskGroup;
         };
 
     } // namespace Internal

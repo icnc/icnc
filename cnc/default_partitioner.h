@@ -1,5 +1,5 @@
 /* *******************************************************************************
- *  Copyright (c) 2007-2014, Intel Corporation
+ *  Copyright (c) 2007-2021, Intel Corporation
  *
  *  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted provided that the following conditions are met:
@@ -33,7 +33,7 @@
 #define _DEFAULT_PARTITIONER_H_
 
 #include <cnc/internal/tbbcompat.h>
-#include <tbb/task_scheduler_init.h>
+#include <tbb/info.h>
 #include <cstdlib>
 
 namespace CnC {
@@ -60,13 +60,13 @@ namespace CnC {
     public:
         default_partitioner()
             : m_grainSize( grainSize ),
-              m_nt( getenv( "CNC_NUM_THREADS" ) ?  atoi( getenv( "CNC_NUM_THREADS" ) ) : tbb::task_scheduler_init::default_num_threads() )
+              m_nt( getenv( "CNC_NUM_THREADS" ) ?  atoi( getenv( "CNC_NUM_THREADS" ) ) : tbb::info::default_concurrency() )
         {
             //            std::cerr << "d";
         }
         default_partitioner( const default_partitioner< grainSize > & o )
             : m_grainSize( o.m_grainSize ),
-              m_nt( getenv( "CNC_NUM_THREADS" ) ?  atoi( getenv( "CNC_NUM_THREADS" ) ) : tbb::task_scheduler_init::default_num_threads() )
+              m_nt( getenv( "CNC_NUM_THREADS" ) ?  atoi( getenv( "CNC_NUM_THREADS" ) ) : tbb::info::default_concurrency() )
         {
             //            std::cerr << "c";
         }

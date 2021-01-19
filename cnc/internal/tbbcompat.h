@@ -1,5 +1,5 @@
 /* *******************************************************************************
- *  Copyright (c) 2007-2014, Intel Corporation
+ *  Copyright (c) 2007-2021, Intel Corporation
  *
  *  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted provided that the following conditions are met:
@@ -36,17 +36,11 @@
 // # define TBB_DEPRECATED_MUTEX_COPYING 1
 // #endif
 
-#include <tbb/tbb_stddef.h>
-//#include <cnc/internal/cnc_stddef.h>
+#include <tbb/version.h>
 
-// we actually require TBB version 4.1 Update 1
-// # define CNC_REQUIRED_TBB_VERSION 6101
-// # define CNC_REQUIRED_TBB_VERSION_STRING "4.1 Update 1"
-// but the TBB packages only ship with binaries for Visual Studio 2013
-// with 4.2 Update 3 which uses 7003
 #ifndef CNC_REQUIRED_TBB_VERSION
-# define CNC_REQUIRED_TBB_VERSION 7003
-# define CNC_REQUIRED_TBB_VERSION_STRING 4.2 Update 3
+# define CNC_REQUIRED_TBB_VERSION 11020
+# define CNC_REQUIRED_TBB_VERSION_STRING 2020.2
 #else
 # ifndef CNC_REQUIRED_TBB_VERSION_STRING
 #  define CNC_REQUIRED_TBB_VERSION_STRING CNC_REQUIRED_TBB_VERSION
@@ -62,13 +56,13 @@
 
 // any build of CnC must use at least the minimal TBB version
 #if TBB_INTERFACE_VERSION < CNC_REQUIRED_TBB_VERSION
-#error Need TBB version CNC_REQUIRED_TBB_VERSION_STRING or newer
+error Need TBB version CNC_REQUIRED_TBB_VERSION_STRING or newer (found TBB_INTERFACE_VERSION)
 #endif
 
 // runtime check to make sure we are not running with an older TBB than
 // what our build of CnC used.
 #define CNC_CHECK_TBB_VERSION()                                         \
-    if( tbb::TBB_runtime_interface_version() < TBB_INTERFACE_VERSION ) { \
+    if( TBB_runtime_interface_version() < TBB_INTERFACE_VERSION ) { \
         CNC_ABORT( "Running with older TBB than used at compile time" ); \
     }
 

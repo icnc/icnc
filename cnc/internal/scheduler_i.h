@@ -1,5 +1,5 @@
 /* *******************************************************************************
- *  Copyright (c) 2007-2014, Intel Corporation
+ *  Copyright (c) 2007-2021, Intel Corporation
  *
  *  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted provided that the following conditions are met:
@@ -34,6 +34,7 @@
 #include <cnc/internal/dist/distributable.h>
 #include <cnc/internal/scalable_vector.h>
 #include <cnc/internal/tbbcompat.h>
+#include <tbb/task_group.h>
 #include <tbb/concurrent_queue.h>
 #include <tbb/spin_mutex.h>
 #include <cnc/internal/tls.h>
@@ -84,7 +85,7 @@ namespace CnC {
             class suspend_group;
 
             scheduler_i( context_base & );
-            virtual ~scheduler_i();
+            virtual ~scheduler_i() noexcept;
 
             /// Call this to init capabilites for distCnC after creation
             void start_dist();
@@ -203,7 +204,7 @@ namespace CnC {
 
         protected:
             context_base                         & m_context;
-            tbb::concurrent_bounded_queue< int > * m_barrier;      ///< simluates a conditional variable/semaphore
+            tbb::concurrent_bounded_queue< int > * m_barrier;      ///< simulates a conditional variable/semaphore
         private:
             const schedulable                    * m_step;         ///< step which created scheduler
             typedef scalable_vector_p< schedulable * > pending_list_type;
@@ -211,6 +212,7 @@ namespace CnC {
             pending_list_type                      m_seqSteps;     ///< steps which need sequentialized execution
             mutex_t                                m_mutex;        ///< for pendingSteps
         protected:
+            tbb::task_group                        m_taskGroup;    ///< waiter tasks are enqueued here
             int                                    m_root;         ///< root process requesting wait
         private:
             std::atomic< unsigned int >            m_userStepsInFlight;

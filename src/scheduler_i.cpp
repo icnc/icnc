@@ -1,5 +1,5 @@
 /* *******************************************************************************
- *  Copyright (c) 2007-2014, Intel Corporation
+ *  Copyright (c) 2007-2021, Intel Corporation
  *
  *  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted provided that the following conditions are met:
@@ -44,20 +44,11 @@
 #include <tbb/enumerable_thread_specific.h>
 #include <cnc/default_tuner.h>
 #include <iostream>
-
+#include <thread>
+#include <chrono>
 
 namespace CnC {
     namespace Internal {
-
-        struct tbb_waiter : public tbb::task
-        {
-            tbb_waiter( scheduler_i * s ) : tbb::task(), m_sched( s ) {}
-            tbb::task * execute();
-        private:
-            scheduler_i * m_sched;
-        };
-
-        // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         
         const int EXIT      = 50;
         const int SELF_WAIT = 51;
@@ -80,6 +71,7 @@ namespace CnC {
               m_pendingSteps(),
               m_seqSteps(),
               m_mutex(),
+              m_taskGroup(),
               m_root( 0 ), // distributor::myPid() ), //distributor::distributed_env() ?  : distributor::myPid() ),
               m_userStepsInFlight(),
               m_activeGraphs(),
@@ -108,8 +100,9 @@ namespace CnC {
 
         // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
  
-        scheduler_i::~scheduler_i()
+        scheduler_i::~scheduler_i() noexcept
         {
+            m_taskGroup.wait();
             m_context.print_scheduler_statistics();
             delete m_barrier;
             set_current( const_cast< schedulable * >( m_step ) );
@@ -330,20 +323,9 @@ namespace CnC {
         // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-        /// remote processes require a separate thread which waits for completion upon request (distCnC only).
-        /// Otherwise the receiver thread would block which may lead to a dead-lock.
-        tbb::task * tbb_waiter::execute()
-        {
-            increment_ref_count();
-            m_sched->wait_loop();
-            decrement_ref_count();
-            return NULL;
-        }
-
         void scheduler_i::enqueue_waiter()
         {
-            tbb_waiter * _waitTask = new( tbb::task::allocate_root() ) tbb_waiter( this );
-            tbb::task::enqueue( *_waitTask );
+            m_taskGroup.run( [&]{ this->wait_loop(); } );
         }
 
         // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -450,14 +432,14 @@ namespace CnC {
         // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-        static bool _yield() { tbb::this_tbb_thread::sleep(tbb::tick_count::interval_t(0.0002)); return true; }
+        static bool _yield() { std::this_thread::sleep_for(std::chrono::microseconds(2)); return true; }
 
         /// Calls wait_all() which delegates it to wait() of the actual scheduler (child class).
         /// Distributed systems require communication flushing and barriers. See \ref scheduler_i::init_wait for details.
         void scheduler_i::wait_loop( bool from_schedulable )
         {
             // { Speaker oss; oss << "wait_loop"; }
-            // if called from schedulable, this taks/step will not complete herein
+            // if called from schedulable, this task/step will not complete herein
             //   -> don't increment/decrement counter
             if( ! from_schedulable ) ++m_userStepsInFlight;
             bool send = m_root == distributor::myPid(); // && !distributor::distributed_env(); // if dist_env, the remote processes also call wait explicitly!

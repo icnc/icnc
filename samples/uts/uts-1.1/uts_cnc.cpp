@@ -13,7 +13,7 @@
  *
  */
 //********************************************************************************
-// Copyright (c) 2010-2014 Intel Corporation. All rights reserved.              **
+// Copyright (c) 2010-2021 Intel Corporation. All rights reserved.              **
 //                                                                              **
 // Redistribution and use in source and binary forms, with or without           **
 // modification, are permitted provided that the following conditions are met:  **
@@ -250,7 +250,7 @@ int main(int argc, char *argv[])
     t1 = uts_wctime();
     /* start with root */
     ctxt.m_tags.put( root );
-    tbb::this_tbb_thread::sleep(tbb::tick_count::interval_t(0.5));
+    std::this_thread::sleep_for(std::chrono::milliseconds(500));
     ctxt.wait();
     t2 = uts_wctime();
     et = t2 - t1;

@@ -1,5 +1,5 @@
 /* *******************************************************************************
- *  Copyright (c) 2007-2014, Intel Corporation
+ *  Copyright (c) 2007-2021, Intel Corporation
  *
  *  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted provided that the following conditions are met:
@@ -49,34 +49,14 @@ namespace CnC {
 			static poi s_poi;
 		}
 
-        //        template< typename Step >
-        class simplest_scheduler::TaskWrapper : public tbb::task
-        {
-        public: 
-            tbb::task * execute()
-            {
-                CNC_ASSERT( m_schedulable );
-                m_schedulable->scheduler().do_execute( m_schedulable );
-                return NULL;
-            }
-
-            TaskWrapper( schedulable * s ) : 
-                m_schedulable( s )
-            {}
-
-        private:
-            schedulable * m_schedulable;
-        };
-
         // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         
         simplest_scheduler::simplest_scheduler( context_base &context, int numThreads, int htstride ) 
             : scheduler_i( context ),
               m_status(),
-              m_rootTask(),
-              m_initTBB( std::max( 2, numThreads + ( distributor::myPid() == 0 ? 0 : 1 ) ) ),
-              m_taskGroupContext( tbb::task_group_context::isolated, tbb::task_group_context::default_traits | tbb::task_group_context::concurrent_wait )
+              m_taskGroup(),
+              m_taskArena( std::max( 2, numThreads + ( distributor::myPid() == 0 ? 0 : 1 ) ) )
         {
             //            {Speaker oss; oss << std::max( 2, numThreads + ( distributor::myPid() == 0 ? 0 : 1 ) );}
             bool _tmp(false);
@@ -84,17 +64,14 @@ namespace CnC {
 				s_po = new pinning_observer( htstride );
 			}
             m_status = COMPLETED;
-            m_rootTask = new( tbb::task::allocate_root( m_taskGroupContext ) ) tbb::empty_task;
-            m_rootTask->set_ref_count( 1 );
         }
 
         // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-        simplest_scheduler::~simplest_scheduler()
+        simplest_scheduler::~simplest_scheduler() noexcept
         {
-            m_rootTask->decrement_ref_count();
-            m_rootTask->destroy( *m_rootTask );
+            m_taskGroup.wait();
         }
 
         // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -104,10 +81,7 @@ namespace CnC {
         {
             int _tmp(COMPLETED);
             m_status.compare_exchange_strong( _tmp, RUNNING );
-            //            tbb_waiter * _waitTask = new( tbb::task::allocate_root() ) TaskWrapper( stepInstance );
-            TaskWrapper * newTask = new( tbb::task::allocate_additional_child_of( *m_rootTask ) ) TaskWrapper( stepInstance );
-            //tbb::task::enqueue( *newTask );
-            tbb::task::spawn( *newTask );
+            m_taskArena.execute( [&]{ m_taskGroup.run( [=]{ stepInstance->scheduler().do_execute(stepInstance); } ); } );
         }
 
         // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -115,7 +89,7 @@ namespace CnC {
 
         void simplest_scheduler::wait( const inflight_counter_type & /*steps_in_flight*/ )
         {
-            m_rootTask->wait_for_all();
+            m_taskGroup.wait();
             m_status = COMPLETED;
         }
     } // namespace Internal
