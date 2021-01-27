@@ -1,5 +1,5 @@
 //********************************************************************************
-// Copyright (c) 2010-2014 Intel Corporation. All rights reserved.              **
+// Copyright (c) 2010-2021 Intel Corporation. All rights reserved.              **
 //                                                                              **
 // Redistribution and use in source and binary forms, with or without           **
 // modification, are permitted provided that the following conditions are met:  **
@@ -30,7 +30,6 @@
 
 #include <array>
 #include <cnc/internal/cnc_stddef.h>
-#include <tbb/tbb_stddef.h>
 
 template< int DIM, class T = int >
 class blocked_range

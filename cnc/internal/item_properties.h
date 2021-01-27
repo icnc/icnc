@@ -1,5 +1,5 @@
 /* *******************************************************************************
- *  Copyright (c) 2007-2014, Intel Corporation
+ *  Copyright (c) 2007-2021, Intel Corporation
  *
  *  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted provided that the following conditions are met:
@@ -56,6 +56,16 @@ namespace CnC {
                   m_getCount()
             {
                 m_getCount = getcount;
+            }
+
+            item_properties( const CnC::Internal::item_properties& ip )
+                : m_suspendGroup( ip.m_suspendGroup ),
+#ifdef _DIST_CNC_
+                  m_subscribers( ip.m_subscribers ),
+                  m_owner( ip.m_owner ),
+#endif
+                  m_getCount( ip.m_getCount.load() )
+            {
             }
 
             int get_count() const

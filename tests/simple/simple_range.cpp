@@ -2,7 +2,7 @@
 #include <cnc/debug.h>
 #include <tbb/tick_count.h>
 
-#define SLEEP( _x ) tbb::this_tbb_thread::sleep( tbb::tick_count::interval_t( _x ) )
+#define SLEEP( _x ) std::this_thread::sleep_for( std::chrono::milliseconds(_x) )
 
 struct my_context;
 
@@ -100,7 +100,7 @@ int step3::execute( const int tag, my_context & ctxt ) const
 {
     int _tmp;
     ctxt.m_items.get( tag+off2, _tmp ); //dep to step2
-    SLEEP( 0.1 );
+    SLEEP( 100 );
     ctxt.m_items.put( tag+off3, tag ); // step2 depends on this
     tbb::queuing_mutex::scoped_lock _lock( ::CnC::Internal::s_tracingMutex );
     std::cout << "step3 " << tag << std::endl;

@@ -1,5 +1,5 @@
 /* *******************************************************************************
- *  Copyright (c) 2007-2014, Intel Corporation
+ *  Copyright (c) 2007-2021, Intel Corporation
  *
  *  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted provided that the following conditions are met:
@@ -36,7 +36,6 @@
 #include <cnc/internal/cnc_stddef.h>
 #include <cnc/internal/statistics.h>
 #include <cnc/internal/tbbcompat.h>
-#include <tbb/aligned_space.h>
 
 namespace CnC {
     namespace Internal {
@@ -140,12 +139,12 @@ namespace CnC {
         // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+        static distributable_context::mutex_type s_ser_mutex;
+
         serializer * distributable_context::new_serializer( const distributable * distbl ) const
         {
-            // an undocumented feature suggested by Arch to make the mutex-init therad-safe
-            static tbb::aligned_space< mutex_type, 1 > s_ser_mutex;
             {
-                mutex_type::scoped_lock _lock( *s_ser_mutex.begin() );
+                mutex_type::scoped_lock _lock( s_ser_mutex );
                 if( ! subscribed() ) {
                     CNC_ASSERT( distributor::myPid() == 0 );
                     distributor::distribute( const_cast< distributable_context * >( this ) );

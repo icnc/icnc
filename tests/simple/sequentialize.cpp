@@ -40,7 +40,7 @@ struct my_context : public CnC::context< my_context >
     }
 };
 
-#define SLEEP( _x ) tbb::this_tbb_thread::sleep( tbb::tick_count::interval_t( _x ) )
+#define SLEEP( _x ) std::this_thread::sleep_for( std::chrono::milliseconds(_x) )
 
 static int val = 1000000;
 
@@ -52,10 +52,10 @@ static int val = 1000000;
 // if steps get executed in a different order, the tag/value pairs will be different.
 int my_step::execute( const int tag, my_context & c ) const
 {
-    SLEEP( 0.1 );
+    SLEEP( 100 );
     if( tag % 2 == 1 ) {
         // we need a sleep to "wait" until remote processes deliver item 1
-        if( tag == 3 ) SLEEP( 5.0 );
+        if( tag == 3 ) SLEEP( 5000 );
         int item;
         if( tag < 14 ) c.m_items.get( tag > 10 ? 1 : tag-2, item );
         CnC::Internal::Speaker oss;

@@ -1,5 +1,5 @@
 /* *******************************************************************************
- *  Copyright (c) 2007-2014, Intel Corporation
+ *  Copyright (c) 2007-2021, Intel Corporation
  *
  *  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted provided that the following conditions are met:
@@ -303,15 +303,15 @@ namespace CnC
     template< typename ITag, typename IType, typename ITuner, typename CType, typename CTuner, typename OTag, typename OTuner, typename ReduceOp, typename Select >
     reduction< ITag, IType, ITuner, CType, CTuner, OTag, OTuner, ReduceOp, Select >::red_tls::red_tls( const red_tls & rt )
         : val( rt.val ),
-          nreduced( rt.nreduced ),
-          n( rt.n ),
+          nreduced( rt.nreduced.load() ),
+          n( rt.n.load() ),
           mtx(),
 #ifdef _DIST_CNC_
-          nCounts( rt.nCounts ),
-          nValues( rt.nValues ),
+          nCounts( rt.nCounts.load() ),
+          nValues( rt.nValues.load() ),
           owner( rt.owner ),
 #endif
-          status( rt.status )
+          status( rt.status.load() )
     {} 
 
     // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -468,7 +468,7 @@ namespace CnC
                 if( i->second.status == FINISH ) {
                     CNC_ASSERT( i->second.nreduced == i->second.n || i->second.n == M1 );
                     CNC_ASSERT( i->second.nValues == 0 && i->second.status == FINISH );
-                    i->second.nreduced = i->second.n;
+                    i->second.nreduced = i->second.n.load();
                     try_put_value( otag, i );
                 }
             } else {
@@ -865,7 +865,7 @@ namespace CnC
 #endif
             {
                 if( cnt != M1 ) i->second.n = cnt;
-                else i->second.n = i->second.nreduced;
+                else i->second.n = i->second.nreduced.load();
                 m_reduce->try_put_value( otag, i );
             }
     }

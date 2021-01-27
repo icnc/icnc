@@ -1,5 +1,5 @@
 /* *******************************************************************************
- *  Copyright (c) 2007-2014, Intel Corporation
+ *  Copyright (c) 2007-2021, Intel Corporation
  *
  *  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted provided that the following conditions are met:
@@ -58,7 +58,7 @@ namespace CnC {
             {
                 data_t() : m_item(), m_prop( ), m_mutex() { m_item = NULL;}
                 data_t( ItemT * i, const item_properties & p ) : m_item(), m_prop( p ), m_mutex() { m_item = i;}
-                data_t( const data_t & dt ) : m_item( dt.m_item ), m_prop( dt.m_prop ), m_mutex() {} // mutices are not copyable
+                data_t( const data_t & dt ) : m_item( dt.m_item.load() ), m_prop( dt.m_prop ), m_mutex() {} // mutices are not copyable
                 ~data_t() { erase(); }
                 void operator=( const data_t & dt ) { m_item = dt.m_item; m_prop = dt.m_prop; } // mutices are not assignable
                 void erase()
@@ -309,7 +309,7 @@ namespace CnC {
                 _data->m_prop.set_owner( owner );
                 // update item after getcount to guarantee that a get_item does not return getcount and item before
                 // both are actually updated (get_count only checks item).
-                ItemT * _sw(NULL);
+                const ItemT * _sw(NULL);
                 if( ! _data->m_item.compare_exchange_strong( _sw, item ) ) return false;
                 m_size++;
                 return true;

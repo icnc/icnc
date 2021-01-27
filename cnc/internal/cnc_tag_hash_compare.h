@@ -1,5 +1,5 @@
 /* *******************************************************************************
- *  Copyright (c) 2007-2014, Intel Corporation
+ *  Copyright (c) 2007-2021, Intel Corporation
  *
  *  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted provided that the following conditions are met:
@@ -56,8 +56,8 @@
 /// pointers as tags are not portable, e.g. to distributed memory).
 /// \return a unique integer for the given tag
 template< typename T >
-struct cnc_hash : public tbb::tbb_hash< T >
-{ 
+struct cnc_hash : public std::hash< T >
+{
 };
 
 /// \brief Provides equality operators for hashing
@@ -141,6 +141,18 @@ struct cnc_equal< std::string >
     {
         return ( a.compare( b ) == 0 );
     }
+};
+
+template< typename T, typename U >
+struct cnc_hash< std::pair< T, U > > {
+public:
+    std::size_t operator()( const std::pair< T, U > & p ) const {
+        return first_hash(p.first) ^ second_hash(p.second);
+    }
+
+private:
+    cnc_hash< T > first_hash;
+    cnc_hash< U > second_hash;
 };
 
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

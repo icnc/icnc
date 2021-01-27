@@ -99,8 +99,8 @@ int main( int, char*[] )
     c.wait();
 
     // sleep a bit to make sure the GC in the background has completed (distCnC)
-    tbb::this_tbb_thread::sleep( tbb::tick_count::interval_t( 1.0 ) );
-    
+    std::this_thread::sleep_for(std::chrono::seconds(1));
+
     std::cout << c.m_vitems.size() << " " << c.m_hitems.size() << std::endl;
 
     for( CnC::item_collection< int, int, ituner< CnC::hashmap_tuner > >::const_iterator it = c.m_hitems.begin(); it != c.m_hitems.end(); ++it ) {

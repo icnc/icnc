@@ -1,5 +1,5 @@
 /* *******************************************************************************
- *  Copyright (c) 2007-2014, Intel Corporation
+ *  Copyright (c) 2007-2021, Intel Corporation
  *
  *  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted provided that the following conditions are met:
@@ -108,8 +108,8 @@ namespace CnC {
             void print_scheduler_statistics();
             statistics * stats() const { return m_statistics; }
 
-        protected:
             typedef tbb::spin_mutex mutex_type;
+        protected:
             mutable mutex_type       m_mutex;
 
         private:

@@ -1,5 +1,5 @@
 /* *******************************************************************************
- *  Copyright (c) 2007-2014, Intel Corporation
+ *  Copyright (c) 2007-2021, Intel Corporation
  *
  *  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted provided that the following conditions are met:
@@ -186,7 +186,7 @@ namespace CnC {
         template< class Tag, class Step, class Arg, class TagTuner, class StepTuner >
         step_launcher< Tag, Step, Arg, TagTuner, StepTuner >::~step_launcher( )
         { 
-            delete m_stepInstance;
+            delete m_stepInstance.load();
             /* delete m_step; */ 
         }
 
@@ -271,7 +271,7 @@ namespace CnC {
         template< class Tag, class Step, class Arg, class TagTuner, class StepTuner >
         bool step_launcher< Tag, Step, Arg, TagTuner, StepTuner >::prepare_from_range( tagged_step_instance< range_type > * rsi, const Tag & tag, step_delayer & sD, int & passOnTo ) const
         {
-            return m_stepInstance->prepare_from_range( rsi, tag, sD );
+            return m_stepInstance.load()->prepare_from_range( rsi, tag, sD );
         }
 
         // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -279,7 +279,7 @@ namespace CnC {
         template< class Tag, class Step, class Arg, class TagTuner, class StepTuner >
         CnC::Internal::StepReturnValue_t step_launcher< Tag, Step, Arg, TagTuner, StepTuner >::execute_from_range( tagged_step_instance< range_type > * rsi, const Tag & tag ) const
         {
-            return m_stepInstance->execute_from_range( rsi, tag );
+            return m_stepInstance.load()->execute_from_range( rsi, tag );
         }
 
         // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

@@ -1,5 +1,5 @@
 /* *******************************************************************************
- *  Copyright (c) 2007-2014, Intel Corporation
+ *  Copyright (c) 2007-2021, Intel Corporation
  *
  *  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted provided that the following conditions are met:
@@ -42,7 +42,6 @@
 #include "tbb_concurrent_queue_scheduler.h"
 #include <cnc/internal/cnc_stddef.h>
 #include <cnc/internal/tbbcompat.h>
-#include "tbb/task_scheduler_init.h"
 
 namespace CnC {
     namespace Internal {
@@ -59,9 +58,9 @@ namespace CnC {
         {
             if( getenv( "CNC_NUM_THREADS" ) ) {
                 m_numThreads = atoi( getenv( "CNC_NUM_THREADS" ) );
-                if( m_numThreads <= 0 ) m_numThreads = tbb::task_scheduler_init::default_num_threads();
+                if( m_numThreads <= 0 ) m_numThreads = tbb::info::default_concurrency();
             } else {
-                m_numThreads = tbb::task_scheduler_init::default_num_threads();
+                m_numThreads = tbb::info::default_concurrency();
             }
             // on remote processes we don't have the env-thread,
             // but we have a service thread which is triggered with wait() and work-waits

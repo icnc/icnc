@@ -97,7 +97,7 @@ set(CMAKE_PREFIX_PATH "${MPIROOT}/${MPIPARCH}/include" "${MPIROOT}/include" "${M
 find_path(MPI_INC_DIR mpi.h)
 find_library(MPI_LIB_OPT NO_DEFAULT_PATH HINTS ${MPI_INC_DIR}/../lib ${MPIROOT}/lib ${MPIROOT}/lib/release_mt ${MPIROOT}/Library/lib NAMES mpi_mt impimt mpich mpi impi)
 if(CMAKE_BUILD_TYPE STREQUAL Debug)
-  find_library(MPI_LIB_DBG NO_DEFAULT_PATH HINTS ${MPI_INC_DIR}/../lib ${MPIROOT}/lib NAMES mpi_dbg_mt impidmt mpich mpi)
+  find_library(MPI_LIB_DBG NO_DEFAULT_PATH HINTS ${MPI_INC_DIR}/../lib ${MPIROOT}/lib ${MPIROOT}/lib/debug_mt NAMES mpi_dbg_mt impidmt mpich mpi)
   set(MPI_LIB optimized ${MPI_LIB_OPT} debug ${MPI_LIB_DBG} CACHE INTERNAL "use for mpi-dependent links")
 else()
   set(MPI_LIB optimized ${MPI_LIB_OPT} CACHE INTERNAL "use for mpi-dependent links")
