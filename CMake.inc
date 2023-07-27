@@ -74,7 +74,7 @@ set(CMAKE_DEBUG_POSTFIX "_debug")
 ################################################################################
 # TBB deps
 
-set(CMAKE_PREFIX_PATH "${TBBROOT}/lib" "${TBBROOT}/lib/${PARCH}/gcc4.7" "${TBBROOT}/lib/${PARCH}/gcc4.4" "${TBBROOT}/lib/${PARCH}/cc4.1.0_libc2.4_kernel2.6.16.21" "${TBBROOT}/lib/${PARCH}/${TBB_DLL_PFX}")
+set(CMAKE_PREFIX_PATH "${TBBROOT}/lib" "${TBBROOT}/lib/${PARCH}/gcc4.8" "${TBBROOT}/lib/${PARCH}/gcc4.7" "${TBBROOT}/lib/${PARCH}/gcc4.4" "${TBBROOT}/lib/${PARCH}/cc4.1.0_libc2.4_kernel2.6.16.21" "${TBBROOT}/lib/${PARCH}/${TBB_DLL_PFX}")
 find_library(TBB_LIB tbb)
 find_library(TBBMALLOC_LIB tbbmalloc)
 set(CNC_ADD_LIBS ${CNC_ADD_LIBS} optimized ${TBB_LIB} optimized ${TBBMALLOC_LIB})
